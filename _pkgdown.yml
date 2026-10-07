@@ -53,7 +53,7 @@ home:
     Data and visualization tools for building World Justice Project charts,
     country-report graphics, and Rule of Law Index analysis in R.
   sidebar:
-    structure: [links, license, community, citation, developers]
+    structure: [links, license, community, citation, developers, dev]
     components:
       developers:
         title: Developers
