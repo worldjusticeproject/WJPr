@@ -7,7 +7,6 @@
   Inter Tight as alternative) with a single line, e.g.
   `options(wjpr.family = "Inter Tight")`. `WJP_theme()` also gains a
   `family` parameter.
-
 - New `wjp_palette()` function exposing the official WJP categorical color
   palette. All chart functions now fall back to this palette when no `cvec`
   is supplied, so charts stay on-brand by default (previously they fell back
@@ -23,8 +22,9 @@
   within a row are collapsed to a single mark and points are never moved.
 - `wjp_lines()` and `wjp_slope()` no longer require the `ngroups` parameter:
   lines are grouped by the `colors` variable automatically. Both functions
-  also work without `colors` (a single series is drawn). `ngroups` is retained
-  for backwards compatibility.
+  also work without `colors` (a single series is drawn).
+- `wjp_slope()` accepts time points stored as text (e.g., `"2019"`) and
+  converts them to numbers.
 - `wjp_dumbbells()` gains an alternating strip background (visual consistency
   with `wjp_dots()`), automatic label positions when `labpos` is not supplied,
   and support for named `cvec` vectors matched against `cgroups`.
@@ -35,24 +35,58 @@
 - `wjp_dots()` automatically enables per-group opacities and shapes when
   `opacities` or `shapes` are supplied.
 - `wjp_divbars()` enables custom ordering automatically when `order` is
-  supplied (the `custom_order` flag is retained for backwards compatibility).
+  supplied.
+- `wjp_groupbars()` accepts the original `national_var` value in
+  `group_order` and `level_order`.
+- `wjp_check_data()` gains support for `type = "groupbars"`.
 
-## Parameter harmonization
+## Parameter harmonization and deprecations
 
-- `wjp_dumbbells()`: `color` was renamed to `colors` (old name still works).
-- `wjp_radar()` and `wjp_rose()`: `order_var` was renamed to `order`
-  (old name still works).
+- `wjp_dumbbells()`: `color` was renamed to `colors`.
+- `wjp_radar()` and `wjp_rose()`: `order_var` was renamed to `order`.
+- `wjp_lines()` and `wjp_slope()`: `ngroups` is deprecated (lines are grouped
+  by `colors`).
+- `wjp_divbars()`: `custom_order` is deprecated (supplying `order` is enough).
+- The old argument names still work but now signal a soft deprecation
+  through the lifecycle package.
 
 ## Bug fixes
 
 - Fixed a bug in `wjp_gauge()` where the invisible padding segment received a
   visible palette color when no `cvec` was supplied, drawing a full circle
   instead of a semicircle.
+- `wjp_gauge()` now hides labels of segments smaller than 5% of the total, as
+  documented. Previously the raw value was compared with 5, which hid every
+  label when values were proportions.
+- `wjp_edgebars()` value labels are no longer padded with leading spaces
+  (e.g., `" 5%"`).
+- `spread_labels_x()` no longer opens a graphics device (leaving a stray
+  `Rplots.pdf`) when sizing gaps from `labels` with absolute units.
 - Fixed a bug in `wjp_dumbbells()` where the `order` parameter was ignored.
+- `wjp_divbars()` reports a missing `order` column instead of silently
+  ignoring it.
 - `diffmeans()` now returns its results explicitly (previously the value was
-  returned invisibly).
+  returned invisibly) and validates `type` and `t` with clear errors.
+- `wjp_radar()` validates `source` (case-insensitive), so `"gpp"` no longer
+  draws percentages on the 0-1 scale.
+- `wjp_lines()` gives a clear error when `transparency = TRUE` is used
+  without `transparencies`, and `wjp_dots()` does the same when `diffOpac` or
+  `diffShp` are set without `opacities` or `shapes`.
 - `wjp_lines()` value labels no longer get clipped when values are close to
   100%: the label flips below the point instead.
+
+## Package infrastructure
+
+- Package, site, and issue-template URLs now point to the renamed
+  `worldjusticeproject` GitHub organization; the documentation site lives at
+  <https://worldjusticeproject.github.io/WJPr/> (the previous
+  `worldjusticeproject-org.github.io` address returned a 404).
+- `grDevices` moved from `Suggests` to `Imports` (it was already imported).
+- Removed the unused `glue` dependency and 35 unused `@importFrom`
+  declarations.
+- `CODEOWNERS` updated to the current maintainer.
+- `wjp_check_deps()` lists `purrr` as a core dependency and `systemfonts` as
+  an optional one, with corrected feature descriptions.
 
 ## Documentation
 
@@ -60,6 +94,12 @@
   "Details" section describing the expected data structure and additional
   worked examples (stacked bars, confidence intervals in dots charts,
   highlighted lines, custom ordering, Rule of Law Index radar, and more).
+- The `gpp` and `roli` dataset documentation now lists the actual columns
+  (`q1a`-`q1f`, the `q49*_G1`/`_G2` items, `code`, `region`) and explains
+  how to work with the labelled survey answers.
+- Contributor documentation (CONTRIBUTING, review checklist, development
+  articles) translated to English and updated to the current function
+  pattern (WJP palette fallback, `wjp_font_family()`).
 - Reference-page figures are now rendered with `grDevices::png` so rich text
   labels (ggtext) keep correct word spacing with the WJP fonts.
 
@@ -67,13 +107,14 @@
 
 - Value labels now share the same typography across all charts
   (Lato bold, 10 pt, ink `#4a4a49`).
-- Grid lines harmonized to a single gray (`#d1cfd1`) across charts.
+- Value-axis grid lines in bar, line, and lollipop charts harmonized to a
+  single light gray (`#d1cfd1`); dot and dumbbell charts keep the dashed
+  `WJP_theme()` grid drawn over their row strips.
 - Category axis text harmonized (`#524F4C`, left-aligned) across horizontal
   charts.
 - Horizontal charts (`wjp_dots()`, `wjp_dumbbells()`, `wjp_lollipops()`,
   `wjp_edgebars()`) now consistently display the first row of the data at the
   top of the chart.
-- `wjp_check_data()` gains support for `type = "groupbars"`.
 - `wjp_groupbars()`: when confidence intervals are drawn, value labels are now
   placed at the end of the full bar (after the gray complement), aligned in a
   single column, instead of next to the upper interval whisker.
@@ -91,8 +132,8 @@
 - Fixed bugs preventing `wjp_dots()` to plot specific data structures.
 - Change the way that `wjp_dots()` calculated and added Confidence Intervals to charts.
 - `wjp_slope()` added.
-- `diff_means()` added.
+- `diffmeans()` added.
 
 # WJPr 0.0.0
 
-- Initial base release 
+- Initial base release

@@ -83,27 +83,6 @@ For a single chart, wrap the call with `withr::with_options(list(wjpr.family = "
 ```{r data, message=FALSE, warning=FALSE}
 # Load sample data
 gpp_data <- WJPr::gpp
-
-# WJP Color Palettes
-wjp_categorical <- c(
-  "#482d8b", "#2894aa", "#f26b21", "#137b3f", "#869d3b",
-  "#0f9581", "#1a74b6", "#8f2e8c", "#555659"
-)
-
-# Colors for contrasting two groups
-wjp_contrast <- c("#482d8b", "#f26b21")
-
-# Factor colors (Rule of Law Index)
-wjp_factors <- c(
-  "Constraints" = "#137b3f",
-  "Corruption"  = "#869d3b",
-  "Open Gov"    = "#0f9581",
-  "Rights"      = "#1a74b6",
-  "Security"    = "#413179",
-  "Regulatory"  = "#8f2e8c",
-  "Civil"       = "#89191c",
-  "Criminal"    = "#f07623"
-)
 ```
 
 ***
@@ -442,8 +421,7 @@ wjp_rose(
   target   = "score",
   grouping = "category",
   labels   = "label",
-  cvec     = c("#482d8b", "#2894aa", "#f26b21", "#137b3f", "#869d3b",
-               "#0f9581", "#1a74b6", "#8f2e8c", "#555659")
+  cvec     = wjp_palette(9)
 )
 ```
 

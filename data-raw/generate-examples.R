@@ -451,7 +451,7 @@ tryCatch({
 
   save_example(plot_gauge, "gauge", width = 5, height = 4)
 }, error = function(e) {
-  message("  SKIPPED: Gauge chart requires ggh4x with with_ggtrace function")
+  message("  SKIPPED: Gauge chart could not be generated")
   message("  Error: ", e$message)
 })
 
@@ -479,8 +479,8 @@ plot_groupbars <- wjp_groupbars(
   colors            = c("#482d8b", "#e5e8e8"),
   group_order       = c("Gender", "Age"),
   level_order       = list(
-    Gender = c("Women", "Men"),
-    Age    = c("55+", "25-54", "18-24")
+    Gender = c("Men", "Women"),
+    Age    = c("18-24", "25-54", "55+")
   ),
   draw_ci           = TRUE,
   ci_lower          = "lower",

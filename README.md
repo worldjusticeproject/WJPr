@@ -1,23 +1,29 @@
 # WJPr
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/worldjusticeproject/WJPr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/worldjusticeproject/WJPr/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
+
 WJPr is an R package from the World Justice Project Data Analytics Unit for producing WJP-style graphics and working with Rule of Law Index data. It is designed for analysts who need publication-ready charts, reproducible examples, and consistent visual language across country-report and research workflows.
 
 ## Features
 
 WJPr provides:
 
-- Chart functions for bars, diverging bars, grouped bars, dots, lines, slopes, dumbbells, lollipops, radar, rose, and gauge visualizations.
+- Chart functions for bars, diverging bars, grouped bars, edge bars, dots, lines, slopes, dumbbells, lollipops, radar, rose, and gauge visualizations.
 - Built-in sample datasets for Rule of Law Index and General Population Poll workflows.
-- A shared WJP theme, fonts, and color guidance for consistent report graphics.
-- Validation helpers for checking chart-ready data before plotting.
+- A shared WJP theme (`WJP_theme()`), fonts (`wjp_fonts()`, `wjp_font_family()`), and color palette (`wjp_palette()`) for consistent report graphics.
+- `spread_labels_x()`, a deterministic helper that keeps value labels in row-based point charts from overlapping.
+- Validation helpers for checking chart-ready data (`wjp_check_data()`) and dependencies (`wjp_check_deps()`), plus `diffmeans()` for difference-in-means tests.
 
 ## Installation
 
-WJPr is hosted on GitHub. To install the package, ensure you have the `devtools` package installed and use the following commands:
+WJPr is hosted on GitHub. Install it with `remotes` (or `devtools`):
 
 ```R
 # Install WJPr from GitHub
-devtools::install_github("worldjusticeproject-org/WJPr")
+remotes::install_github("worldjusticeproject/WJPr")
 ```
 
 ## Usage
@@ -42,43 +48,33 @@ head(WJPr::roli)
 Create a simple WJP-style bar chart:
 
 ```R
-# Load WJP fonts when using the default theme
+library(dplyr)
+
+# Load the WJP fonts before plotting
 wjp_fonts()
 
-# Loading data
-gpp_data <- WJPr::gpp
-
-# Prepare the data
-data4bars <- gpp_data %>%
-  select(country, year, q1a) %>%
+# Prepare the data: % of respondents who trust Institution A, 2022
+data4bars <- WJPr::gpp %>%
+  filter(year == 2022) %>%
+  mutate(
+    q1a   = as.double(unclass(q1a)),  # survey answers are labelled vectors
+    trust = case_when(q1a <= 2 ~ 1, q1a <= 4 ~ 0),
+    year  = as.character(year)
+  ) %>%
   group_by(country, year) %>%
-  mutate(
-    q1a = as.double(q1a),
-    trust = case_when(
-      q1a <= 2  ~ 1,
-      q1a <= 4  ~ 0,
-      q1a == 99 ~ NA_real_
-    ),
-    year = as.character(year)
-  ) %>%
-  summarise(
-    trust   = mean(trust, na.rm = TRUE),
-    .groups = "keep"
-  ) %>%
-  mutate(
-    trust = trust*100
-  ) %>%
-  filter(year == "2022")
+  summarise(trust = mean(trust, na.rm = TRUE) * 100, .groups = "drop")
 
 # Draw the chart
 wjp_bars(
-    data4bars,              
-    target    = "trust",        
-    grouping  = "country",
-    colors    = "year",
-    cvec      = c("2022" = "#482d8b")
+  data4bars,
+  target   = "trust",
+  grouping = "country",
+  colors   = "year",
+  cvec     = c("2022" = "#482d8b")
 )
 ```
+
+When `cvec` is omitted, every chart falls back to the WJP palette (`wjp_palette()`).
 
 ### Example: Changing the Chart Font
 
@@ -172,7 +168,7 @@ WJPr includes focused chart functions for common WJP reporting patterns:
   </a>
 </div>
 
-For a complete interactive gallery with code examples, see the [Chart Gallery vignette](https://worldjusticeproject-org.github.io/WJPr/articles/gallery.html).
+For a complete interactive gallery with code examples, see the [Chart Gallery vignette](https://worldjusticeproject.github.io/WJPr/articles/gallery.html).
 
 ## Data Structure
 
@@ -212,7 +208,7 @@ wjp_check_data(
 )
 ```
 
-For detailed guidance, see the [Data Preparation vignette](https://worldjusticeproject-org.github.io/WJPr/articles/data-preparation.html).
+For detailed guidance, see the [Data Preparation vignette](https://worldjusticeproject.github.io/WJPr/articles/data-preparation.html).
 
 ## Documentation
 
@@ -249,9 +245,9 @@ wjp_newchart <- function(
 ) {
   # 1. Rename columns using all_of()
   # 2. Handle NULL parameters
-  # 3. Create ggplot
-  # 4. Apply colors if cvec provided
-  # 5. Apply theme
+  # 3. Fall back to the WJP palette when cvec is NULL (wjp_default_cvec())
+  # 4. Create ggplot, using wjp_font_family() for text layers
+  # 5. Apply ptheme, then chart-specific theme() tweaks
   return(plt)
 }
 ```
@@ -260,14 +256,14 @@ wjp_newchart <- function(
 
 - Roxygen2 with `@export`, `@param`, `@return`, `@examples`
 - Include `lifecycle::badge("experimental")` in description
-- Add example to `data-raw/generate-examples.R`
-- Update `CLAUDE.md`
+- Add tests in `tests/testthat/` and an example to `data-raw/generate-examples.R`
+- Register the function in `_pkgdown.yml` and update `NEWS.md`
 
 ### Resources
 
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - Complete contribution guidelines
-- **[Development Guide](https://worldjusticeproject-org.github.io/WJPr/articles/development-guide.html)** - Step-by-step tutorial
-- **[Issues](https://github.com/worldjusticeproject-org/WJPr/issues)** - Report bugs or request features
+- **[Development Guide](https://worldjusticeproject.github.io/WJPr/articles/development-guide.html)** - Step-by-step tutorial
+- **[Issues](https://github.com/worldjusticeproject/WJPr/issues)** - Report bugs or request features
 
 ## License
 

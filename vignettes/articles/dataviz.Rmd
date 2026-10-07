@@ -35,6 +35,8 @@ This vignette demonstrates how to use the data visualization functions included 
 11. Grouped Bars
 12. Gauge
 
+This article walks through the most common ones step by step. See the [Chart Gallery](gallery.html) for ready-to-use examples of every chart type, including lollipops, grouped bars, and gauges.
+
 ```{r setup, message=FALSE}
 library(ggplot2)
 library(dplyr)
@@ -47,7 +49,7 @@ library(WJPr)
 ```
 
 ```{r}
-# Always load the WJP fonts if not passing a custom theme to function
+# Always load the WJP fonts before plotting
 wjp_fonts()
 
 # Loading data
@@ -228,29 +230,32 @@ data4stackedbars <- gpp_data %>%
     country, q1a, percentage, value_label, label_position
   )
 
-kbl(data4bars)
+kbl(data4stackedbars)
 ```
 
 Notice that we transform the q1a column into a factor variable and define the specific levels (order) of responses. Specifying factor levels allows us to control how the answers are displayed in the chart. If we don’t define the factor levels, the responses will default to alphabetical order, which may not align with the intended order of this ordinal variable.
 
-Once the data is ready, we can use the `wjp_bars()` function again, this time setting the `stacked` parameter to "TRUE":
+Once the data is ready, we can use the `wjp_bars()` function again, this time setting the `stacked` parameter to `TRUE` (so the value labels are drawn in white inside each segment) and `show_legend = TRUE` (so readers can identify each answer):
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, fig.width=8}
 stacked_bar <- wjp_bars(
-    data4stackedbars,              
-    target    = "percentage",        
-    grouping  = "country",
-    labels    = "value_label",
-    lab_pos   = "label_position",
-    colors    = "q1a",
-    cvec      = c("A lot"     = "#482d8b",
-                  "Some"      = "#2894aa",
-                  "Little"    = "#869d3b",
-                  "None"      = "#f26b21",
-                  "No answer" = "#555659"),
-    direction = "horizontal",
-    stacked   = TRUE
+    data4stackedbars,
+    target      = "percentage",
+    grouping    = "country",
+    labels      = "value_label",
+    lab_pos     = "label_position",
+    colors      = "q1a",
+    cvec        = c("A lot"     = "#482d8b",
+                    "Some"      = "#2894aa",
+                    "Little"    = "#869d3b",
+                    "None"      = "#f26b21",
+                    "No answer" = "#555659"),
+    direction   = "horizontal",
+    stacked     = TRUE,
+    show_legend = TRUE
 )
+
+stacked_bar
 ```
 
 ## Diverging Bars Chart
@@ -270,11 +275,11 @@ data4divbars <- gpp_data %>%
       q1a <= 4  ~ "No Trust"
     )
   ) %>%
-  group_by(country, q1a) %>%
-  count() %>%
   filter(
     !is.na(q1a)
   ) %>%
+  group_by(country, q1a) %>%
+  count() %>%
   group_by(country) %>%
   mutate(
     total       = sum(n),
@@ -286,59 +291,48 @@ data4divbars <- gpp_data %>%
       ),
       "%"
     ),
-    value_label    = if_else(percentage >= 5, 
-                             value_label, 
-                             NA_character_),
-    direction      = if_else(q1a == "Trust", 
-                             "positive", 
-                             "negative"),
-    percentage     = if_else(direction == "negative", 
-                             percentage*-1, 
-                             percentage),
-    label_position = (percentage/2)
+    value_label = if_else(percentage >= 5,
+                          value_label,
+                          NA_character_)
   ) %>%
   select(
-    country, q1a, percentage, value_label, label_position, direction
+    country, q1a, percentage, value_label
   )
 
 kbl(data4divbars)
 ```
 
-Diverging bar charts are a variation of standard bar charts that use both the positive and negative sides of the Cartesian plane to display information. For example, let’s revisit our earlier case where we plotted levels of trust in Institution A. With diverging bars, we can plot the percentage of respondents who answered "A lot" and "Some" on one side, and the percentage of respondents who answered "Little" and "None" on the other. To achieve this, we first need to wrangle the data slightly differently:
-
-Pay close attention to how we create a new variable, `direction`, to specify the direction in which the values should be plotted. Values associated with a "negative" direction are converted into negative numbers.
-
-Once the data is prepared, we can use the `wjp_divbars()` function to create the chart. Several parameters are used in the same way as in the wjp_bars() function:
+Notice that all percentages are positive: there is no need to flip the sign of one group yourself. Once the data is prepared, we can use the `wjp_divbars()` function to create the chart. Several parameters are used in the same way as in the `wjp_bars()` function:
 
 - `target`: Specifies the column containing the values to be plotted.
-- `grouping`: Specifies the column containing the categorical groupings.
+- `grouping`: Specifies the column containing the categories shown on each row.
 - `cvec`: Contains a named vector that links specific values to color codes.
 - `labels`: Specifies the column containing the value labels to display (optional).
 
 In addition to these familiar parameters, the `wjp_divbars()` function has two unique parameters essential for diverging bar charts:
 
-- `diverging`: Specifies the column name that identifies the direction of the values (positive or negative).
-- `negative`: Specifies the value in the diverging column that indicates negative values.
+- `diverging`: Specifies the column that contains the opposing groups (here, "Trust" and "No Trust").
+- `negative`: Specifies the value of the `diverging` column whose bars should extend to the left. The function flips its values into the negative side automatically. If you prefer to supply pre-signed values, leave `negative = NULL`.
 
 By combining these parameters, the `wjp_divbars()` function allows for clear and effective visualization of contrasting groups within the data.
 
-
 ```{r}
 wjp_divbars(
-    data4divbars,             
-    target      = "percentage",       
-    grouping    = "country",         
-    diverging   = "q1a",     
-    negative    = "negative",   
+    data4divbars,
+    target      = "percentage",
+    grouping    = "country",
+    diverging   = "q1a",
+    negative    = "No Trust",
     cvec        = c("Trust"     = "#482d8b",
                     "No Trust"  = "#f26b21"),
-    labels      = "value_label"
+    labels      = "value_label",
+    show_legend = TRUE
 )
 ```
 
 ## Edgebars
 
-Edgebars is a specific type of horizontal bars that have the Y-Axis text on top of the bar instead that along the axis. This design modification is a good option when the dimensions of the plot are small (narrow) and the axis texts are expected to be long. Use the  wjp_edgebars()` function to plot these bars in a similar way than previous examples.
+Edgebars are a specific type of horizontal bars that place the Y-axis text on top of each bar instead of along the axis. This design modification is a good option when the dimensions of the plot are small (narrow) and the axis texts are expected to be long. Use the `wjp_edgebars()` function to plot these bars in a similar way to the previous examples.
 
 ```{r}
 wjp_edgebars(
@@ -435,7 +429,7 @@ wjp_lines(
 )
 ```
 
-2. For multiple lines, pass the full data. In this case, also consider setting repel = TRUE to prevent overlapping value labels. Note that the ggrepel package must be loaded for this feature to work.
+2. For multiple lines, pass the full data. In this case, also consider setting `repel = TRUE` to prevent overlapping value labels. Note that the ggrepel package must be installed for this feature to work.
 
 ```{r}
 library(ggrepel)
@@ -478,7 +472,7 @@ wjp_lines(
 
 Slope charts are a great choice for visualizing the evolution of variables between two specific points in time. They provide a more aesthetically pleasing alternative to line charts in such cases. The `wjp_slope()` function is designed for this purpose.
 
-Let’s use an example where we disaggregate the evolution of trust in Institution A between 2017 and 2022 across three countries. We begin by preparing the data to fit this design:
+Let’s use an example where we disaggregate the evolution of trust in Institution A between 2017 and 2019 by gender. We begin by preparing the data to fit this design:
 
 ```{r}
 data4slopes <- gpp_data %>%
@@ -516,14 +510,14 @@ data4slopes <- gpp_data %>%
 kbl(data4slopes)
 ```
 
-Once the data is ready, we can use the wjp_slope() function. This function relies on parameters that have been covered in previous examples:
+Once the data is ready, we can use the `wjp_slope()` function. This function relies on parameters that have been covered in previous examples:
 
 - `target`: Specifies the column containing the values to be plotted on the Y-axis.
 - `grouping`: Specifies the column containing the categorical groupings. For slope charts, this usually refers to the time variable or year.
 - `colors`: Specifies the column used to distinguish different colors in the slope chart.
 - `cvec`: Contains a named vector mapping specific values to their corresponding color codes.
 - `labels`: Specifies the column containing value labels to display, if any.
-- `repel`: Activates the `ggrepel` feature to prevent overlapping labels. Note that the `ggrepel` package must be loaded for this feature to work.
+- `repel`: Activates the `ggrepel` feature to prevent overlapping labels. Note that the `ggrepel` package must be installed for this feature to work.
 
 As with `wjp_lines()`, the lines are defined by the `colors` variable. Using these parameters, you can create a slope chart that effectively highlights changes between two points in time while maintaining clarity and visual appeal.
 
@@ -787,9 +781,9 @@ Once that we have the data ready, we can proceed by applying the `wjp_radar()` f
 
 - `target`: Specifies the column containing the values to be plotted.
 - `axis_var`: Equivalent to what is called `grouping` in other functions. It specifies the column containing the categorical groupings or variables that will be shown in each axis of the polar chart.
-- `color_var`: The column name used to assign different data points to different lines. Each line will have a different color.
+- `colors`: The column name used to assign different data points to different lines. Each line will have a different color.
 - `cvec`: Contains a named vector that links specific values to color codes.
-- `label_var`: Specifies the column containing the value labels to display.
+- `labels`: Specifies the column containing the axis labels to display around the radar.
 
 
 ```{r, fig.height=4, warning=FALSE}
@@ -871,9 +865,7 @@ wjp_rose(
     target    = "percentage",
     grouping  = "category",
     labels    = "axis_label",
-    cvec      = c("#482d8b", "#2894aa", "#f26b21",
-                  "#137b3f", "#869d3b", "#0f9581",
-                  "#1a74b6", "#8f2e8c", "#555659")
+    cvec      = wjp_palette(9)
 )
 ```
 
@@ -896,7 +888,7 @@ wjp_divbars(
     target       = "percentage",
     grouping     = "country",
     diverging    = "q1a",
-    negative     = "negative",
+    negative     = "No Trust",
     cvec         = c("Trust"     = "#482d8b",
                      "No Trust"  = "#f26b21"),
     labels       = "value_label",
@@ -931,13 +923,13 @@ wjp_dots(
 
 ## Adding more customizations
 
-All the plotting functions from the WJPr package return a ggplot object. This means that, with a further knowledge of ggplot, the user can further customize the plot returned by the plotting function. For example, let's say that we want to further customize our stacked bars from before and completely remove the panel grid and add some title and subtitle to it. We can do it by using the `labs()` and `theme()` functions from the ggplot2 package as shown bellow:
+All the plotting functions from the WJPr package return a ggplot object. This means that, with a further knowledge of ggplot, the user can further customize the plot returned by the plotting function. For example, let's say that we want to further customize our stacked bars from before and completely remove the panel grid and add some title and subtitle to it. We can do it by using the `labs()` and `theme()` functions from the ggplot2 package as shown below:
 
 ```{r, warning=FALSE}
 stacked_bar +
   labs(
     title    = "Trust in Institution A",
-    subtitle = "Percentage of people who has a lot, some, little, or no trust in Institution A"
+    subtitle = "Percentage of people who have a lot, some, little, or no trust in Institution A"
   ) +
   theme(
     axis.text.x         = element_blank(),

@@ -1,8 +1,8 @@
 ---
-title: "Guía de Desarrollo: Cómo Agregar Funciones a WJPr"
+title: "Development Guide: Adding Functions to WJPr"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Guía de Desarrollo: Cómo Agregar Funciones a WJPr}
+  %\VignetteIndexEntry{Development Guide: Adding Functions to WJPr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,45 +15,48 @@ knitr::opts_chunk$set(
 )
 ```
 
-Esta guía técnica detalla el proceso completo para agregar nuevas funciones de visualización al paquete WJPr.
+This technical guide walks through the complete process for adding new visualization functions to the WJPr package.
 
-## Requisitos Previos
+## Prerequisites
 
-### Dependencias de Desarrollo
+### Development Dependencies
 
 ```{r}
 install.packages(c(
-"devtools",
-"roxygen2",
-"testthat",
-"usethis"
+  "devtools",
+  "roxygen2",
+  "testthat",
+  "usethis",
+  "pkgdown"
 ))
 ```
 
-### Clonar el Repositorio
+### Clone the Repository
 
 ```{bash}
-git clone https://github.com/worldjusticeproject-org/WJPr.git
+git clone https://github.com/worldjusticeproject/WJPr.git
 cd WJPr
 ```
 
-## Paso 1: Crear el Archivo de la Función
+Then restore the project environment with `renv::restore()`.
 
-### Ubicación y Nomenclatura
+## Step 1: Create the Function File
 
-Crear un nuevo archivo en `R/` siguiendo la convención:
+### Location and Naming
 
-- **Gráficos**: `{tipo}Chart.R` (ej: `waterfallChart.R`)
-- **Utilidades**: `{nombre}.R` (ej: `validation.R`)
+Create a new file in `R/` following the convention:
+
+- **Charts**: `{type}Chart.R` (e.g., `waterfallChart.R`)
+- **Utilities**: `{name}.R` (e.g., `validation.R`)
 
 ```{r}
-# Crear archivo
-file.create("R/waterfallChart.R")
+# Create the file
+usethis::use_r("waterfallChart")
 ```
 
-## Paso 2: Estructura de la Función
+## Step 2: Function Structure
 
-### Template Completo
+### Complete Template
 
 ```{r}
 #' Plot a Waterfall Chart following WJP style guidelines
@@ -61,33 +64,33 @@ file.create("R/waterfallChart.R")
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' `wjp_waterfall()` creates a waterfall chart showing cumulative effects
+#' `wjp_waterfall()` creates a waterfall chart showing the cumulative effect
 #' of sequential positive and negative values.
 #'
-#' @param data A data frame containing the data to be plotted.
+#' @param data Data frame containing the data to plot.
 #' @param target String. Column name with numeric values to plot.
 #' @param grouping String. Column name with category labels.
-#' @param colors String. Column name for color grouping. Default is NULL.
-#' @param cvec Named character vector of colors. Default is NULL.
-#' @param labels String. Column name with value labels. Default is NULL.
-#' @param direction String. "horizontal" or "vertical". Default is "vertical".
-#' @param ptheme A ggplot2 theme. Default is WJP_theme().
+#' @param colors String. Column name for color grouping. Default is `NULL`.
+#' @param cvec Named vector of colors. Default is `NULL` (the WJP palette,
+#'   see [wjp_palette()], is applied).
+#' @param labels String. Column name with value labels. Default is `NULL`.
+#' @param direction String. `"horizontal"` or `"vertical"`. Default is `"vertical"`.
+#' @param ptheme ggplot theme to apply. Default is [WJP_theme()].
+#' @param show_legend Logical. If `TRUE`, displays a horizontal legend above
+#'   the chart. Default is `FALSE`.
 #'
 #' @return A ggplot object representing the waterfall chart.
 #' @export
 #'
 #' @examples
-#' library(dplyr)
-#' library(ggplot2)
-#'
-#' # Load fonts
+#' # Always load the WJP fonts
 #' wjp_fonts()
 #'
 #' # Prepare data
 #' data_waterfall <- data.frame(
 #'   category = c("Start", "Gain A", "Loss B", "Gain C", "End"),
-#'   value = c(100, 30, -20, 15, 125),
-#'   type = c("total", "positive", "negative", "positive", "total")
+#'   value    = c(100, 30, -20, 15, 125),
+#'   type     = c("total", "positive", "negative", "positive", "total")
 #' )
 #'
 #' # Create chart
@@ -96,7 +99,7 @@ file.create("R/waterfallChart.R")
 #'   target   = "value",
 #'   grouping = "category",
 #'   colors   = "type",
-#'   cvec     = c("total" = "#482d8b",
+#'   cvec     = c("total"    = "#482d8b",
 #'                "positive" = "#0f9581",
 #'                "negative" = "#f26b21")
 #' )
@@ -105,169 +108,173 @@ wjp_waterfall <- function(
     data,
     target,
     grouping,
-    colors    = NULL,
-    cvec      = NULL,
-    labels    = NULL,
-    direction = "vertical",
-    ptheme    = WJP_theme()
+    colors      = NULL,
+    cvec        = NULL,
+    labels      = NULL,
+    direction   = "vertical",
+    ptheme      = WJP_theme(),
+    show_legend = FALSE
 ) {
 
-# ===========================================================================
-# SECCIÓN 1: VALIDACIÓN DE DATOS (Opcional pero recomendado)
-# ===========================================================================
+  # ===========================================================================
+  # SECTION 1: INPUT VALIDATION (optional but recommended)
+  # ===========================================================================
 
-if (!is.data.frame(data)) {
-  stop("'data' must be a data frame")
-}
+  if (!is.data.frame(data)) {
+    stop("`data` must be a data frame.", call. = FALSE)
+  }
 
-if (!target %in% names(data)) {
-  stop(paste0("Column '", target, "' not found in data"))
-}
+  if (!target %in% names(data)) {
+    stop("Column '", target, "' not found in `data`.", call. = FALSE)
+  }
 
-# ===========================================================================
-# SECCIÓN 2: RENOMBRAR VARIABLES
-# ===========================================================================
+  if (!direction %in% c("vertical", "horizontal")) {
+    stop('`direction` must be one of "vertical" or "horizontal".', call. = FALSE)
+  }
 
-# Renombrar columnas obligatorias
-data <- data %>%
-  dplyr::rename(
-    target_var   = dplyr::all_of(target),
-    grouping_var = dplyr::all_of(grouping)
-  )
+  # ===========================================================================
+  # SECTION 2: RENAME VARIABLES
+  # ===========================================================================
 
-# Manejar columna de colores
-if (is.null(colors)) {
-  # Si no se especifica, usar grouping como color
+  # Rename the required columns
   data <- data %>%
-    dplyr::mutate(colors_var = grouping_var)
-} else if (colors == grouping) {
-  # Evitar doble rename si son la misma columna
-  data <- data %>%
-    dplyr::mutate(colors_var = grouping_var)
-} else {
-  data <- data %>%
-    dplyr::rename(colors_var = dplyr::all_of(colors))
-}
-
-# Manejar labels
-if (is.null(labels)) {
-  data <- data %>%
-    dplyr::mutate(labels_var = "")
-} else if (labels == grouping) {
-  data <- data %>%
-    dplyr::mutate(labels_var = grouping_var)
-} else if (labels == colors && !is.null(colors)) {
-  data <- data %>%
-    dplyr::mutate(labels_var = colors_var)
-} else {
-  data <- data %>%
-    dplyr::rename(labels_var = dplyr::all_of(labels))
-}
-
-# ===========================================================================
-# SECCIÓN 3: TRANSFORMACIONES DE DATOS
-# ===========================================================================
-
-# Calcular posiciones para waterfall
-data <- data %>%
-  dplyr::mutate(
-    end   = cumsum(target_var),
-    start = dplyr::lag(end, default = 0),
-    # Ajustar para valores negativos
-    ymin = pmin(start, end),
-    ymax = pmax(start, end)
-  )
-
-# ===========================================================================
-# SECCIÓN 4: CREAR GRÁFICO BASE
-# ===========================================================================
-
-plt <- ggplot2::ggplot(
-  data,
-  ggplot2::aes(
-    x    = grouping_var,
-    fill = colors_var
-  )
-) +
-  ggplot2::geom_rect(
-    ggplot2::aes(
-      xmin = as.numeric(factor(grouping_var)) - 0.4,
-      xmax = as.numeric(factor(grouping_var)) + 0.4,
-      ymin = ymin,
-      ymax = ymax
-    ),
-    show.legend = FALSE
-  )
-
-# Agregar labels si existen
-if (!all(data$labels_var == "")) {
-  plt <- plt +
-    ggplot2::geom_text(
-      ggplot2::aes(
-        x     = grouping_var,
-        y     = ymax,
-        label = labels_var
-      ),
-      vjust    = -0.5,
-      family   = "Lato Full",
-      fontface = "bold",
-      color    = "#4a4a49"
+    dplyr::rename(
+      target_var   = dplyr::all_of(target),
+      grouping_var = dplyr::all_of(grouping)
     )
-}
 
-# ===========================================================================
-# SECCIÓN 5: APLICAR COLORES
-# ===========================================================================
+  # Handle the colors column
+  if (is.null(colors) || identical(colors, grouping)) {
+    # If not supplied (or the same column as grouping), reuse grouping
+    data <- data %>%
+      dplyr::mutate(colors_var = grouping_var)
+  } else {
+    data <- data %>%
+      dplyr::rename(colors_var = dplyr::all_of(colors))
+  }
 
-if (!is.null(cvec)) {
+  # Handle labels
+  if (is.null(labels)) {
+    data <- data %>%
+      dplyr::mutate(labels_var = "")
+  } else if (identical(labels, grouping)) {
+    data <- data %>%
+      dplyr::mutate(labels_var = grouping_var)
+  } else if (identical(labels, colors)) {
+    data <- data %>%
+      dplyr::mutate(labels_var = colors_var)
+  } else {
+    data <- data %>%
+      dplyr::rename(labels_var = dplyr::all_of(labels))
+  }
+
+  # ===========================================================================
+  # SECTION 3: DATA TRANSFORMATIONS
+  # ===========================================================================
+
+  # Compute the waterfall positions
+  data <- data %>%
+    dplyr::mutate(
+      end   = cumsum(target_var),
+      start = dplyr::lag(end, default = 0),
+      # Handle negative values
+      ymin  = pmin(start, end),
+      ymax  = pmax(start, end)
+    )
+
+  # ===========================================================================
+  # SECTION 4: DEFAULT COLORS
+  # ===========================================================================
+
+  # Fall back to the WJP palette when no color vector is supplied
+  if (is.null(cvec)) {
+    cvec <- wjp_default_cvec(data$colors_var)
+  }
+
+  # ===========================================================================
+  # SECTION 5: BASE CHART
+  # ===========================================================================
+
+  plt <- ggplot2::ggplot(
+    data,
+    ggplot2::aes(
+      x    = grouping_var,
+      fill = colors_var
+    )
+  ) +
+    ggplot2::geom_rect(
+      ggplot2::aes(
+        xmin = as.numeric(factor(grouping_var)) - 0.4,
+        xmax = as.numeric(factor(grouping_var)) + 0.4,
+        ymin = ymin,
+        ymax = ymax
+      ),
+      show.legend = show_legend
+    ) +
+    ggplot2::scale_fill_manual(
+      values = cvec,
+      breaks = wjp_legend_breaks(data$colors_var),
+      name   = NULL
+    )
+
+  # Add value labels if supplied
+  if (!all(data$labels_var == "")) {
+    plt <- plt +
+      ggplot2::geom_text(
+        ggplot2::aes(
+          x     = grouping_var,
+          y     = ymax,
+          label = labels_var
+        ),
+        vjust    = -0.5,
+        family   = wjp_font_family(),
+        fontface = "bold",
+        size     = 3.514598,
+        color    = "#4a4a49"
+      )
+  }
+
+  # ===========================================================================
+  # SECTION 6: DIRECTION
+  # ===========================================================================
+
+  if (direction == "horizontal") {
+    plt <- plt +
+      ggplot2::coord_flip()
+  }
+
+  # ===========================================================================
+  # SECTION 7: THEME AND FINAL TWEAKS
+  # ===========================================================================
+
   plt <- plt +
-    ggplot2::scale_fill_manual(values = cvec)
-}
+    ptheme +
+    ggplot2::labs(x = "", y = "") +
+    ggplot2::theme(
+      panel.grid.major.x = ggplot2::element_blank()
+    ) +
+    wjp_legend_theme(show_legend)
 
-# ===========================================================================
-# SECCIÓN 6: APLICAR DIRECCIÓN
-# ===========================================================================
-
-if (direction == "horizontal") {
-  plt <- plt +
-    ggplot2::coord_flip()
-}
-
-# ===========================================================================
-# SECCIÓN 7: APLICAR TEMA Y AJUSTES FINALES
-# ===========================================================================
-
-plt <- plt +
-  ptheme +
-  ggplot2::labs(x = "", y = "") +
-  ggplot2::theme(
-    panel.grid.major.x = ggplot2::element_blank(),
-    legend.position    = "none"
-  )
-
-return(plt)
+  return(plt)
 }
 ```
 
-## Paso 3: Patrones Importantes
+## Step 3: Important Patterns
 
-### Manejo de Parámetros Opcionales
+### Handling Optional Parameters
 
-El patrón más importante es manejar correctamente cuando un parámetro es NULL o cuando dos parámetros apuntan a la misma columna:
+The most important pattern is handling a parameter that is NULL or two parameters that point to the same column:
 
 ```{r}
-# INCORRECTO - Causa error si colors == grouping
+# INCORRECT - Fails if colors == grouping
 data <- data %>%
   rename(
     grouping_var = all_of(grouping),
-    colors_var   = all_of(colors)  # ERROR: columna ya renombrada
+    colors_var   = all_of(colors)  # ERROR: column already renamed
   )
 
-# CORRECTO - Verificar antes de renombrar
-if (is.null(colors)) {
-  data <- data %>%
-    mutate(colors_var = grouping_var)
-} else if (colors == grouping) {
+# CORRECT - Check before renaming
+if (is.null(colors) || identical(colors, grouping)) {
   data <- data %>%
     mutate(colors_var = grouping_var)
 } else {
@@ -275,86 +282,133 @@ if (is.null(colors)) {
     rename(colors_var = all_of(colors))
 }
 ```
-### Vector de Colores Nombrado
+
+### Named Color Vector
 
 ```{r}
-# Los nombres deben coincidir EXACTAMENTE con valores de la variable colors
+# Names must match the values of the colors variable EXACTLY
 cvec <- c(
   "Trust"    = "#482d8b",
   "No Trust" = "#f26b21"
 )
 
-# En la función, aplicar solo si no es NULL
-if (!is.null(cvec)) {
-  plt <- plt +
-    scale_fill_manual(values = cvec)
+# Inside the function, fall back to the WJP palette when cvec is NULL
+if (is.null(cvec)) {
+  cvec <- wjp_default_cvec(data$colors_var)
 }
+plt <- plt +
+  scale_fill_manual(values = cvec)
 ```
 
-### Coordenadas Polares (Gráficos Circulares)
+### Fonts
 
-Para gráficos tipo radar, rose o gauge:
+Never hard-code a font family. Read the active one with `wjp_font_family()` so `options(wjpr.family = "Inter Tight")` switches every chart:
+
+```{r}
+geom_text(
+  family   = wjp_font_family(),
+  fontface = "bold",
+  size     = 3.514598  # 10 pt value labels
+)
+```
+
+### Polar Coordinates (Circular Charts)
+
+For radar, rose, or gauge charts:
 
 ```{r}
 plt <- plt +
   coord_polar(
-    theta = "y",      # Variable para el ángulo
-    start = pi        # Punto de inicio (pi = abajo)
+    theta = "y",      # Variable mapped to the angle
+    start = pi        # Starting point (pi = bottom)
   ) +
   theme(
-    aspect.ratio = 1  # Mantener proporción 1:1 para círculo
+    aspect.ratio = 1  # Keep a 1:1 ratio for a circle
   )
 ```
 
-### Agregar Segmentos Invisibles
+### Invisible Segments
 
-Para controlar el rango visual sin afectar los datos:
+To control the visual range without affecting the data (as `wjp_gauge()` does to draw a semicircle):
 
 ```{r}
-# Agregar segmento de relleno transparente
+# Add a transparent padding segment
 padding_data <- data.frame(
-  category = "___padding___",
-  value    = 50,
-  color    = "transparent"
+  colors_var = "___padding___",
+  target_var = 50
 )
 
 data <- dplyr::bind_rows(data, padding_data)
 cvec <- c(cvec, "___padding___" = "transparent")
 ```
 
-## Paso 4: Documentación Roxygen2
+Keep technical segments out of the legend by passing the visible categories as `breaks` (see `wjp_legend_breaks()`).
 
-### Tags Obligatorios
+### Deprecating Parameters
 
-| Tag | Descripción | Ejemplo |
+When a parameter is renamed, keep the old name working and signal the change:
+
+```{r}
+wjp_waterfall <- function(data, target, grouping, order = NULL, order_var = deprecated()) {
+  if (lifecycle::is_present(order_var)) {
+    lifecycle::deprecate_soft("1.2.0", "wjp_waterfall(order_var)", "wjp_waterfall(order)")
+    if (is.null(order)) order <- order_var
+  }
+  ...
+}
+```
+
+## Step 4: Roxygen2 Documentation
+
+### Required Tags
+
+| Tag | Description | Example |
 |-----|-------------|---------|
-| `@description` | Descripción detallada | Incluir lifecycle badge |
-| `@param` | Cada parámetro | `@param data A data frame...` |
-| `@return` | Valor de retorno | `@return A ggplot object` |
-| `@export` | Exportar función | Siempre incluir |
-| `@examples` | Ejemplo reproducible | Código ejecutable |
+| `@description` | Detailed description | Include the lifecycle badge |
+| `@param` | Every parameter | `@param data Data frame containing...` |
+| `@return` | Returned value | `@return A ggplot object` |
+| `@export` | Export the function | Always include |
+| `@examples` | Reproducible example | Runnable code |
 
 ### Lifecycle Badge
 
-Siempre incluir el estado de la función:
+Always include the function status:
 
 ```{r}
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Descripción de la función...
+#' Description of the function...
 ```
 
-Opciones:
-- `"experimental"` - Nueva, puede cambiar
-- `"stable"` - API estable
-- `"deprecated"` - No usar, será eliminada
+Options:
+- `"experimental"` - New, may change
+- `"stable"` - Stable API
+- `"deprecated"` - Do not use, will be removed
 
-## Paso 5: Agregar Ejemplo Visual
+## Step 5: Add Tests
 
-### Actualizar generate-examples.R
+Create or extend a file in `tests/testthat/`:
 
-Agregar sección en `data-raw/generate-examples.R`:
+```{r}
+test_that("wjp_waterfall returns a buildable ggplot", {
+  data <- data.frame(
+    category = c("Start", "Gain", "Loss"),
+    value    = c(100, 30, -20)
+  )
+
+  plot <- wjp_waterfall(data, target = "value", grouping = "category")
+
+  expect_s3_class(plot, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(plot))
+})
+```
+
+## Step 6: Add a Visual Example
+
+### Update generate-examples.R
+
+Add a section to `data-raw/generate-examples.R`:
 
 ```{r}
 # =============================================================================
@@ -363,75 +417,77 @@ Agregar sección en `data-raw/generate-examples.R`:
 message("XX. Generating waterfall chart example...")
 
 data_waterfall <- data.frame(
-category = c("Start", "Revenue", "Costs", "Taxes", "End"),
-value = c(100, 50, -30, -10, 110),
-type = c("total", "gain", "loss", "loss", "total")
+  category = c("Start", "Revenue", "Costs", "Taxes", "End"),
+  value    = c(100, 50, -30, -10, 110),
+  type     = c("total", "gain", "loss", "loss", "total")
 )
 
 plot_waterfall <- wjp_waterfall(
   data_waterfall,
-  target = "value",
+  target   = "value",
   grouping = "category",
-  colors = "type",
-  cvec = c("total" = "#482d8b",
-           "gain"  = "#0f9581",
-           "loss"  = "#f26b21")
+  colors   = "type",
+  cvec     = c("total" = "#482d8b",
+               "gain"  = "#0f9581",
+               "loss"  = "#f26b21")
 )
 
 save_example(plot_waterfall, "waterfall")
 ```
 
-### Generar Imagen
+### Generate the Image
 
 ```{r}
 source("data-raw/generate-examples.R")
 ```
 
-## Paso 6: Actualizar CLAUDE.md
+## Step 7: Register the Function
 
-Agregar la nueva función a la sección de funciones:
+- Add the function to `_pkgdown.yml` (the `functions` navbar menu and the `reference` index).
+- Add a section to `vignettes/articles/gallery.Rmd`.
+- Add an entry to `NEWS.md`.
+- Add the function to the chart table in `CLAUDE.md`:
 
 ```markdown
-### wjp_waterfall()
-- **Archivo**: `R/waterfallChart.R`
-- **Propósito**: Gráfico waterfall para mostrar cambios acumulativos
-- **Parámetros clave**: target, grouping, colors, direction
+| `wjp_waterfall()` | waterfallChart.R | Waterfall chart for cumulative changes |
 ```
 
-## Paso 7: Verificación
+## Step 8: Verification
 
-### Checklist Pre-PR
+### Pre-PR Checklist
 
 ```{r}
-# 1. Regenerar documentación
+# 1. Regenerate documentation
 devtools::document()
 
-# 2. Verificar paquete
+# 2. Run the tests
+devtools::test()
+
+# 3. Check the package
 devtools::check()
 
-# 3. Cargar y probar
+# 4. Load and try it
 devtools::load_all()
-
-# 4. Ejecutar ejemplo manualmente
 wjp_fonts()
-# ... código del ejemplo
+# ... example code
 
-# 5. Generar imagen
+# 5. Generate the image
 source("data-raw/generate-examples.R")
 ```
 
-### Errores Comunes
+### Common Errors
 
-| Error | Causa | Solución |
+| Error | Cause | Solution |
 |-------|-------|----------|
-| `object 'x' not found` | Variable no renombrada | Verificar rename |
-| `Column doesn't exist` | Doble rename | Usar if/else para evitar |
-| `NULL` result | Falta return() | Agregar `return(plt)` |
-| Font not found | Fonts no cargados | Llamar `wjp_fonts()` |
+| `object 'x' not found` | Variable not renamed | Check the rename step |
+| `Column doesn't exist` | Double rename | Use if/else to avoid it |
+| `NULL` result | Missing `return()` | Add `return(plt)` |
+| Font not found | Fonts not loaded | Call `wjp_fonts()` |
+| `no visible binding for global variable` (check NOTE) | Column used in `aes()`/`mutate()` | Add it to `globalVariables()` in `R/WJPr-package.R` |
 
-## Paso 8: Pull Request
+## Step 9: Pull Request
 
-### Crear Rama
+### Create a Branch
 
 ```{bash}
 git checkout -b feature/waterfall-chart
@@ -443,30 +499,32 @@ git checkout -b feature/waterfall-chart
 git add R/waterfallChart.R
 git add man/wjp_waterfall.Rd
 git add man/figures/example-waterfall.png
+git add tests/testthat/test-charts.R
 git add data-raw/generate-examples.R
-git add CLAUDE.md
+git add _pkgdown.yml NEWS.md CLAUDE.md
 
 git commit -m "Add wjp_waterfall() chart function
 
 - New waterfall chart for cumulative changes
 - Supports horizontal/vertical direction
-- Full Roxygen2 documentation
+- Full Roxygen2 documentation and tests
 - Example image generated"
 ```
 
-### Push y PR
+### Push and PR
 
 ```{bash}
 git push origin feature/waterfall-chart
 ```
 
-Crear PR en GitHub con:
-- Descripción de la función
-- Screenshot del gráfico
-- Checklist completado
+Open a PR on GitHub with:
+- A description of the function
+- A screenshot of the chart
+- The completed checklist
 
-## Recursos Adicionales
+## Additional Resources
 
-- [R Packages (2e)](https://r-pkgs.org/) - Guía completa de desarrollo
-- [ggplot2 extensions](https://exts.ggplot2.tidyverse.org/) - Inspiración
-- [Roxygen2 documentation](https://roxygen2.r-lib.org/) - Tags disponibles
+- [R Packages (2e)](https://r-pkgs.org/) - Complete package development guide
+- [ggplot2 extensions](https://exts.ggplot2.tidyverse.org/) - Inspiration
+- [roxygen2 documentation](https://roxygen2.r-lib.org/) - Available tags
+- [lifecycle](https://lifecycle.r-lib.org/) - Deprecating functions and arguments

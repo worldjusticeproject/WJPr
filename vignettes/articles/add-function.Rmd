@@ -1,8 +1,8 @@
 ---
-title: "Agregar una función nueva"
+title: "Adding a New Function"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Agregar una función nueva}
+  %\VignetteIndexEntry{Adding a New Function}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,35 +15,36 @@ knitr::opts_chunk$set(
 )
 ```
 
-Esta guía resume el flujo recomendado para insertar una función nueva en WJPr.
-Para detalles más extensos, ver la [guía de desarrollo completa](development-guide.html).
+This guide summarizes the recommended workflow for adding a new function to WJPr.
+For more detail, see the [complete development guide](development-guide.html).
 
-## 1. Crear el archivo
+## 1. Create the file
 
-Las funciones de gráficos viven en `R/` y siguen la convención:
+Chart functions live in `R/` and follow this convention:
 
-- `R/{tipo}Chart.R` para gráficos, por ejemplo `R/waterfallChart.R`.
-- `R/{nombre}.R` para utilidades, validadores o funciones no gráficas.
+- `R/{type}Chart.R` for charts, for example `R/waterfallChart.R`.
+- `R/{name}.R` for utilities, validators, or non-chart functions.
 
-La función exportada debe usar el prefijo `wjp_`:
+The exported function must use the `wjp_` prefix:
 
 ```r
 wjp_waterfall <- function(
     data,
     target,
     grouping,
-    colors = NULL,
-    cvec = NULL,
-    labels = NULL,
-    ptheme = WJP_theme()
+    colors      = NULL,
+    cvec        = NULL,
+    labels      = NULL,
+    ptheme      = WJP_theme(),
+    show_legend = FALSE
 ) {
-  # implementación
+  # implementation
 }
 ```
 
-## 2. Documentar con roxygen2
+## 2. Document with roxygen2
 
-Toda función pública necesita documentación roxygen completa:
+Every public function needs complete roxygen documentation:
 
 ```r
 #' Plot a Waterfall Chart following WJP style guidelines
@@ -53,53 +54,53 @@ Toda función pública necesita documentación roxygen completa:
 #'
 #' `wjp_waterfall()` creates a waterfall chart following WJP style guidelines.
 #'
-#' @param data A data frame containing the data to be plotted.
+#' @param data Data frame containing the data to plot.
 #' @param target String. Column name containing numeric values.
 #' @param grouping String. Column name containing categories.
-#' @param colors String. Column name for color groups. Default is NULL.
-#' @param cvec Named vector of colors. Default is NULL.
-#' @param labels String. Column name with labels. Default is NULL.
-#' @param ptheme A ggplot2 theme. Default is WJP_theme().
+#' @param colors String. Column name for color groups. Default is `NULL`.
+#' @param cvec Named vector of colors. Default is `NULL` (the WJP palette,
+#'   see [wjp_palette()], is applied).
+#' @param labels String. Column name with labels. Default is `NULL`.
+#' @param ptheme ggplot theme to apply. Default is [WJP_theme()].
+#' @param show_legend Logical. If `TRUE`, displays a horizontal legend above
+#'   the chart. Default is `FALSE`.
 #'
 #' @return A ggplot object.
 #' @export
 ```
 
-Después de documentar, ejecutar:
+After documenting, run:
 
 ```r
-roxygen2::roxygenise()
+devtools::document()
 ```
 
-Esto actualiza `NAMESPACE` y los archivos en `man/`.
+This updates `NAMESPACE` and the files in `man/`.
 
-## 3. Usar el patrón interno de columnas
+## 3. Use the internal column pattern
 
-Las funciones deben renombrar columnas de entrada a nombres internos estables.
-Esto hace que el código sea consistente entre gráficos:
+Functions rename the input columns to stable internal names. This keeps the
+code consistent across charts:
 
 ```r
-data <- data |>
+data <- data %>%
   dplyr::rename(
-    target_var = dplyr::all_of(target),
+    target_var   = dplyr::all_of(target),
     grouping_var = dplyr::all_of(grouping)
   )
 
-if (is.null(colors)) {
-  data <- data |>
-    dplyr::mutate(colors_var = grouping_var)
-} else if (colors == grouping) {
-  data <- data |>
+if (is.null(colors) || identical(colors, grouping)) {
+  data <- data %>%
     dplyr::mutate(colors_var = grouping_var)
 } else {
-  data <- data |>
+  data <- data %>%
     dplyr::rename(colors_var = dplyr::all_of(colors))
 }
 ```
 
-## 4. Validar entradas importantes
+## 4. Validate important inputs
 
-Agregar errores claros para casos que producirían gráficos inválidos:
+Add clear errors for cases that would produce invalid charts:
 
 ```r
 if (!is.data.frame(data)) {
@@ -111,76 +112,84 @@ if (any(!is.na(data$target_var) & data$target_var < 0)) {
 }
 ```
 
-Para validaciones generales, usar o extender `wjp_check_data()`.
+For general validations, use or extend `wjp_check_data()`.
 
-## 5. Aplicar colores y tema
+## 5. Apply colors, fonts, and theme
 
-Las funciones deben retornar un objeto `ggplot` y respetar `cvec` y `ptheme`:
+Functions return a `ggplot` object, fall back to the WJP palette when `cvec`
+is `NULL`, read the active font with `wjp_font_family()`, and respect `ptheme`:
 
 ```r
-plt <- ggplot2::ggplot(data, ggplot2::aes(grouping_var, target_var)) +
-  ggplot2::geom_col()
-
-if (!is.null(cvec)) {
-  plt <- plt +
-    ggplot2::scale_fill_manual(values = cvec)
+if (is.null(cvec)) {
+  cvec <- wjp_default_cvec(data$colors_var)
 }
 
-plt <- plt + ptheme
+plt <- ggplot2::ggplot(data, ggplot2::aes(grouping_var, target_var, fill = colors_var)) +
+  ggplot2::geom_col(show.legend = show_legend) +
+  ggplot2::geom_text(
+    ggplot2::aes(label = labels_var),
+    family   = wjp_font_family(),
+    fontface = "bold",
+    size     = 3.514598
+  ) +
+  ggplot2::scale_fill_manual(
+    values = cvec,
+    breaks = wjp_legend_breaks(data$colors_var),
+    name   = NULL
+  )
+
+plt <- plt + ptheme + wjp_legend_theme(show_legend)
 
 return(plt)
 ```
 
-No llamar `WJP_theme()` directamente dentro de la función si ya existe un
-argumento `ptheme`.
+Do not call `WJP_theme()` directly inside the function when a `ptheme`
+argument already exists.
 
-## 6. Agregar pruebas
+## 6. Add tests
 
-Agregar al menos una prueba en `tests/testthat/` que confirme:
+Add at least one test in `tests/testthat/` that confirms:
 
-- La función devuelve un objeto `ggplot`.
-- `ggplot2::ggplot_build()` no falla.
-- Los argumentos opcionales importantes funcionan.
-- Los errores esperados tienen mensajes claros.
+- The function returns a `ggplot` object.
+- `ggplot2::ggplot_build()` does not fail.
+- The important optional arguments work.
+- Expected errors have clear messages.
 
-Ejemplo:
+Example:
 
 ```r
 test_that("wjp_waterfall returns a buildable ggplot", {
   data <- data.frame(
     category = c("Start", "Gain", "Loss"),
-    value = c(100, 30, -20)
+    value    = c(100, 30, -20)
   )
 
   plot <- wjp_waterfall(data, target = "value", grouping = "category")
 
-  testthat::expect_s3_class(plot, "ggplot")
-  testthat::expect_no_error(ggplot2::ggplot_build(plot))
+  expect_s3_class(plot, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(plot))
 })
 ```
 
-## 7. Agregar la función al sitio web
+## 7. Add the function to the website
 
-Actualizar `_pkgdown.yml`:
+Update `_pkgdown.yml`:
 
-1. Agregar la función en el dropdown `navbar > components > functions`.
-2. Agregarla a la sección correcta en `reference`.
-3. Si corresponde, agregar un ejemplo visual en `vignettes/articles/gallery.Rmd`.
+1. Add the function to the `navbar > components > functions` dropdown.
+2. Add it to the right section in `reference`.
+3. If relevant, add a visual example to `vignettes/articles/gallery.Rmd` and
+   `data-raw/generate-examples.R`.
 
-## 8. Verificar antes de subir
+Also add an entry to `NEWS.md`.
 
-Ejecutar:
+## 8. Check before pushing
+
+Run:
 
 ```r
-testthat::test_dir("tests/testthat")
+devtools::test()
+devtools::check()
 pkgdown::build_site()
 ```
 
-Y para revisión de paquete:
-
-```bash
-R CMD build --no-build-vignettes .
-R CMD check --no-manual --no-build-vignettes --no-examples WJPr_1.0.1.tar.gz
-```
-
-Si todo pasa, la función está lista para revisión.
+If everything passes, the function is ready for review.

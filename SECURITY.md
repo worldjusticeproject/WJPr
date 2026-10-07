@@ -4,15 +4,15 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.0.x   | :white_check_mark: |
-| < 1.0   | :x:                |
+| 1.1.x   | :white_check_mark: |
+| < 1.1   | :x:                |
 
 ## Reporting a Vulnerability
 
 If you discover a security vulnerability in WJPr, please report it by:
 
 1. **DO NOT** open a public issue
-2. Email the maintainer directly with details
+2. Email the maintainer (data-analytics@worldjusticeproject.org) with details
 3. Include steps to reproduce the vulnerability
 4. Allow reasonable time for a fix before public disclosure
 

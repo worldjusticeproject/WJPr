@@ -1,43 +1,43 @@
-# Soporte para WJPr
+# Getting Help with WJPr
 
-## Documentación
+## Documentation
 
-Antes de abrir un issue, consulta la documentación disponible:
+Before opening an issue, check the available documentation:
 
-- **[Sitio de documentación](https://worldjusticeproject-org.github.io/WJPr/)** - Documentación completa del paquete
-- **[Referencia de funciones](https://worldjusticeproject-org.github.io/WJPr/reference/)** - Documentación de cada función
-- **[Preparación de datos](https://worldjusticeproject-org.github.io/WJPr/articles/data-preparation.html)** - Cómo estructurar datos
-- **[Galería de gráficos](https://worldjusticeproject-org.github.io/WJPr/articles/gallery.html)** - Ejemplos visuales
+- **[Documentation site](https://worldjusticeproject.github.io/WJPr/)** - Complete package documentation
+- **[Function reference](https://worldjusticeproject.github.io/WJPr/reference/)** - Documentation for every function
+- **[Data preparation](https://worldjusticeproject.github.io/WJPr/articles/data-preparation.html)** - How to structure your data
+- **[Chart gallery](https://worldjusticeproject.github.io/WJPr/articles/gallery.html)** - Visual examples
 
-## Obtener Ayuda
+## Getting Help
 
-### Preguntas sobre uso
+### Usage questions
 
-1. Revisa la documentación de la función con `?wjp_funcion`
-2. Busca en [issues existentes](https://github.com/worldjusticeproject-org/WJPr/issues?q=is%3Aissue)
-3. Abre un [issue de pregunta](https://github.com/worldjusticeproject-org/WJPr/issues/new?template=question.md)
+1. Read the function documentation with `?wjp_function`
+2. Search the [existing issues](https://github.com/worldjusticeproject/WJPr/issues?q=is%3Aissue)
+3. Open a [question issue](https://github.com/worldjusticeproject/WJPr/issues/new?template=question.md)
 
-### Reportar bugs
+### Reporting bugs
 
-Usa la [plantilla de bug report](https://github.com/worldjusticeproject-org/WJPr/issues/new?template=bug_report.md) e incluye:
+Use the [bug report template](https://github.com/worldjusticeproject/WJPr/issues/new?template=bug_report.md) and include:
 
-- Código reproducible mínimo
-- Mensaje de error completo
-- Versión de R y WJPr (`sessionInfo()`)
+- A minimal reproducible example
+- The full error message
+- Your R and WJPr versions (`sessionInfo()`)
 
-### Solicitar funcionalidades
+### Requesting features
 
-Usa la [plantilla de feature request](https://github.com/worldjusticeproject-org/WJPr/issues/new?template=feature_request.md) y describe:
+Use the [feature request template](https://github.com/worldjusticeproject/WJPr/issues/new?template=feature_request.md) and describe:
 
-- Caso de uso
-- Propuesta de solución
-- Ejemplo de cómo se usaría
+- The use case
+- The proposed solution
+- An example of how it would be used
 
-## Contribuir
+## Contributing
 
-¿Quieres contribuir código? Lee nuestra [guía de contribución](CONTRIBUTING.md).
+Want to contribute code? Read our [contribution guide](CONTRIBUTING.md).
 
-## Recursos Externos
+## External Resources
 
 - [ggplot2 documentation](https://ggplot2.tidyverse.org/)
 - [R for Data Science](https://r4ds.hadley.nz/)

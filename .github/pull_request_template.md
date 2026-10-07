@@ -31,7 +31,8 @@ Brief description of changes.
 - [ ] NULL parameters handled correctly
 - [ ] No duplicate column renames when parameters match
 - [ ] Uses `all_of()` for column selection
-- [ ] Colors applied only when `cvec` is not NULL
+- [ ] Falls back to the WJP palette when `cvec` is NULL
+- [ ] Text layers use `wjp_font_family()`
 - [ ] Returns ggplot object
 
 ### Documentation
@@ -42,14 +43,17 @@ Brief description of changes.
 - [ ] All parameters documented with type
 
 ### Testing
+- [ ] Tests added in `tests/testthat/`
 - [ ] Example runs without errors
 - [ ] `devtools::check()` passes
 - [ ] `devtools::document()` run
 
 ### Files Updated
-- [ ] New file named `{tipo}Chart.R`
+- [ ] New file named `{type}Chart.R`
 - [ ] Example image added to `man/figures/`
 - [ ] `data-raw/generate-examples.R` updated
+- [ ] `_pkgdown.yml` updated (navbar and reference index)
+- [ ] `NEWS.md` entry added
 - [ ] `CLAUDE.md` updated with new function
 
 ## Related Issues

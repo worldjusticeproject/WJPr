@@ -2,23 +2,23 @@
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
 # Default owners for everything in the repo
-*                           @ctoruno
+*                           @aspardog
 
 # R code and functions
-/R/                         @ctoruno
+/R/                         @aspardog
 
 # Documentation
-/vignettes/                 @ctoruno
-/man/                       @ctoruno
-*.md                        @ctoruno
+/vignettes/                 @aspardog
+/man/                       @aspardog
+*.md                        @aspardog
 
 # Package configuration
-DESCRIPTION                 @ctoruno
-NAMESPACE                   @ctoruno
+DESCRIPTION                 @aspardog
+NAMESPACE                   @aspardog
 
 # Data files
-/data/                      @ctoruno
-/data-raw/                  @ctoruno
+/data/                      @aspardog
+/data-raw/                  @aspardog
 
 # CI/CD and GitHub config
-/.github/                   @ctoruno
+/.github/                   @aspardog

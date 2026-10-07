@@ -47,7 +47,6 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
-docs
 .DS_Store
 inst/doc
 
