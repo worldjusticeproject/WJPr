@@ -2,7 +2,7 @@
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
-#' 
+#'
 #' `wjp_radar()` takes a data frame with a specific data structure (usually long shaped) and returns a ggplot
 #' object with a radar chart following WJP style guidelines.
 #'
@@ -99,13 +99,21 @@ wjp_radar <- function(
     cvec      = NULL,
     order     = NULL,
     source    = "GPP",
-    order_var = NULL,
+    order_var = deprecated(),
     show_legend = FALSE
 ){
 
   # Backwards compatibility: `order_var` was renamed to `order`
-  if (is.null(order) && !is.null(order_var)) {
-    order <- order_var
+  if (lifecycle::is_present(order_var)) {
+    lifecycle::deprecate_soft("1.1.0", "wjp_radar(order_var)", "wjp_radar(order)")
+    if (is.null(order)) {
+      order <- order_var
+    }
+  }
+
+  source <- toupper(source)
+  if (length(source) != 1 || !source %in% c("GPP", "QRQ")) {
+    stop('`source` must be one of "GPP" or "QRQ".', call. = FALSE)
   }
 
   # Renaming variables in the data frame to match the function naming
@@ -122,7 +130,7 @@ wjp_radar <- function(
     data <- data %>%
       mutate(maincat_var = color_var)
   }
-  
+
   if (is.null(order)) {
     data <- data %>%
       group_by(color_var) %>%
@@ -131,14 +139,14 @@ wjp_radar <- function(
     data <- data %>%
       rename(order_var = all_of(order))
   }
-  
+
   if (source == "GPP") {
     data <- data %>%
       mutate(
         target_var = target_var/100
       )
   }
-  
+
   # Default colors: WJP contrast pair plus a neutral gray fallback
   if (is.null(cvec)) {
     cvec   <- c("#482d8b", "#f26b21")
@@ -146,22 +154,22 @@ wjp_radar <- function(
   cvec <- c(cvec, "#555659")
 
   legend_breaks <- wjp_legend_breaks(data$color_var)
-    
+
   # Counting number of axis for the radar
   nvertix <- length(unique(data$axis_var))
-  
-  # Distance to the center of the web 
+
+  # Distance to the center of the web
   central_distance <- 0.2
-  
+
   # Function to generate radar coordinates
   circle_coords <- function(r, n_axis = nvertix){
     fi <- seq(0, 2*pi, (1/n_axis)*2*pi) + pi/2
     x <- r*cos(fi)
     y <- r*sin(fi)
-    
+
     tibble(x, y, r)
   }
-  
+
   # Function to generate axis lines
   axis_coords <- function(n_axis = nvertix){
     fi <- seq(0, (1 - 1/n_axis)*2*pi, (1/n_axis)*2*pi) + pi/2
@@ -169,64 +177,64 @@ wjp_radar <- function(
     y1 <- central_distance*sin(fi)
     x2 <- (1 + central_distance)*cos(fi)
     y2 <- (1 + central_distance)*sin(fi)
-    
+
     tibble(x = c(x1, x2), y = c(y1, y2), id = rep(1:n_axis, 2))
   }
-  
+
   # Function to generate axis coordinates
-  text_coords <- function(r      = 1.5, 
+  text_coords <- function(r      = 1.5,
                           n_axis = nvertix){
     fi <- seq(0, (1 - 1/n_axis)*2*pi, (1/n_axis)*2*pi) + pi/2 + 0.01*2*pi/r
     x <- r*cos(fi)
     y <- r*sin(fi)
-    
+
     tibble(x, y, r = r - central_distance)
   }
-  
+
   # Y-Axis labels
   axis_measure <- tibble(
     r         = seq(0, 1, 0.2),
     parameter = rep(
-      data %>% 
-        filter(order_var == 1) %>% 
+      data %>%
+        filter(order_var == 1) %>%
         ungroup() %>%
-        distinct(axis_var) %>% 
+        distinct(axis_var) %>%
         pull(axis_var),
       6
     )
   ) %>%
     bind_cols(
       purrr::map_df(
-        seq(0, 1, 0.2) + central_distance, 
+        seq(0, 1, 0.2) + central_distance,
         text_coords
-      ) %>% 
+      ) %>%
         distinct(r, .keep_all = TRUE) %>%
         select(-r)
     )
-  
+
   if (source == "GPP"){
     axis_measure <- axis_measure %>%
       mutate(
         r = paste0(r*100, "%")
       )
   }
-  
+
   # Generating data points
   rescaled_coords <- function(r, n_axis = nvertix){
     fi <- seq(0, 2*pi, (1/n_axis)*2*pi) + pi/2
-    tibble(r, fi) %>% 
-      mutate(x = r*cos(fi), y = r*sin(fi)) %>% 
+    tibble(r, fi) %>%
+      mutate(x = r*cos(fi), y = r*sin(fi)) %>%
       select(-fi)
   }
-  
-  rescaled_data <- data %>% 
+
+  rescaled_data <- data %>%
     bind_rows(
-      data %>% 
+      data %>%
         filter(
-          axis_var %in% 
-            (data %>% 
-               filter(order_var == 1) %>% 
-               distinct(axis_var) %>% 
+          axis_var %in%
+            (data %>%
+               filter(order_var == 1) %>%
+               distinct(axis_var) %>%
                pull(axis_var))
         ) %>%
         mutate(axis_var  = "copy",
@@ -237,18 +245,18 @@ wjp_radar <- function(
     mutate(
       coords = rescaled_coords(target_var + central_distance)
     ) %>%
-    unnest(cols = c(coords)) 
-  
+    unnest(cols = c(coords))
+
   # Generating ggplot
   radar <-
-    
+
     # We set up the ggplot
     ggplot(
       data = purrr::map_df(seq(0, 1, 0.20) + central_distance, circle_coords),
-      aes(x = x, 
+      aes(x = x,
           y = y)
     ) +
-    
+
     # We draw the outter ring
     geom_polygon(
       data     = circle_coords(1 + central_distance),
@@ -256,14 +264,14 @@ wjp_radar <- function(
       color    = "#d1cfd1",
       fill     = NA
     ) +
-    
+
     # We draw the inner rings
     geom_path(
-      aes(group = r), 
-      lty       = 2, 
+      aes(group = r),
+      lty       = 2,
       color     = "#d1cfd1"
     ) +
-    
+
     # We draw the ZERO ring
     geom_polygon(
       data = purrr::map_df(seq(0, 1, 0.20) + central_distance, circle_coords) %>%
@@ -272,16 +280,16 @@ wjp_radar <- function(
       linetype  = "solid",
       color     = "#d1cfd1"
     ) +
-    
+
     # Then, we draw the Y-axis lines
     geom_line(
-      data = axis_coords(), 
-      aes(x     = x, 
-          y     = y, 
+      data = axis_coords(),
+      aes(x     = x,
+          y     = y,
           group = id),
       color = "#d1cfd1"
     ) +
-    
+
     # Along with its labels
     geom_text(
       data = axis_measure,
@@ -293,7 +301,7 @@ wjp_radar <- function(
       color      = "#524F4C",
       show.legend = FALSE
     ) +
-    
+
     # Then, we add the axis labels
     {
       label_data <- text_coords() %>%
@@ -333,31 +341,31 @@ wjp_radar <- function(
         )
       }
     } +
-    
+
     # We add the data points along with its lines
     geom_point(
-      data = rescaled_data, 
-      aes(x     = x, 
-          y     = y, 
-          group = color_var, 
-          color = as.factor(color_var)), 
+      data = rescaled_data,
+      aes(x     = x,
+          y     = y,
+          group = color_var,
+          color = as.factor(color_var)),
       size        = 3,
       show.legend = show_legend
     ) +
     geom_path(
-      data = rescaled_data, 
-      aes(x     = x, 
-          y     = y, 
-          group = color_var, 
-          color = as.factor(color_var)), 
+      data = rescaled_data,
+      aes(x     = x,
+          y     = y,
+          group = color_var,
+          color = as.factor(color_var)),
       linewidth   = 1,
       show.legend = show_legend
     ) +
-    
+
     # Remaining aesthetics
-    coord_cartesian(clip = "off") + 
-    scale_x_continuous(expand = expansion(mult = 0.125)) + 
-    scale_y_continuous(expand = expansion(mult = 0.10)) + 
+    coord_cartesian(clip = "off") +
+    scale_x_continuous(expand = expansion(mult = 0.125)) +
+    scale_y_continuous(expand = expansion(mult = 0.10)) +
     scale_color_manual(values = cvec, breaks = legend_breaks, name = NULL) +
     theme_void() +
     theme(
@@ -365,7 +373,7 @@ wjp_radar <- function(
       plot.background    = element_blank()
     ) +
     wjp_legend_theme(show_legend)
-  
+
   return(radar)
-  
+
 }

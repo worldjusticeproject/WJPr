@@ -131,8 +131,9 @@ Default is "left".}
 
 \item{national_var}{String. Value in the \code{grouping} column that identifies
 the national average row (e.g., "general", "Overall"). When specified, this row
-is displayed with a special formatted label (bold, italic, colored) using
-\code{geom_richtext()}. Default is NULL.}
+is displayed in a blank facet with a special formatted label (bold, italic,
+colored) drawn with \code{ggtext::geom_richtext()}. The value can be used as
+is in \code{group_order} and \code{level_order}. Default is NULL.}
 
 \item{national_level}{String. Value in the \code{levels} column corresponding to
 the national average label (e.g., "National Average"). Required when
@@ -163,7 +164,7 @@ rows.
 library(dplyr)
 library(ggplot2)
 
-# Load WJP fonts (optional)
+# Always load the WJP fonts
 wjp_fonts()
 
 # Create sample data
@@ -196,7 +197,7 @@ data_ci <- data.frame(
   group    = c("Gender", "Gender", "Age", "Age", "Age"),
   category = c("Male", "Female", "18-29", "30-49", "50+"),
   value    = c(0.45, 0.52, 0.38, 0.48, 0.55),
-  se       = c(0.50, 0.50, 0.49, 0.50, 0.50),
+  sd       = c(0.50, 0.50, 0.49, 0.50, 0.50),
   n        = c(420, 460, 180, 510, 240)
 )
 
@@ -206,7 +207,7 @@ wjp_groupbars(
   grouping    = "group",
   levels      = "category",
   draw_ci     = TRUE,
-  sd          = "se",
+  sd          = "sd",
   sample_size = "n"
 )
 
@@ -296,7 +297,7 @@ wjp_groupbars(
   target         = "pct_weighted",
   grouping       = "disaggregation",
   levels         = "demographics",
-  group_order    = c(" ", "Age Group", "Gender"),
+  group_order    = c("general", "Age Group", "Gender"),
   national_var   = "general",
   national_level = "National Average"
 )

@@ -183,6 +183,12 @@ wjp_dots <- function(
   # Supplying opacity/shape vectors enables the respective aesthetics
   if (!is.null(opacities)) diffOpac <- TRUE
   if (length(shapes) > 1 || !all(is.na(shapes))) diffShp <- TRUE
+  if (isTRUE(diffOpac) && is.null(opacities)) {
+    stop("`opacities` must be provided when diffOpac = TRUE.", call. = FALSE)
+  }
+  if (isTRUE(diffShp) && all(is.na(shapes))) {
+    stop("`shapes` must be provided when diffShp = TRUE.", call. = FALSE)
+  }
 
   # Default to the WJP palette when no color vector is supplied
   if (is.null(cvec)) {

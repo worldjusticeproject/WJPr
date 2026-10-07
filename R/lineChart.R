@@ -131,10 +131,20 @@ wjp_lines <- function(
     x.breaks       = NULL,
     x.labels       = NULL,
     sec.ticks      = NULL,
-    ngroups        = NULL,
+    ngroups        = deprecated(),
     ptheme         = WJP_theme(),
     show_legend    = FALSE
 ){
+
+  if (lifecycle::is_present(ngroups)) {
+    lifecycle::deprecate_soft(
+      "1.1.0", "wjp_lines(ngroups)",
+      details = "Lines are grouped by the `colors` variable automatically."
+    )
+  }
+  if (isTRUE(transparency) && is.null(transparencies)) {
+    stop("`transparencies` must be provided when transparency = TRUE.", call. = FALSE)
+  }
 
   legend_theme <- wjp_legend_theme(show_legend)
   show_color_legend <- isTRUE(show_legend) && !is.null(colors)
@@ -169,12 +179,9 @@ wjp_lines <- function(
   }
   legend_breaks <- wjp_legend_breaks(data$colors_var)
 
-  # Lines are grouped by the colors variable; `ngroups` is kept for
-  # backwards compatibility with previous versions of the function.
-  if (is.null(ngroups)) {
-    data <- data %>%
-      dplyr::mutate(group_var = colors_var)
-  } else if (length(ngroups) == nrow(data)) {
+  # Lines are grouped by the colors variable; a deprecated `ngroups` vector
+  # of matching length is still honored for backwards compatibility.
+  if (lifecycle::is_present(ngroups) && length(ngroups) == nrow(data)) {
     data$group_var <- ngroups
   } else {
     data <- data %>%

@@ -100,15 +100,18 @@ wjp_dumbbells <- function(
     cvec      = NULL,
     order     = NULL,
     bgcolor   = "#ffffff",
-    color     = NULL,
+    color     = deprecated(),
     ptheme    = WJP_theme(),
     label_offset = 4,
     show_legend = TRUE
 ){
 
   # Backwards compatibility: `color` was renamed to `colors`
-  if (is.null(colors) && !is.null(color)) {
-    colors <- color
+  if (lifecycle::is_present(color)) {
+    lifecycle::deprecate_soft("1.1.0", "wjp_dumbbells(color)", "wjp_dumbbells(colors)")
+    if (is.null(colors)) {
+      colors <- color
+    }
   }
   if (is.null(colors)) {
     stop("`colors` must be provided.", call. = FALSE)

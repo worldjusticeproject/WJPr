@@ -154,3 +154,14 @@ test_that("invalid inputs raise clear errors", {
     "lower < upper"
   )
 })
+
+test_that("the text path converts absolute units without opening a device", {
+  expect_equal(wjp_unit_mm(grid::unit(1, "cm"), "x"), 10)
+  expect_equal(wjp_unit_mm(grid::unit(1, "inches"), "x"), 25.4)
+  expect_equal(wjp_unit_mm(grid::unit(72.27, "points"), "x"), 25.4)
+  expect_equal(wjp_unit_mm(150, "x"), 150)
+
+  device_before <- grDevices::dev.cur()
+  spread_labels_x(c(30, 31), labels = c("30%", "31%"), limits = c(0, 100))
+  expect_equal(grDevices::dev.cur(), device_before)
+})

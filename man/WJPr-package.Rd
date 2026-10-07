@@ -6,14 +6,14 @@
 \alias{WJPr-package}
 \title{WJPr: World Justice Project Data and Visualization Tools}
 \description{
-The WJPr package contains the most important data and visualization tools used by Data Analytics Unit at The World Justice Project. Version 1.0.0 comes with a wide range of visualization functions for replicating the image charts from the Country Reports. Additionally, you can find the Rule of Law Index scores data for all factors and subfactors as complementary data.
+The WJPr package contains the most important data and visualization tools used by the Data Analytics Unit at The World Justice Project. It provides a wide range of visualization functions for replicating the charts from the Country Reports following WJP style guidelines, a statistical helper for difference-in-means tests, and the Rule of Law Index scores for all factors and subfactors as complementary data.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/worldjusticeproject-org/WJPr}
-  \item \url{https://worldjusticeproject-org.github.io/WJPr/}
-  \item Report bugs at \url{https://github.com/worldjusticeproject-org/WJPr/issues}
+  \item \url{https://github.com/worldjusticeproject/WJPr}
+  \item \url{https://worldjusticeproject.github.io/WJPr/}
+  \item Report bugs at \url{https://github.com/worldjusticeproject/WJPr/issues}
 }
 
 }

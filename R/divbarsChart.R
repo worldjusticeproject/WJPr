@@ -104,17 +104,29 @@ wjp_divbars <- function(
     labels       = NULL,
     label_color  = "#ffffff",
     order        = NULL,
-    custom_order = FALSE,
+    custom_order = deprecated(),
     ptheme       = WJP_theme(),
     show_legend  = FALSE
 ){
+
+  # Backwards compatibility: ordering is enabled by supplying `order`
+  if (lifecycle::is_present(custom_order)) {
+    lifecycle::deprecate_soft(
+      "1.1.0", "wjp_divbars(custom_order)",
+      details = "Custom ordering is enabled automatically when `order` is supplied."
+    )
+  }
 
   # Renaming variables in the data frame to match the function naming
   data <- data %>%
     rename(target_var   = all_of(target),
            rows_var     = all_of(grouping),
-           grouping_var = all_of(diverging),
-           order_var    = any_of(order))
+           grouping_var = all_of(diverging))
+
+  if (!is.null(order)) {
+    data <- data %>%
+      rename(order_var = all_of(order))
+  }
 
   if (!is.null(labels)) {
     data <- data %>%
@@ -148,11 +160,8 @@ wjp_divbars <- function(
   }
   legend_breaks <- wjp_legend_breaks(data$grouping_var)
 
-  # Supplying an order column enables custom ordering
-  use_order <- isTRUE(custom_order) || !is.null(order)
-
-  # Creating ggplot
-  if (use_order && "order_var" %in% names(data)) {
+  # Creating ggplot (supplying an order column enables custom ordering)
+  if (!is.null(order)) {
     chart <- ggplot(data, aes(x     = reorder(rows_var, order_var),
                               y     = target_var,
                               fill  = grouping_var,

@@ -40,8 +40,10 @@ variable. Default is \code{NULL} (the WJP palette, see \code{\link[=wjp_palette]
 
 \item{direction}{String. Either \code{"vertical"} (default) or \code{"horizontal"}.}
 
-\item{stacked}{Logical. If \code{TRUE}, bars are stacked on top of each other per group.
-Default is \code{FALSE}.}
+\item{stacked}{Logical. Set to \code{TRUE} for stacked bars (several rows per
+category, one per segment) so value labels are drawn in white inside each
+segment. Rows that share a category are always stacked; this flag only
+switches the label styling. Default is \code{FALSE}.}
 
 \item{lab_pos}{String. Column name of the variable that contains the Y coordinates
 for the value labels. Default is \code{NULL} (labels are placed at the bar value).}

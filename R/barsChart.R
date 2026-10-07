@@ -28,8 +28,10 @@
 #' @param cvec Named vector of colors. Names should match the values of the `colors`
 #'   variable. Default is `NULL` (the WJP palette, see [wjp_palette()], is applied).
 #' @param direction String. Either `"vertical"` (default) or `"horizontal"`.
-#' @param stacked Logical. If `TRUE`, bars are stacked on top of each other per group.
-#'   Default is `FALSE`.
+#' @param stacked Logical. Set to `TRUE` for stacked bars (several rows per
+#'   category, one per segment) so value labels are drawn in white inside each
+#'   segment. Rows that share a category are always stacked; this flag only
+#'   switches the label styling. Default is `FALSE`.
 #' @param lab_pos String. Column name of the variable that contains the Y coordinates
 #'   for the value labels. Default is `NULL` (labels are placed at the bar value).
 #' @param expand Logical. If `TRUE`, the axis is expanded to give extra space for value

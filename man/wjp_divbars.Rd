@@ -14,7 +14,7 @@ wjp_divbars(
   labels = NULL,
   label_color = "#ffffff",
   order = NULL,
-  custom_order = FALSE,
+  custom_order = deprecated(),
   ptheme = WJP_theme(),
   show_legend = FALSE
 )

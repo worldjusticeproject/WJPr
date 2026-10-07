@@ -62,7 +62,7 @@ Use \code{factor_order} to control the drawing order of the segments.
 library(dplyr)
 library(ggplot2)
 
-# Always load the WJP fonts (optional)
+# Always load the WJP fonts
 wjp_fonts()
 
 # Create sample data for gauge chart

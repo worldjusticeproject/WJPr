@@ -11,13 +11,14 @@
 #' @details
 #' The function expects long-format data with exactly two `grouping` values
 #' (the two time points) per series. `grouping` must be numeric (e.g., years)
-#' so the value labels can be placed just outside each endpoint. When labels
+#' so the value labels can be placed just outside each endpoint; numbers
+#' stored as text (e.g., `"2019"`) are converted automatically. When labels
 #' overlap, set `repel = TRUE` (requires the ggrepel package).
 #'
 #' @param data Data frame containing the data to plot.
 #' @param target String. Column name of the variable that supplies the values to plot.
 #' @param grouping String. Column name of the numeric variable that supplies the two
-#'   X-axis values (usually years).
+#'   X-axis values (usually years). Numbers stored as text are converted.
 #' @param colors String. Column name of the variable that defines the lines and their
 #'   color grouping. Default is `NULL` (a single line is drawn).
 #' @param cvec Named vector of colors, one per line. Names should match the values of
@@ -84,10 +85,17 @@ wjp_slope <- function(
     cvec      = NULL,
     labels    = NULL,
     repel     = FALSE,
-    ngroups   = NULL,
+    ngroups   = deprecated(),
     ptheme    = WJP_theme(),
     show_legend = FALSE
 ){
+
+  if (lifecycle::is_present(ngroups)) {
+    lifecycle::deprecate_soft(
+      "1.1.0", "wjp_slope(ngroups)",
+      details = "Lines are grouped by the `colors` variable automatically."
+    )
+  }
 
   legend_theme <- wjp_legend_theme(show_legend)
   show_color_legend <- isTRUE(show_legend) && !is.null(colors)
@@ -118,9 +126,19 @@ wjp_slope <- function(
       rename(colors_var = all_of(colors))
   }
 
-  # Lines are grouped by the colors variable; `ngroups` is kept for
-  # backwards compatibility with previous versions of the function.
-  if (!is.null(ngroups) && length(ngroups) == nrow(data)) {
+  # The two time points must be numeric so labels can be offset from each
+  # endpoint; numbers stored as text (e.g., "2019") are converted.
+  if (!is.numeric(data$grouping_var)) {
+    numeric_grouping <- suppressWarnings(as.numeric(as.character(data$grouping_var)))
+    if (any(is.na(numeric_grouping) & !is.na(data$grouping_var))) {
+      stop("`grouping` must be a numeric column (e.g., years).", call. = FALSE)
+    }
+    data$grouping_var <- numeric_grouping
+  }
+
+  # Lines are grouped by the colors variable; a deprecated `ngroups` vector
+  # of matching length is still honored for backwards compatibility.
+  if (lifecycle::is_present(ngroups) && length(ngroups) == nrow(data)) {
     data$group_var <- ngroups
   } else {
     data <- data %>%

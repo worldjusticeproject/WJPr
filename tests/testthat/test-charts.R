@@ -64,16 +64,15 @@ test_that("chart functions return buildable ggplot objects", {
     wjp_bars(bars, "val", "cat", labels = "lab", lab_pos = "pos", colors = "col", order = "ord", expand = TRUE),
     wjp_divbars(stack, "val", "cat", "diverge", negative = "No Trust", labels = "lab"),
     wjp_dots(dots, "val", "cat", "group", draw_ci = TRUE, sd = "sd", sample_size = "n"),
-    wjp_dumbbells(dumb, "val", "cat", cgroups = c("2019", "2024"), color = "yr", labels = "lab", labpos = "labpos"),
+    wjp_dumbbells(dumb, "val", "cat", cgroups = c("2019", "2024"), colors = "yr", labels = "lab", labpos = "labpos"),
     wjp_edgebars(bars, "val", "cat", "lab"),
     wjp_gauge(gauge, "val", "cat", labels = "lab"),
     wjp_groupbars(groupbars, "value", "group", "level"),
-    wjp_lines(line, "val", "year", ngroups = line$group, colors = "group", labels = "lab"),
+    wjp_lines(line, "val", "year", colors = "group", labels = "lab"),
     wjp_lollipops(bars, "val", "cat", point_size = 8, line_size = 1),
     wjp_radar(radar, "axis", "val", "lab", "group", maincat = "main"),
     wjp_rose(radar[radar$group == "G1", ], "val", "axis", "lab"),
     wjp_slope(line[line$year %in% c(2019, 2021), ], "val", "year",
-              ngroups = line$group[line$year %in% c(2019, 2021)],
               colors = "group", labels = "lab")
   )
 
@@ -519,10 +518,11 @@ test_that("wjp_rose and wjp_radar accept the harmonized order parameter", {
   expect_no_error(ggplot2::ggplot_build(
     wjp_rose(radar[radar$group == "G1", ], "val", "axis", "lab", order = "ord")
   ))
-  # Deprecated alias still works
-  expect_no_error(ggplot2::ggplot_build(
-    wjp_rose(radar[radar$group == "G1", ], "val", "axis", "lab", order_var = "ord")
-  ))
+  # Deprecated alias still works, with a deprecation signal
+  lifecycle::expect_deprecated(
+    rose <- wjp_rose(radar[radar$group == "G1", ], "val", "axis", "lab", order_var = "ord")
+  )
+  expect_no_error(ggplot2::ggplot_build(rose))
 })
 
 test_that("wjp_lollipops supports labels, order, and ptheme", {
@@ -664,4 +664,142 @@ test_that("wjp_dots draws spread, deduplicated value labels without moving point
     wjp_dots(dots, "val", "cat", "grp", show_labels = "yes"),
     "`show_labels`"
   )
+})
+
+test_that("deprecated arguments still work and signal their deprecation", {
+  dumb <- data.frame(
+    cat = rep(c("A", "B"), each = 2),
+    yr  = rep(c("2019", "2024"), 2),
+    val = c(20, 30, 40, 45)
+  )
+  lifecycle::expect_deprecated(
+    plot <- wjp_dumbbells(dumb, "val", "cat", cgroups = c("2019", "2024"), color = "yr")
+  )
+  expect_no_error(ggplot2::ggplot_build(plot))
+
+  line <- data.frame(
+    year  = rep(c(2019, 2021), 2),
+    group = rep(c("A", "B"), each = 2),
+    val   = c(20, 25, 50, 55)
+  )
+  lifecycle::expect_deprecated(
+    plot <- wjp_lines(line, "val", "year", colors = "group", ngroups = line$group)
+  )
+  expect_no_error(ggplot2::ggplot_build(plot))
+  lifecycle::expect_deprecated(
+    plot <- wjp_slope(line, "val", "year", colors = "group", ngroups = line$group)
+  )
+  expect_no_error(ggplot2::ggplot_build(plot))
+
+  radar <- data.frame(
+    axis  = LETTERS[1:4],
+    val   = c(20, 40, 60, 80),
+    lab   = LETTERS[1:4],
+    group = "G1",
+    ord   = 4:1
+  )
+  lifecycle::expect_deprecated(
+    plot <- wjp_radar(radar, "axis", "val", "lab", "group", order_var = "ord")
+  )
+  expect_no_error(ggplot2::ggplot_build(plot))
+
+  stack <- data.frame(
+    cat     = c("A", "A", "B", "B"),
+    val     = c(40, 60, 30, 70),
+    diverge = c("Trust", "No Trust", "Trust", "No Trust")
+  )
+  lifecycle::expect_deprecated(
+    plot <- wjp_divbars(stack, "val", "cat", "diverge", negative = "No Trust",
+                        custom_order = TRUE)
+  )
+  expect_no_error(ggplot2::ggplot_build(plot))
+})
+
+test_that("wjp_gauge hides labels by share of the total, whatever the scale", {
+  label_text <- function(plot) {
+    built <- ggplot2::ggplot_build(plot)
+    text_layer <- Filter(function(l) "label" %in% names(l), built$data)[[1]]
+    text_layer$label
+  }
+
+  # Proportions: both segments are well above 5% of the total
+  proportions <- data.frame(cat = c("A", "B"), val = c(0.3, 0.7), lab = c("30%", "70%"))
+  expect_equal(label_text(wjp_gauge(proportions, "val", "cat", labels = "lab")),
+               c("30%", "70%"))
+
+  # Counts: the small segment (2% of the total) is hidden
+  counts <- data.frame(cat = c("A", "B"), val = c(20, 980), lab = c("2%", "98%"))
+  expect_equal(label_text(wjp_gauge(counts, "val", "cat", labels = "lab")),
+               c("", "98%"))
+})
+
+test_that("wjp_edgebars value labels are not padded with spaces", {
+  bars <- data.frame(cat = c("A", "B"), val = c(5, 45))
+  built <- ggplot2::ggplot_build(wjp_edgebars(bars, "val", "cat"))
+  labels <- unlist(lapply(built$data, function(l) if ("label" %in% names(l)) l$label))
+  expect_true(all(c("5%", "45%") %in% labels))
+})
+
+test_that("wjp_divbars reports a missing order column clearly", {
+  stack <- data.frame(
+    cat     = c("A", "A"),
+    val     = c(40, 60),
+    diverge = c("Trust", "No Trust")
+  )
+  expect_error(
+    wjp_divbars(stack, "val", "cat", "diverge", order = "missing_column"),
+    "missing_column"
+  )
+})
+
+test_that("wjp_radar validates the source scale", {
+  radar <- data.frame(axis = LETTERS[1:3], val = c(20, 50, 70), lab = LETTERS[1:3], group = "G")
+  expect_no_error(ggplot2::ggplot_build(
+    wjp_radar(radar, "axis", "val", "lab", "group", source = "gpp")
+  ))
+  expect_error(
+    wjp_radar(radar, "axis", "val", "lab", "group", source = "other"),
+    "`source`"
+  )
+})
+
+test_that("wjp_dots requires opacities and shapes when their flags are set", {
+  dots <- data.frame(cat = c("A", "A"), group = c("G1", "G2"), val = c(20, 40))
+  expect_error(wjp_dots(dots, "val", "cat", "group", diffOpac = TRUE), "`opacities`")
+  expect_error(wjp_dots(dots, "val", "cat", "group", diffShp = TRUE), "`shapes`")
+})
+
+test_that("wjp_lines requires transparencies when transparency = TRUE", {
+  line <- data.frame(year = 2019:2021, val = c(20, 25, 30), group = "A")
+  expect_error(
+    wjp_lines(line, "val", "year", colors = "group", transparency = TRUE),
+    "`transparencies`"
+  )
+})
+
+test_that("wjp_slope accepts years stored as text and rejects non-numeric values", {
+  slope <- data.frame(year = c("2019", "2022"), val = c(40, 55))
+  expect_no_error(ggplot2::ggplot_build(wjp_slope(slope, "val", "year")))
+
+  slope$year <- c("before", "after")
+  expect_error(wjp_slope(slope, "val", "year"), "numeric")
+})
+
+test_that("wjp_groupbars accepts national_var in group_order", {
+  data_disagg <- data.frame(
+    disaggregation = c("general", "Gender", "Gender"),
+    demographics   = c("National Average", "Male", "Female"),
+    pct_weighted   = c(0.75, 0.77, 0.73)
+  )
+  plot <- wjp_groupbars(
+    data_disagg,
+    target         = "pct_weighted",
+    grouping       = "disaggregation",
+    levels         = "demographics",
+    group_order    = c("general", "Gender"),
+    national_var   = "general",
+    national_level = "National Average"
+  )
+  expect_no_error(ggplot2::ggplot_build(plot))
+  expect_equal(levels(plot$data$grouping_var), c(" ", "Gender"))
 })

@@ -81,8 +81,9 @@
 #'   Default is "left".
 #' @param national_var String. Value in the \code{grouping} column that identifies
 #'   the national average row (e.g., "general", "Overall"). When specified, this row
-#'   is displayed with a special formatted label (bold, italic, colored) using
-#'   \code{geom_richtext()}. Default is NULL.
+#'   is displayed in a blank facet with a special formatted label (bold, italic,
+#'   colored) drawn with \code{ggtext::geom_richtext()}. The value can be used as
+#'   is in \code{group_order} and \code{level_order}. Default is NULL.
 #' @param national_level String. Value in the \code{levels} column corresponding to
 #'   the national average label (e.g., "National Average"). Required when
 #'   \code{national_var} is specified. Default is NULL.
@@ -94,7 +95,7 @@
 #' library(dplyr)
 #' library(ggplot2)
 #'
-#' # Load WJP fonts (optional)
+#' # Always load the WJP fonts
 #' wjp_fonts()
 #'
 #' # Create sample data
@@ -127,7 +128,7 @@
 #'   group    = c("Gender", "Gender", "Age", "Age", "Age"),
 #'   category = c("Male", "Female", "18-29", "30-49", "50+"),
 #'   value    = c(0.45, 0.52, 0.38, 0.48, 0.55),
-#'   se       = c(0.50, 0.50, 0.49, 0.50, 0.50),
+#'   sd       = c(0.50, 0.50, 0.49, 0.50, 0.50),
 #'   n        = c(420, 460, 180, 510, 240)
 #' )
 #'
@@ -137,7 +138,7 @@
 #'   grouping    = "group",
 #'   levels      = "category",
 #'   draw_ci     = TRUE,
-#'   sd          = "se",
+#'   sd          = "sd",
 #'   sample_size = "n"
 #' )
 #'
@@ -227,7 +228,7 @@
 #'   target         = "pct_weighted",
 #'   grouping       = "disaggregation",
 #'   levels         = "demographics",
-#'   group_order    = c(" ", "Age Group", "Gender"),
+#'   group_order    = c("general", "Age Group", "Gender"),
 #'   national_var   = "general",
 #'   national_level = "National Average"
 #' )
@@ -430,7 +431,7 @@ wjp_groupbars <- function(
 
     # Check if it exists in the data
     if (!national_y_id %in% level_order) {
-      warning("National average level not found in data")
+      warning("`national_level` was not found in the `levels` column.", call. = FALSE)
       return(NULL)
     }
 
@@ -618,6 +619,17 @@ wjp_groupbars <- function(
   # ===========================================================================
   # 3. APPLY ORDERING
   # ===========================================================================
+
+  # The national row is drawn in a blank facet; accept its original
+  # `national_var` value in `group_order` and `level_order`
+  if (use_national_richtext) {
+    if (!is.null(group_order)) {
+      group_order[group_order == national_var] <- national_group_empty
+    }
+    if (!is.null(level_order)) {
+      names(level_order)[names(level_order) == national_var] <- national_group_empty
+    }
+  }
 
   # Order groups (facets)
   if (!is.null(group_order)) {

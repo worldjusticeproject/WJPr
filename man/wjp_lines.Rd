@@ -18,7 +18,7 @@ wjp_lines(
   x.breaks = NULL,
   x.labels = NULL,
   sec.ticks = NULL,
-  ngroups = NULL,
+  ngroups = deprecated(),
   ptheme = WJP_theme(),
   show_legend = FALSE
 )

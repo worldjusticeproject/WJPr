@@ -12,7 +12,7 @@ wjp_slope(
   cvec = NULL,
   labels = NULL,
   repel = FALSE,
-  ngroups = NULL,
+  ngroups = deprecated(),
   ptheme = WJP_theme(),
   show_legend = FALSE
 )
@@ -23,7 +23,7 @@ wjp_slope(
 \item{target}{String. Column name of the variable that supplies the values to plot.}
 
 \item{grouping}{String. Column name of the numeric variable that supplies the two
-X-axis values (usually years).}
+X-axis values (usually years). Numbers stored as text are converted.}
 
 \item{colors}{String. Column name of the variable that defines the lines and their
 color grouping. Default is \code{NULL} (a single line is drawn).}
@@ -61,7 +61,8 @@ the \code{colors} variable. Values are expected on a 0-100 percentage scale.
 \details{
 The function expects long-format data with exactly two \code{grouping} values
 (the two time points) per series. \code{grouping} must be numeric (e.g., years)
-so the value labels can be placed just outside each endpoint. When labels
+so the value labels can be placed just outside each endpoint; numbers
+stored as text (e.g., \code{"2019"}) are converted automatically. When labels
 overlap, set \code{repel = TRUE} (requires the ggrepel package).
 }
 \examples{

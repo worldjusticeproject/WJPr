@@ -25,6 +25,7 @@ if (getRversion() >= "2.15.1") {
     "lab0",
     "lab1",
     "label",
+    "label_pos",
     "label_value",
     "label_var",
     "label_x",
@@ -72,46 +73,19 @@ if (getRversion() >= "2.15.1") {
 # Package startup
 # =============================================================================
 
-#' @title Package Load Hook
-#' @description Runs when the package is loaded. Verifies critical dependencies.
-#' @param libname Library name
-#' @param pkgname Package name
-#' @keywords internal
-#' @noRd
-.onLoad <- function(libname, pkgname) {
-
- # Core dependencies that must be available
- core_deps <- c("ggplot2", "dplyr", "tidyr", "magrittr")
-
- missing_core <- vapply(core_deps, function(pkg) {
-    !requireNamespace(pkg, quietly = TRUE)
-  }, logical(1))
-
-  if (any(missing_core)) {
-    missing_names <- core_deps[missing_core]
-    warning(
-      "WJPr: Missing core dependencies: ",
-      paste(missing_names, collapse = ", "),
-      "\nInstall with: install.packages(c('",
-      paste(missing_names, collapse = "', '"),
-      "'))",
-      call. = FALSE
-    )
-  }
-}
-
 #' @title Package Attach Hook
-#' @description Runs when the package is attached. Shows startup message.
+#' @description Runs when the package is attached. Reports missing optional
+#'   dependencies (core dependencies are guaranteed by `Imports`).
 #' @param libname Library name
 #' @param pkgname Package name
 #' @keywords internal
 #' @noRd
 .onAttach <- function(libname, pkgname) {
 
- # Check for optional dependencies
- optional_deps <- c("ggtext", "ggrepel", "ggh4x")
+  # Check for optional dependencies
+  optional_deps <- c("ggtext", "ggrepel", "ggh4x")
 
- missing_optional <- vapply(optional_deps, function(pkg) {
+  missing_optional <- vapply(optional_deps, function(pkg) {
     !requireNamespace(pkg, quietly = TRUE)
   }, logical(1))
 

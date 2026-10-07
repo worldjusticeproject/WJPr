@@ -181,9 +181,7 @@ wjp_edgebars <- function(
       aes(
         x = reorder(x_var, -x_lab_pos),
         y = y_value,
-        label = paste0(format(round(y_value, 0),
-                              nsmall = 0),
-                       "%")
+        label = paste0(round(y_value, 0), "%")
       ),
       color    = "#4a4a49",
       position = position_dodge(width = bar_width),

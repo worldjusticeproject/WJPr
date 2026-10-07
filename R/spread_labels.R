@@ -375,9 +375,24 @@ wjp_text_width_mm <- function(labels, font_size, family) {
 
 #' Convert a grid unit (or millimetre scalar) to millimetres
 #'
+#' Absolute units are converted arithmetically so that no graphics device is
+#' opened as a side effect; other units fall back to `grid::convertWidth()`.
+#'
 #' @noRd
 wjp_unit_mm <- function(u, arg) {
   if (grid::is.unit(u)) {
+    mm_per_unit <- c(
+      mm     = 1,
+      cm     = 10,
+      inches = 25.4,
+      points = 25.4 / 72.27,
+      bigpts = 25.4 / 72,
+      picas  = 12 * 25.4 / 72.27
+    )
+    type <- grid::unitType(u)
+    if (length(u) == 1 && type %in% names(mm_per_unit)) {
+      return(as.numeric(u) * mm_per_unit[[type]])
+    }
     grid::convertWidth(u, "mm", valueOnly = TRUE)
   } else if (is.numeric(u) && length(u) == 1 && is.finite(u) && u > 0) {
     u

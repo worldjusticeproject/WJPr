@@ -7,10 +7,12 @@
 \format{
 \subsection{\code{roli}}{
 
-A data frame with 1,341 rows and 57 columns:
+A tibble with 1,341 rows and 57 columns:
 \describe{
 \item{country}{Country name}
 \item{year}{Year of measurement (2012-2024)}
+\item{code}{Three-letter ISO country code}
+\item{region}{WJP region}
 \item{roli}{Overall Rule of Law Index Score (0-1)}
 \item{f1}{Factor 1: Constraints on Government Powers}
 \item{f2}{Factor 2: Absence of Corruption}

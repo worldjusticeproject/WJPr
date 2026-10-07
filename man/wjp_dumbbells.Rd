@@ -15,7 +15,7 @@ wjp_dumbbells(
   cvec = NULL,
   order = NULL,
   bgcolor = "#ffffff",
-  color = NULL,
+  color = deprecated(),
   ptheme = WJP_theme(),
   label_offset = 4,
   show_legend = TRUE

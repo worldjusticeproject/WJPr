@@ -57,27 +57,34 @@
 #' )
 #'
 diffmeans <- function(data, target_vars, group_vars, geo_var, type = "categorical", t = 0.1, collapse = TRUE, verbose = FALSE){
-  
+
+  if (length(type) != 1 || !type %in% c("categorical", "continuous")) {
+    stop('`type` must be one of "categorical" or "continuous".', call. = FALSE)
+  }
+  if (length(t) != 1 || !is.numeric(t) || !is.finite(t) || t <= 0 || t >= 1) {
+    stop("`t` must be a single number between 0 and 1.", call. = FALSE)
+  }
+
   # Looping through grouping alternatives
   groloop <- lapply(
     group_vars %>% set_names(group_vars),
     function(grouping){
-      
+
       if (verbose == TRUE){
         print("=================")
         print(grouping)
       }
-      
+
       # Looping through target variables
       varloop <- lapply(
         target_vars %>% set_names(target_vars),
         function(target){
-          
+
           if (verbose == TRUE){
             print("--------------")
             print(target)
           }
-          
+
           # Preparing data for tests
           data_subset <- data %>%
             select(
@@ -85,7 +92,7 @@ diffmeans <- function(data, target_vars, group_vars, geo_var, type = "categorica
               target   = all_of(target),
               geovar   = all_of(geo_var)
             )
-          
+
           # Defining a function to estimate the results.
           if (type == "continuous") {
             stat_function <- function(df) {
@@ -94,7 +101,7 @@ diffmeans <- function(data, target_vars, group_vars, geo_var, type = "categorica
               mean_A  <- mean(group_A, na.rm = TRUE)
               mean_B  <- mean(group_B, na.rm = TRUE)
               ttest_result <- t.test(group_A, group_B, paired = FALSE)
-              
+
               data.frame(
                 mean_A  = mean_A,
                 mean_B  = mean_B,
@@ -110,7 +117,7 @@ diffmeans <- function(data, target_vars, group_vars, geo_var, type = "categorica
               prop_test_result <- prop.test(count_table)
               mean_A <- mean(df$target[df$grouping == 1], na.rm = TRUE)
               mean_B <- mean(df$target[df$grouping == 0], na.rm = TRUE)
-              
+
               data.frame(
                 mean_A  = mean_A,
                 mean_B  = mean_B,
@@ -120,7 +127,7 @@ diffmeans <- function(data, target_vars, group_vars, geo_var, type = "categorica
               )
             }
           }
-          
+
           results <- data_subset %>%
             group_by(geovar) %>%
             nest() %>%
@@ -138,7 +145,7 @@ diffmeans <- function(data, target_vars, group_vars, geo_var, type = "categorica
             )
         }
       )
-      
+
       if (collapse == TRUE){
         varloop <- imap_dfr(
           varloop,
@@ -149,11 +156,11 @@ diffmeans <- function(data, target_vars, group_vars, geo_var, type = "categorica
               ) %>%
               relocate(variable)
           }
-        ) 
+        )
       } else {
         varloop <- varloop
       }
-      
+
       return(varloop)
 
     }

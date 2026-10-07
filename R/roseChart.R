@@ -63,13 +63,16 @@ wjp_rose <- function(
     labels,
     cvec      = NULL,
     order     = NULL,
-    order_var = NULL,
+    order_var = deprecated(),
     ptheme    = WJP_theme()
 ){
 
   # Backwards compatibility: `order_var` was renamed to `order`
-  if (is.null(order) && !is.null(order_var)) {
-    order <- order_var
+  if (lifecycle::is_present(order_var)) {
+    lifecycle::deprecate_soft("1.1.0", "wjp_rose(order_var)", "wjp_rose(order)")
+    if (is.null(order)) {
+      order <- order_var
+    }
   }
 
   # Renaming variables in the data frame to match the function naming
@@ -77,7 +80,7 @@ wjp_rose <- function(
     rename(
       target_var   = all_of(target),
       grouping_var = all_of(grouping),
-      alabels_var  = all_of(labels),
+      alabels_var  = all_of(labels)
     )
 
   # Accept percentages (0-100) as well as proportions (0-1)

@@ -38,24 +38,23 @@
 #' @importFrom ggplot2 scale_alpha_manual scale_shape_manual
 #' @importFrom ggplot2 coord_flip coord_polar coord_cartesian
 #' @importFrom ggplot2 facet_grid facet_wrap
-#' @importFrom ggplot2 theme theme_minimal theme_void rel
-#' @importFrom ggplot2 element_blank element_text element_line element_rect
-#' @importFrom ggplot2 margin unit expansion
-#' @importFrom ggplot2 position_stack position_dodge position_fill
-#' @importFrom ggplot2 ggsave
+#' @importFrom ggplot2 theme theme_void rel
+#' @importFrom ggplot2 element_blank element_text element_line
+#' @importFrom ggplot2 margin expansion
+#' @importFrom ggplot2 position_stack position_dodge
 
 # =============================================================================
 # dplyr - Data manipulation
 # =============================================================================
 
 #' @importFrom dplyr mutate filter select rename arrange relocate recode
-#' @importFrom dplyr group_by ungroup summarise summarize
-#' @importFrom dplyr left_join right_join inner_join full_join
+#' @importFrom dplyr group_by ungroup summarise
+#' @importFrom dplyr left_join
 #' @importFrom dplyr bind_rows bind_cols
-#' @importFrom dplyr if_else case_when coalesce
-#' @importFrom dplyr pull distinct n row_number lag lead
-#' @importFrom dplyr across all_of any_of starts_with ends_with
-#' @importFrom dplyr slice slice_head slice_tail
+#' @importFrom dplyr if_else case_when
+#' @importFrom dplyr pull distinct row_number
+#' @importFrom dplyr across all_of
+#' @importFrom dplyr slice_head
 
 # =============================================================================
 # tidyr - Data tidying
@@ -63,15 +62,14 @@
 
 #' @importFrom tidyr pivot_longer pivot_wider
 #' @importFrom tidyr unnest nest
-#' @importFrom tidyr drop_na replace_na
 
 # =============================================================================
 # Other tidyverse packages
 # =============================================================================
 
 #' @importFrom magrittr %>%
-#' @importFrom tibble tibble as_tibble
-#' @importFrom purrr map map_df map_chr map_dbl map_lgl imap_dfr set_names
+#' @importFrom tibble tibble
+#' @importFrom purrr map map_df imap_dfr set_names
 
 # =============================================================================
 # ggplot2 extensions (OPTIONAL - use with :: notation)
@@ -83,16 +81,16 @@
 # Optional packages:
 #   - ggtext: geom_richtext, element_markdown
 #   - ggrepel: geom_text_repel, geom_label_repel
-#   - ggh4x: extended faceting
+#   - ggh4x: guide_axis_minor (wjp_lines custom.axis)
 
 # =============================================================================
 # Utility packages
 # =============================================================================
 
-#' @importFrom stats na.omit sd var t.test chisq.test prop.test qnorm reorder
+#' @importFrom stats t.test prop.test qnorm reorder
 #' @importFrom utils head tail
 #' @importFrom grDevices colorRampPalette
-#' @importFrom grid unit viewport editGrob gpar
+#' @importFrom grid unit
 
 # =============================================================================
 # Font and display
@@ -105,8 +103,7 @@
 # Other utilities
 # =============================================================================
 
-#' @importFrom glue glue
-#' @importFrom rlang .data := sym enquo
+#' @importFrom rlang .data
 #' @importFrom lifecycle deprecated
 # haven is optional - use haven::is.labelled() with requireNamespace check
 

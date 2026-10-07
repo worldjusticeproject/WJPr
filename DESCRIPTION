@@ -11,24 +11,22 @@ Authors@R: c(
            email = "data-analytics@worldjusticeproject.org",
            role = c("aut", "cre", "cph"))
     )
-Author: Santiago Pardo [aut],
-    World Justice Project - Data Analytics Unit [aut, cre, cph]
-Maintainer: World Justice Project - Data Analytics Unit <data-analytics@worldjusticeproject.org>
 Description: The WJPr package contains the most important data and
-    visualization tools used by Data Analytics Unit at The World Justice
-    Project. Version 1.0.0 comes with a wide range of visualization
-    functions for replicating the image charts from the Country Reports.
-    Additionally, you can find the Rule of Law Index scores data for all
-    factors and subfactors as complementary data.
+    visualization tools used by the Data Analytics Unit at The World Justice
+    Project. It provides a wide range of visualization functions for
+    replicating the charts from the Country Reports following WJP style
+    guidelines, a statistical helper for difference-in-means tests, and the
+    Rule of Law Index scores for all factors and subfactors as complementary
+    data.
 License: MIT + file LICENSE
-URL: https://github.com/worldjusticeproject-org/WJPr, https://worldjusticeproject-org.github.io/WJPr/
-BugReports: https://github.com/worldjusticeproject-org/WJPr/issues
+URL: https://github.com/worldjusticeproject/WJPr, https://worldjusticeproject.github.io/WJPr/
+BugReports: https://github.com/worldjusticeproject/WJPr/issues
 Depends:
     R (>= 4.1.0)
 Imports:
     dplyr (>= 1.1.0),
     ggplot2 (>= 3.4.0),
-    glue (>= 1.6.0),
+    grDevices,
     grid,
     lifecycle,
     magrittr (>= 2.0.0),
@@ -47,7 +45,6 @@ Suggests:
     ggh4x (>= 0.2.0),
     ggrepel (>= 0.9.0),
     ggtext (>= 0.1.0),
-    grDevices,
     haven (>= 2.5.0),
     kableExtra (>= 1.4.0),
     knitr,

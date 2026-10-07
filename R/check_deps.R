@@ -26,28 +26,29 @@
 #'
 wjp_check_deps <- function(install = FALSE, quiet = FALSE, ask = interactive()) {
 
- # Define dependencies
- core_deps <- list(
+  # Define dependencies
+  core_deps <- list(
     ggplot2   = list(min_version = "3.4.0", used_for = "All chart functions"),
     dplyr     = list(min_version = "1.1.0", used_for = "Data manipulation"),
     tidyr     = list(min_version = "1.3.0", used_for = "Data reshaping"),
     magrittr  = list(min_version = "2.0.0", used_for = "Pipe operator"),
     rlang     = list(min_version = "1.0.0", used_for = "Tidy evaluation"),
     tibble    = list(min_version = "3.0.0", used_for = "Data frames"),
+    purrr     = list(min_version = "1.0.0", used_for = "Functional programming"),
     sysfonts  = list(min_version = "0.8.0", used_for = "Font loading"),
     showtext  = list(min_version = "0.9.0", used_for = "Font rendering")
   )
 
   optional_deps <- list(
-    ggtext    = list(min_version = "0.1.0", used_for = "Rich text labels (wjp_radar, wjp_edgebars)"),
-    ggrepel   = list(min_version = "0.9.0", used_for = "Non-overlapping labels (wjp_lines, wjp_slope)"),
-    ggh4x     = list(min_version = "0.2.0", used_for = "Extended faceting"),
-    haven     = list(min_version = "2.5.0", used_for = "Reading Stata/SPSS files"),
-    purrr     = list(min_version = "1.0.0", used_for = "Functional programming (wjp_radar)")
+    ggtext      = list(min_version = "0.1.0", used_for = "Rich text labels (radar, rose, edgebars, groupbars)"),
+    ggrepel     = list(min_version = "0.9.0", used_for = "Non-overlapping labels (wjp_lines, wjp_slope)"),
+    ggh4x       = list(min_version = "0.2.0", used_for = "Minor axis ticks (wjp_lines custom.axis)"),
+    systemfonts = list(min_version = "1.0.0", used_for = "Label width measurement (spread_labels_x)"),
+    haven       = list(min_version = "2.5.0", used_for = "Reading Stata/SPSS files")
   )
 
   # Check function
- check_pkg <- function(pkg, info) {
+  check_pkg <- function(pkg, info) {
     installed <- requireNamespace(pkg, quietly = TRUE)
     version <- if (installed) {
       as.character(utils::packageVersion(pkg))
@@ -81,7 +82,7 @@ wjp_check_deps <- function(install = FALSE, quiet = FALSE, ask = interactive()) 
   names(optional_status) <- names(optional_deps)
 
   # Print results
- if (!quiet) {
+  if (!quiet) {
     cat("\n")
     cat("WJPr Dependency Check\n")
     cat(strrep("=", 60), "\n\n")
@@ -136,7 +137,7 @@ wjp_check_deps <- function(install = FALSE, quiet = FALSE, ask = interactive()) 
     cat("\n")
 
     # Summary
-   missing_core <- !vapply(core_status, function(x) x$installed && x$meets_min, logical(1))
+    missing_core <- !vapply(core_status, function(x) x$installed && x$meets_min, logical(1))
     missing_optional <- !vapply(optional_status, function(x) x$installed, logical(1))
 
     if (any(missing_core)) {
@@ -163,7 +164,7 @@ wjp_check_deps <- function(install = FALSE, quiet = FALSE, ask = interactive()) 
   }
 
   # Install missing packages if requested
- if (install) {
+  if (install) {
     missing_core_pkgs <- names(core_status)[!vapply(core_status, function(x) x$installed, logical(1))]
     missing_optional_pkgs <- names(optional_status)[!vapply(optional_status, function(x) x$installed, logical(1))]
 
@@ -202,7 +203,7 @@ wjp_check_deps <- function(install = FALSE, quiet = FALSE, ask = interactive()) 
   }
 
   # Return status invisibly
- invisible(list(
+  invisible(list(
     core = vapply(core_status, function(x) x$installed && x$meets_min, logical(1)),
     optional = vapply(optional_status, function(x) x$installed, logical(1))
   ))

@@ -11,7 +11,7 @@ wjp_rose(
   labels,
   cvec = NULL,
   order = NULL,
-  order_var = NULL,
+  order_var = deprecated(),
   ptheme = WJP_theme()
 )
 }

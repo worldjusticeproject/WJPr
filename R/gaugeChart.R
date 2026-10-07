@@ -37,7 +37,7 @@
 #' library(dplyr)
 #' library(ggplot2)
 #'
-#' # Always load the WJP fonts (optional)
+#' # Always load the WJP fonts
 #' wjp_fonts()
 #'
 #' # Create sample data for gauge chart
@@ -76,8 +76,8 @@
 #'
 
 wjp_gauge <- function(
-    data,                    
-    target,             
+    data,
+    target,
     colors,
     cvec           = NULL,
     factor_order   = NULL,
@@ -86,7 +86,7 @@ wjp_gauge <- function(
     ptheme         = WJP_theme(),
     show_legend    = FALSE
 ){
-  
+
   # Renaming variables in the data frame to match the function naming
   if (is.null(labels)) {
     data <- data %>%
@@ -103,8 +103,8 @@ wjp_gauge <- function(
         labels_var    = all_of(labels)
       )
   }
-  
-  
+
+
   # Sorting values if necessary
   if (!is.null(factor_order)){
     data <- data %>%
@@ -118,22 +118,23 @@ wjp_gauge <- function(
       ) %>%
       arrange(colors_var)
   }
-  
-  # Hide labels for segments that are too small to hold them
-  data <- data %>%
-    ungroup() %>%
-    mutate(
-      labels_var = if_else(target_var >= 5,
-                           labels_var,
-                           "")
-    )
 
   # Calculate total for scaling
-
   total_value <- sum(data$target_var)
   if (!is.finite(total_value) || total_value <= 0) {
     stop("`target` values must sum to a positive finite value.", call. = FALSE)
   }
+
+  # Hide labels for segments that are too small to hold them (below 5% of
+  # the total), whatever the scale of `target` (proportions, percentages,
+  # or counts)
+  data <- data %>%
+    ungroup() %>%
+    mutate(
+      labels_var = if_else(target_var / total_value >= 0.05,
+                           labels_var,
+                           "")
+    )
 
   # Scale values to span 180 degrees (half circle)
   # We'll use 0-100 for the data and add padding to make it a semicircle
