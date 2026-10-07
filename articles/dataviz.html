@@ -66,6 +66,7 @@
     <li><a class="dropdown-item" href="../reference/wjp_fonts.html">wjp_fonts()</a></li>
     <li><a class="dropdown-item" href="../reference/wjp_font_family.html">wjp_font_family()</a></li>
     <li><a class="dropdown-item" href="../reference/wjp_palette.html">wjp_palette()</a></li>
+    <li><a class="dropdown-item" href="../reference/spread_labels_x.html">spread_labels_x()</a></li>
     <li><a class="dropdown-item" href="../reference/WJP_theme.html">WJP_theme()</a></li>
   </ul>
 </li>
@@ -90,7 +91,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/worldjusticeproject-org/WJPr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/worldjusticeproject/WJPr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -107,7 +108,7 @@
       <h1>Data Visualization with WJPr</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject-org/WJPr/blob/main/vignettes/articles/dataviz.Rmd" class="external-link"><code>vignettes/articles/dataviz.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject/WJPr/blob/main/vignettes/articles/dataviz.Rmd" class="external-link"><code>vignettes/articles/dataviz.Rmd</code></a></small>
       <div class="d-none name"><code>dataviz.Rmd</code></div>
     </div>
 
@@ -131,6 +132,9 @@ functions for the following chart types:</p>
 <li>Grouped Bars</li>
 <li>Gauge</li>
 </ol>
+<p>This article walks through the most common ones step by step. See the
+<a href="gallery.html">Chart Gallery</a> for ready-to-use examples of
+every chart type, including lollipops, grouped bars, and gauges.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -139,9 +143,9 @@ functions for the following chart types:</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://haven.tidyverse.org" class="external-link">haven</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/ggtext/" class="external-link">ggtext</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://haozhu233.github.io/kableExtra/" class="external-link">kableExtra</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/worldjusticeproject-org/WJPr" class="external-link">WJPr</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/worldjusticeproject/WJPr" class="external-link">WJPr</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Always load the WJP fonts if not passing a custom theme to function</span></span>
+<code class="sourceCode R"><span><span class="co"># Always load the WJP fonts before plotting</span></span>
 <span><span class="fu"><a href="../reference/wjp_fonts.html">wjp_fonts</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Loading data</span></span>
@@ -401,20 +405,17 @@ country. First, we modify the data to reflect this new design:</p>
 <span>    <span class="va">country</span>, <span class="va">q1a</span>, <span class="va">percentage</span>, <span class="va">value_label</span>, <span class="va">label_position</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kbl.html" class="external-link">kbl</a></span><span class="op">(</span><span class="va">data4bars</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kbl.html" class="external-link">kbl</a></span><span class="op">(</span><span class="va">data4stackedbars</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
 country
 </th>
 <th style="text-align:left;">
-year
+q1a
 </th>
 <th style="text-align:right;">
-trust
-</th>
-<th style="text-align:left;">
-color_variable
+percentage
 </th>
 <th style="text-align:left;">
 value_label
@@ -429,19 +430,84 @@ label_position
 Atlantis
 </td>
 <td style="text-align:left;">
-2022
+No answer
 </td>
 <td style="text-align:right;">
-49.09091
+3.508772
 </td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+1.7543860
+</td>
+</tr>
+<tr>
 <td style="text-align:left;">
 Atlantis
 </td>
 <td style="text-align:left;">
-49%
+None
 </td>
 <td style="text-align:right;">
-54.09091
+14.035088
+</td>
+<td style="text-align:left;">
+14.0%
+</td>
+<td style="text-align:right;">
+10.5263158
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atlantis
+</td>
+<td style="text-align:left;">
+Little
+</td>
+<td style="text-align:right;">
+35.087719
+</td>
+<td style="text-align:left;">
+35.1%
+</td>
+<td style="text-align:right;">
+35.0877193
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atlantis
+</td>
+<td style="text-align:left;">
+Some
+</td>
+<td style="text-align:right;">
+28.070175
+</td>
+<td style="text-align:left;">
+28.1%
+</td>
+<td style="text-align:right;">
+66.6666667
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atlantis
+</td>
+<td style="text-align:left;">
+A lot
+</td>
+<td style="text-align:right;">
+19.298246
+</td>
+<td style="text-align:left;">
+19.3%
+</td>
+<td style="text-align:right;">
+90.3508772
 </td>
 </tr>
 <tr>
@@ -449,19 +515,67 @@ Atlantis
 Narnia
 </td>
 <td style="text-align:left;">
-2022
+None
 </td>
 <td style="text-align:right;">
-45.65217
+19.565217
 </td>
+<td style="text-align:left;">
+19.6%
+</td>
+<td style="text-align:right;">
+9.7826087
+</td>
+</tr>
+<tr>
 <td style="text-align:left;">
 Narnia
 </td>
 <td style="text-align:left;">
-46%
+Little
 </td>
 <td style="text-align:right;">
-50.65217
+34.782609
+</td>
+<td style="text-align:left;">
+34.8%
+</td>
+<td style="text-align:right;">
+36.9565217
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Narnia
+</td>
+<td style="text-align:left;">
+Some
+</td>
+<td style="text-align:right;">
+28.260870
+</td>
+<td style="text-align:left;">
+28.3%
+</td>
+<td style="text-align:right;">
+68.4782609
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Narnia
+</td>
+<td style="text-align:left;">
+A lot
+</td>
+<td style="text-align:right;">
+17.391304
+</td>
+<td style="text-align:left;">
+17.4%
+</td>
+<td style="text-align:right;">
+91.3043478
 </td>
 </tr>
 <tr>
@@ -469,19 +583,84 @@ Narnia
 Neverland
 </td>
 <td style="text-align:left;">
-2022
+No answer
 </td>
 <td style="text-align:right;">
-63.63636
+1.785714
 </td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.8928571
+</td>
+</tr>
+<tr>
 <td style="text-align:left;">
 Neverland
 </td>
 <td style="text-align:left;">
-64%
+None
 </td>
 <td style="text-align:right;">
-68.63636
+12.500000
+</td>
+<td style="text-align:left;">
+12.5%
+</td>
+<td style="text-align:right;">
+8.0357143
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Neverland
+</td>
+<td style="text-align:left;">
+Little
+</td>
+<td style="text-align:right;">
+23.214286
+</td>
+<td style="text-align:left;">
+23.2%
+</td>
+<td style="text-align:right;">
+25.8928571
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Neverland
+</td>
+<td style="text-align:left;">
+Some
+</td>
+<td style="text-align:right;">
+42.857143
+</td>
+<td style="text-align:left;">
+42.9%
+</td>
+<td style="text-align:right;">
+58.9285714
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Neverland
+</td>
+<td style="text-align:left;">
+A lot
+</td>
+<td style="text-align:right;">
+19.642857
+</td>
+<td style="text-align:left;">
+19.6%
+</td>
+<td style="text-align:right;">
+90.1785714
 </td>
 </tr>
 </tbody>
@@ -494,23 +673,29 @@ alphabetical order, which may not align with the intended order of this
 ordinal variable.</p>
 <p>Once the data is ready, we can use the <code><a href="../reference/wjp_bars.html">wjp_bars()</a></code>
 function again, this time setting the <code>stacked</code> parameter to
-“TRUE”:</p>
+<code>TRUE</code> (so the value labels are drawn in white inside each
+segment) and <code>show_legend = TRUE</code> (so readers can identify
+each answer):</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">stacked_bar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wjp_bars.html">wjp_bars</a></span><span class="op">(</span></span>
-<span>    <span class="va">data4stackedbars</span>,              </span>
-<span>    target    <span class="op">=</span> <span class="st">"percentage"</span>,        </span>
-<span>    grouping  <span class="op">=</span> <span class="st">"country"</span>,</span>
-<span>    labels    <span class="op">=</span> <span class="st">"value_label"</span>,</span>
-<span>    lab_pos   <span class="op">=</span> <span class="st">"label_position"</span>,</span>
-<span>    colors    <span class="op">=</span> <span class="st">"q1a"</span>,</span>
-<span>    cvec      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A lot"</span>     <span class="op">=</span> <span class="st">"#482d8b"</span>,</span>
-<span>                  <span class="st">"Some"</span>      <span class="op">=</span> <span class="st">"#2894aa"</span>,</span>
-<span>                  <span class="st">"Little"</span>    <span class="op">=</span> <span class="st">"#869d3b"</span>,</span>
-<span>                  <span class="st">"None"</span>      <span class="op">=</span> <span class="st">"#f26b21"</span>,</span>
-<span>                  <span class="st">"No answer"</span> <span class="op">=</span> <span class="st">"#555659"</span><span class="op">)</span>,</span>
-<span>    direction <span class="op">=</span> <span class="st">"horizontal"</span>,</span>
-<span>    stacked   <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>    <span class="va">data4stackedbars</span>,</span>
+<span>    target      <span class="op">=</span> <span class="st">"percentage"</span>,</span>
+<span>    grouping    <span class="op">=</span> <span class="st">"country"</span>,</span>
+<span>    labels      <span class="op">=</span> <span class="st">"value_label"</span>,</span>
+<span>    lab_pos     <span class="op">=</span> <span class="st">"label_position"</span>,</span>
+<span>    colors      <span class="op">=</span> <span class="st">"q1a"</span>,</span>
+<span>    cvec        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A lot"</span>     <span class="op">=</span> <span class="st">"#482d8b"</span>,</span>
+<span>                    <span class="st">"Some"</span>      <span class="op">=</span> <span class="st">"#2894aa"</span>,</span>
+<span>                    <span class="st">"Little"</span>    <span class="op">=</span> <span class="st">"#869d3b"</span>,</span>
+<span>                    <span class="st">"None"</span>      <span class="op">=</span> <span class="st">"#f26b21"</span>,</span>
+<span>                    <span class="st">"No answer"</span> <span class="op">=</span> <span class="st">"#555659"</span><span class="op">)</span>,</span>
+<span>    direction   <span class="op">=</span> <span class="st">"horizontal"</span>,</span>
+<span>    stacked     <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    show_legend <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">stacked_bar</span></span></code></pre></div>
+<p><img src="dataviz_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="diverging-bars-chart">Diverging Bars Chart<a class="anchor" aria-label="anchor" href="#diverging-bars-chart"></a>
@@ -536,11 +721,11 @@ slightly differently:</p>
 <span>      <span class="va">q1a</span> <span class="op">&lt;=</span> <span class="fl">4</span>  <span class="op">~</span> <span class="st">"No Trust"</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">q1a</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
 <span>    <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">q1a</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">q1a</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    total       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
@@ -552,19 +737,12 @@ slightly differently:</p>
 <span>      <span class="op">)</span>,</span>
 <span>      <span class="st">"%"</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    value_label    <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">percentage</span> <span class="op">&gt;=</span> <span class="fl">5</span>, </span>
-<span>                             <span class="va">value_label</span>, </span>
-<span>                             <span class="cn">NA_character_</span><span class="op">)</span>,</span>
-<span>    direction      <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">q1a</span> <span class="op">==</span> <span class="st">"Trust"</span>, </span>
-<span>                             <span class="st">"positive"</span>, </span>
-<span>                             <span class="st">"negative"</span><span class="op">)</span>,</span>
-<span>    percentage     <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">direction</span> <span class="op">==</span> <span class="st">"negative"</span>, </span>
-<span>                             <span class="va">percentage</span><span class="op">*</span><span class="op">-</span><span class="fl">1</span>, </span>
-<span>                             <span class="va">percentage</span><span class="op">)</span>,</span>
-<span>    label_position <span class="op">=</span> <span class="op">(</span><span class="va">percentage</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span></span>
+<span>    value_label <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">percentage</span> <span class="op">&gt;=</span> <span class="fl">5</span>,</span>
+<span>                          <span class="va">value_label</span>,</span>
+<span>                          <span class="cn">NA_character_</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
-<span>    <span class="va">country</span>, <span class="va">q1a</span>, <span class="va">percentage</span>, <span class="va">value_label</span>, <span class="va">label_position</span>, <span class="va">direction</span></span>
+<span>    <span class="va">country</span>, <span class="va">q1a</span>, <span class="va">percentage</span>, <span class="va">value_label</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kbl.html" class="external-link">kbl</a></span><span class="op">(</span><span class="va">data4divbars</span><span class="op">)</span></span></code></pre></div>
@@ -582,12 +760,6 @@ percentage
 <th style="text-align:left;">
 value_label
 </th>
-<th style="text-align:right;">
-label_position
-</th>
-<th style="text-align:left;">
-direction
-</th>
 </tr></thead>
 <tbody>
 <tr>
@@ -598,16 +770,10 @@ Atlantis
 No Trust
 </td>
 <td style="text-align:right;">
--50.90909
+50.90909
 </td>
 <td style="text-align:left;">
 50.9%
-</td>
-<td style="text-align:right;">
--25.45455
-</td>
-<td style="text-align:left;">
-negative
 </td>
 </tr>
 <tr>
@@ -623,12 +789,6 @@ Trust
 <td style="text-align:left;">
 49.1%
 </td>
-<td style="text-align:right;">
-24.54545
-</td>
-<td style="text-align:left;">
-positive
-</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -638,16 +798,10 @@ Narnia
 No Trust
 </td>
 <td style="text-align:right;">
--54.34783
+54.34783
 </td>
 <td style="text-align:left;">
 54.3%
-</td>
-<td style="text-align:right;">
--27.17391
-</td>
-<td style="text-align:left;">
-negative
 </td>
 </tr>
 <tr>
@@ -663,12 +817,6 @@ Trust
 <td style="text-align:left;">
 45.7%
 </td>
-<td style="text-align:right;">
-22.82609
-</td>
-<td style="text-align:left;">
-positive
-</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -678,16 +826,10 @@ Neverland
 No Trust
 </td>
 <td style="text-align:right;">
--36.36364
+36.36364
 </td>
 <td style="text-align:left;">
 36.4%
-</td>
-<td style="text-align:right;">
--18.18182
-</td>
-<td style="text-align:left;">
-negative
 </td>
 </tr>
 <tr>
@@ -703,37 +845,21 @@ Trust
 <td style="text-align:left;">
 63.6%
 </td>
-<td style="text-align:right;">
-31.81818
-</td>
-<td style="text-align:left;">
-positive
-</td>
 </tr>
 </tbody>
 </table>
-<p>Diverging bar charts are a variation of standard bar charts that use
-both the positive and negative sides of the Cartesian plane to display
-information. For example, let’s revisit our earlier case where we
-plotted levels of trust in Institution A. With diverging bars, we can
-plot the percentage of respondents who answered “A lot” and “Some” on
-one side, and the percentage of respondents who answered “Little” and
-“None” on the other. To achieve this, we first need to wrangle the data
-slightly differently:</p>
-<p>Pay close attention to how we create a new variable,
-<code>direction</code>, to specify the direction in which the values
-should be plotted. Values associated with a “negative” direction are
-converted into negative numbers.</p>
-<p>Once the data is prepared, we can use the <code><a href="../reference/wjp_divbars.html">wjp_divbars()</a></code>
-function to create the chart. Several parameters are used in the same
-way as in the wjp_bars() function:</p>
+<p>Notice that all percentages are positive: there is no need to flip
+the sign of one group yourself. Once the data is prepared, we can use
+the <code><a href="../reference/wjp_divbars.html">wjp_divbars()</a></code> function to create the chart. Several
+parameters are used in the same way as in the <code><a href="../reference/wjp_bars.html">wjp_bars()</a></code>
+function:</p>
 <ul>
 <li>
 <code>target</code>: Specifies the column containing the values to
 be plotted.</li>
 <li>
 <code>grouping</code>: Specifies the column containing the
-categorical groupings.</li>
+categories shown on each row.</li>
 <li>
 <code>cvec</code>: Contains a named vector that links specific
 values to color codes.</li>
@@ -746,37 +872,41 @@ labels to display (optional).</li>
 for diverging bar charts:</p>
 <ul>
 <li>
-<code>diverging</code>: Specifies the column name that identifies
-the direction of the values (positive or negative).</li>
+<code>diverging</code>: Specifies the column that contains the
+opposing groups (here, “Trust” and “No Trust”).</li>
 <li>
-<code>negative</code>: Specifies the value in the diverging column
-that indicates negative values.</li>
+<code>negative</code>: Specifies the value of the
+<code>diverging</code> column whose bars should extend to the left. The
+function flips its values into the negative side automatically. If you
+prefer to supply pre-signed values, leave
+<code>negative = NULL</code>.</li>
 </ul>
 <p>By combining these parameters, the <code><a href="../reference/wjp_divbars.html">wjp_divbars()</a></code>
 function allows for clear and effective visualization of contrasting
 groups within the data.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/wjp_divbars.html">wjp_divbars</a></span><span class="op">(</span></span>
-<span>    <span class="va">data4divbars</span>,             </span>
-<span>    target      <span class="op">=</span> <span class="st">"percentage"</span>,       </span>
-<span>    grouping    <span class="op">=</span> <span class="st">"country"</span>,         </span>
-<span>    diverging   <span class="op">=</span> <span class="st">"q1a"</span>,     </span>
-<span>    negative    <span class="op">=</span> <span class="st">"negative"</span>,   </span>
+<span>    <span class="va">data4divbars</span>,</span>
+<span>    target      <span class="op">=</span> <span class="st">"percentage"</span>,</span>
+<span>    grouping    <span class="op">=</span> <span class="st">"country"</span>,</span>
+<span>    diverging   <span class="op">=</span> <span class="st">"q1a"</span>,</span>
+<span>    negative    <span class="op">=</span> <span class="st">"No Trust"</span>,</span>
 <span>    cvec        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Trust"</span>     <span class="op">=</span> <span class="st">"#482d8b"</span>,</span>
 <span>                    <span class="st">"No Trust"</span>  <span class="op">=</span> <span class="st">"#f26b21"</span><span class="op">)</span>,</span>
-<span>    labels      <span class="op">=</span> <span class="st">"value_label"</span></span>
+<span>    labels      <span class="op">=</span> <span class="st">"value_label"</span>,</span>
+<span>    show_legend <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="dataviz_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="edgebars">Edgebars<a class="anchor" aria-label="anchor" href="#edgebars"></a>
 </h2>
-<p>Edgebars is a specific type of horizontal bars that have the Y-Axis
-text on top of the bar instead that along the axis. This design
+<p>Edgebars are a specific type of horizontal bars that place the Y-axis
+text on top of each bar instead of along the axis. This design
 modification is a good option when the dimensions of the plot are small
 (narrow) and the axis texts are expected to be long. Use the
-wjp_edgebars()` function to plot these bars in a similar way than
-previous examples.</p>
+<code><a href="../reference/wjp_edgebars.html">wjp_edgebars()</a></code> function to plot these bars in a similar way
+to the previous examples.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/wjp_edgebars.html">wjp_edgebars</a></span><span class="op">(</span></span>
 <span>    <span class="va">data4bars</span>,              </span>
@@ -1068,8 +1198,9 @@ cases:</p>
 <p><img src="dataviz_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="100%"></p>
 <ol start="2" style="list-style-type: decimal">
 <li>For multiple lines, pass the full data. In this case, also consider
-setting repel = TRUE to prevent overlapping value labels. Note that the
-ggrepel package must be loaded for this feature to work.</li>
+setting <code>repel = TRUE</code> to prevent overlapping value labels.
+Note that the ggrepel package must be installed for this feature to
+work.</li>
 </ol>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggrepel.slowkow.com/" class="external-link">ggrepel</a></span><span class="op">)</span></span>
@@ -1123,8 +1254,8 @@ variables between two specific points in time. They provide a more
 aesthetically pleasing alternative to line charts in such cases. The
 <code><a href="../reference/wjp_slope.html">wjp_slope()</a></code> function is designed for this purpose.</p>
 <p>Let’s use an example where we disaggregate the evolution of trust in
-Institution A between 2017 and 2022 across three countries. We begin by
-preparing the data to fit this design:</p>
+Institution A between 2017 and 2019 by gender. We begin by preparing the
+data to fit this design:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data4slopes</span> <span class="op">&lt;-</span> <span class="va">gpp_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">gend</span>, <span class="va">q1a</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -1233,9 +1364,9 @@ Male
 </tr>
 </tbody>
 </table>
-<p>Once the data is ready, we can use the wjp_slope() function. This
-function relies on parameters that have been covered in previous
-examples:</p>
+<p>Once the data is ready, we can use the <code><a href="../reference/wjp_slope.html">wjp_slope()</a></code>
+function. This function relies on parameters that have been covered in
+previous examples:</p>
 <ul>
 <li>
 <code>target</code>: Specifies the column containing the values to
@@ -1256,7 +1387,7 @@ display, if any.</li>
 <li>
 <code>repel</code>: Activates the <code>ggrepel</code> feature to
 prevent overlapping labels. Note that the <code>ggrepel</code> package
-must be loaded for this feature to work.</li>
+must be installed for this feature to work.</li>
 </ul>
 <p>As with <code><a href="../reference/wjp_lines.html">wjp_lines()</a></code>, the lines are defined by the
 <code>colors</code> variable. Using these parameters, you can create a
@@ -2217,15 +2348,14 @@ be plotted.</li>
 containing the categorical groupings or variables that will be shown in
 each axis of the polar chart.</li>
 <li>
-<code>color_var</code>: The column name used to assign different
-data points to different lines. Each line will have a different
-color.</li>
+<code>colors</code>: The column name used to assign different data
+points to different lines. Each line will have a different color.</li>
 <li>
 <code>cvec</code>: Contains a named vector that links specific
 values to color codes.</li>
 <li>
-<code>label_var</code>: Specifies the column containing the value
-labels to display.</li>
+<code>labels</code>: Specifies the column containing the axis labels
+to display around the radar.</li>
 </ul>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/wjp_radar.html">wjp_radar</a></span><span class="op">(</span></span>
@@ -2330,9 +2460,7 @@ used to exemplify the radar chart.</p>
 <span>    target    <span class="op">=</span> <span class="st">"percentage"</span>,</span>
 <span>    grouping  <span class="op">=</span> <span class="st">"category"</span>,</span>
 <span>    labels    <span class="op">=</span> <span class="st">"axis_label"</span>,</span>
-<span>    cvec      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#482d8b"</span>, <span class="st">"#2894aa"</span>, <span class="st">"#f26b21"</span>,</span>
-<span>                  <span class="st">"#137b3f"</span>, <span class="st">"#869d3b"</span>, <span class="st">"#0f9581"</span>,</span>
-<span>                  <span class="st">"#1a74b6"</span>, <span class="st">"#8f2e8c"</span>, <span class="st">"#555659"</span><span class="op">)</span></span>
+<span>    cvec      <span class="op">=</span> <span class="fu"><a href="../reference/wjp_palette.html">wjp_palette</a></span><span class="op">(</span><span class="fl">9</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="dataviz_files/figure-html/unnamed-chunk-30-1.png" class="r-plt" alt="" width="100%"></p>
 </div>
@@ -2362,7 +2490,7 @@ the specific order of the elements and pass its name through
 <span>    target       <span class="op">=</span> <span class="st">"percentage"</span>,</span>
 <span>    grouping     <span class="op">=</span> <span class="st">"country"</span>,</span>
 <span>    diverging    <span class="op">=</span> <span class="st">"q1a"</span>,</span>
-<span>    negative     <span class="op">=</span> <span class="st">"negative"</span>,</span>
+<span>    negative     <span class="op">=</span> <span class="st">"No Trust"</span>,</span>
 <span>    cvec         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Trust"</span>     <span class="op">=</span> <span class="st">"#482d8b"</span>,</span>
 <span>                     <span class="st">"No Trust"</span>  <span class="op">=</span> <span class="st">"#f26b21"</span><span class="op">)</span>,</span>
 <span>    labels       <span class="op">=</span> <span class="st">"value_label"</span>,</span>
@@ -2403,12 +2531,12 @@ example, let’s say that we want to further customize our stacked bars
 from before and completely remove the panel grid and add some title and
 subtitle to it. We can do it by using the <code><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs()</a></code> and
 <code><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme()</a></code> functions from the ggplot2 package as shown
-bellow:</p>
+below:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">stacked_bar</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title    <span class="op">=</span> <span class="st">"Trust in Institution A"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"Percentage of people who has a lot, some, little, or no trust in Institution A"</span></span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Percentage of people who have a lot, some, little, or no trust in Institution A"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
 <span>    axis.text.x         <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>

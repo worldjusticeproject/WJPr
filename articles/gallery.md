@@ -33,7 +33,7 @@ For categorical data visualizations, start with violet, teal-blue, and
 orange. When a chart needs more categories, use the established Rule of
 Law Index factor colors already included in this package. The full
 ordered palette is available programmatically via
-[`wjp_palette()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_palette.md):
+[`wjp_palette()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md):
 
 ``` r
 
@@ -48,7 +48,7 @@ on-brand by default.
 
 ## Typography
 
-[`wjp_fonts()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_fonts.md)
+[`wjp_fonts()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_fonts.md)
 registers two font systems from Google Fonts: **Lato** (Full, Light, and
 Black weights) and **Inter Tight**. All charts use Lato by default. To
 switch every chart of the session — axis text, value labels, and legends
@@ -90,34 +90,13 @@ For a single chart, wrap the call with
 only the theme elements (axis text and titles) of one chart, pass
 `ptheme = WJP_theme(family = "Inter Tight")` — note that value labels
 keep the session font in that case. See
-[`wjp_font_family()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_font_family.md)
+[`wjp_font_family()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_font_family.md)
 for details.
 
 ``` r
 
 # Load sample data
 gpp_data <- WJPr::gpp
-
-# WJP Color Palettes
-wjp_categorical <- c(
-  "#482d8b", "#2894aa", "#f26b21", "#137b3f", "#869d3b",
-  "#0f9581", "#1a74b6", "#8f2e8c", "#555659"
-)
-
-# Colors for contrasting two groups
-wjp_contrast <- c("#482d8b", "#f26b21")
-
-# Factor colors (Rule of Law Index)
-wjp_factors <- c(
-  "Constraints" = "#137b3f",
-  "Corruption"  = "#869d3b",
-  "Open Gov"    = "#0f9581",
-  "Rights"      = "#1a74b6",
-  "Security"    = "#413179",
-  "Regulatory"  = "#8f2e8c",
-  "Civil"       = "#89191c",
-  "Criminal"    = "#f07623"
-)
 ```
 
 ------------------------------------------------------------------------
@@ -126,7 +105,7 @@ wjp_factors <- c(
 
 ### Vertical Bars
 
-[`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md) -
+[`wjp_bars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_bars.md) -
 Standard vertical bar chart for comparing values across categories.
 
 ``` r
@@ -198,7 +177,7 @@ Uses the same `data_bars` structure shown above — only
 
 ## Diverging Bars
 
-[`wjp_divbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_divbars.md) -
+[`wjp_divbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_divbars.md) -
 Show positive and negative values extending from a center point.
 
 ``` r
@@ -252,7 +231,7 @@ diverging = response {.table}
 
 ## Dots Chart
 
-[`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md) -
+[`wjp_dots()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dots.md) -
 Compare multiple variables across groups with dot markers.
 
 ``` r
@@ -305,7 +284,7 @@ colors = country {.table}
 
 ## Line Chart
 
-[`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md) -
+[`wjp_lines()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_lines.md) -
 Display trends over time with connected points.
 
 ``` r
@@ -365,7 +344,7 @@ institution {.table}
 
 ## Slope Chart
 
-[`wjp_slope()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_slope.md) -
+[`wjp_slope()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_slope.md) -
 Compare values between exactly two time points.
 
 ``` r
@@ -414,7 +393,7 @@ gender {.table}
 
 ## Dumbbell Chart
 
-[`wjp_dumbbells()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dumbbells.md) -
+[`wjp_dumbbells()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dumbbells.md) -
 Show change between two points with connected markers.
 
 ``` r
@@ -457,7 +436,7 @@ colors = year {.table}
 
 ## Lollipop Chart
 
-[`wjp_lollipops()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lollipops.md) -
+[`wjp_lollipops()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_lollipops.md) -
 Minimalist bar alternative with stems and dots.
 
 ``` r
@@ -479,7 +458,7 @@ automatically; pass a `labels` column to override them.
 
 ## Edgebars Chart
 
-[`wjp_edgebars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_edgebars.md) -
+[`wjp_edgebars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_edgebars.md) -
 Horizontal bars with labels at the edge, ideal for narrow spaces.
 
 ``` r
@@ -502,7 +481,7 @@ drawn at the edge of each bar defaults to the `grouping` values; pass a
 
 ## Radar Chart
 
-[`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md) -
+[`wjp_radar()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_radar.md) -
 Compare multiple dimensions on a circular grid.
 
 ``` r
@@ -563,7 +542,7 @@ Input data for wjp_radar(): target = score, axis_var = category, colors
 
 ## Rose Chart
 
-[`wjp_rose()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_rose.md) -
+[`wjp_rose()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_rose.md) -
 Circular bar chart for single-unit multi-dimensional data.
 
 ``` r
@@ -576,8 +555,7 @@ wjp_rose(
   target   = "score",
   grouping = "category",
   labels   = "label",
-  cvec     = c("#482d8b", "#2894aa", "#f26b21", "#137b3f", "#869d3b",
-               "#0f9581", "#1a74b6", "#8f2e8c", "#555659")
+  cvec     = wjp_palette(9)
 )
 ```
 
@@ -599,7 +577,7 @@ Input data for wjp_rose(): target = score, grouping = category {.table}
 
 ## Gauge Chart
 
-[`wjp_gauge()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_gauge.md) -
+[`wjp_gauge()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_gauge.md) -
 Semicircular chart for showing composition or progress.
 
 ``` r
@@ -641,7 +619,7 @@ Input data for wjp_gauge(): target = value, colors = category {.table}
 
 ## Grouped Bars
 
-[`wjp_groupbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_groupbars.md) -
+[`wjp_groupbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_groupbars.md) -
 Faceted bars that compare a value across demographic groups (one facet
 per `grouping`). Values can be supplied as proportions (`0-1`) or
 percentages (`0-100`). Confidence intervals can be calculated from `sd`
@@ -716,16 +694,16 @@ Input data for wjp_groupbars(): target = value, grouping = group, levels
 
 | Chart | Function | Best For |
 |----|----|----|
-| Vertical Bars | [`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md) | Comparing values across categories |
+| Vertical Bars | [`wjp_bars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_bars.md) | Comparing values across categories |
 | Horizontal Bars | `wjp_bars(direction = "horizontal")` | Long category names |
-| Diverging Bars | [`wjp_divbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_divbars.md) | Positive/negative comparisons |
-| Dots | [`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md) | Multiple groups, multiple variables |
-| Lines | [`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md) | Trends over time |
-| Slope | [`wjp_slope()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_slope.md) | Change between two time points |
-| Dumbbells | [`wjp_dumbbells()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dumbbells.md) | Before/after comparisons |
-| Lollipops | [`wjp_lollipops()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lollipops.md) | Minimalist bar alternative |
-| Edgebars | [`wjp_edgebars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_edgebars.md) | Narrow spaces, long labels |
-| Radar | [`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md) | Multi-dimensional group comparison |
-| Rose | [`wjp_rose()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_rose.md) | Multi-dimensional single unit |
-| Gauge | [`wjp_gauge()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_gauge.md) | Composition, progress |
-| Grouped Bars | [`wjp_groupbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_groupbars.md) | Compare a value across demographic groups |
+| Diverging Bars | [`wjp_divbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_divbars.md) | Positive/negative comparisons |
+| Dots | [`wjp_dots()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dots.md) | Multiple groups, multiple variables |
+| Lines | [`wjp_lines()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_lines.md) | Trends over time |
+| Slope | [`wjp_slope()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_slope.md) | Change between two time points |
+| Dumbbells | [`wjp_dumbbells()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dumbbells.md) | Before/after comparisons |
+| Lollipops | [`wjp_lollipops()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_lollipops.md) | Minimalist bar alternative |
+| Edgebars | [`wjp_edgebars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_edgebars.md) | Narrow spaces, long labels |
+| Radar | [`wjp_radar()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_radar.md) | Multi-dimensional group comparison |
+| Rose | [`wjp_rose()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_rose.md) | Multi-dimensional single unit |
+| Gauge | [`wjp_gauge()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_gauge.md) | Composition, progress |
+| Grouped Bars | [`wjp_groupbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_groupbars.md) | Compare a value across demographic groups |

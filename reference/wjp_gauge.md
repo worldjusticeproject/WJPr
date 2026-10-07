@@ -41,7 +41,7 @@ wjp_gauge(
 
   Named vector of colors, one per segment. Names should match the values
   of the `colors` variable. Default is `NULL` (the WJP palette, see
-  [`wjp_palette()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_palette.md),
+  [`wjp_palette()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md),
   is applied).
 
 - factor_order:
@@ -62,7 +62,7 @@ wjp_gauge(
 - ptheme:
 
   ggplot theme to apply. Default is
-  [`WJP_theme()`](https://worldjusticeproject-org.github.io/WJPr/reference/WJP_theme.md).
+  [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md).
 
 - show_legend:
 
@@ -88,7 +88,7 @@ segments.
 library(dplyr)
 library(ggplot2)
 
-# Always load the WJP fonts (optional)
+# Always load the WJP fonts
 wjp_fonts()
 
 # Create sample data for gauge chart

@@ -25,6 +25,9 @@ wjp_dots(
   sd = NULL,
   sample_size = NULL,
   bgcolor = "#ffffff",
+  labels = NULL,
+  show_labels = FALSE,
+  label_offset = 0.32,
   ptheme = WJP_theme(),
   show_legend = FALSE
 )
@@ -54,7 +57,7 @@ wjp_dots(
 
   Named vector of colors. Names should match the values of the `colors`
   variable. Default is `NULL` (the WJP palette, see
-  [`wjp_palette()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_palette.md),
+  [`wjp_palette()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md),
   is applied).
 
 - order:
@@ -101,10 +104,32 @@ wjp_dots(
   String. Hex code of the background color for the alternating row
   strips. Default is `"#ffffff"`.
 
+- labels:
+
+  String. Column name of the variable containing the value labels to
+  display above each point. Only used when `show_labels = TRUE`. Default
+  is `NULL` (labels are generated automatically as rounded percentages).
+
+- show_labels:
+
+  Logical. If `TRUE`, draws a value label above each point. When several
+  series in the same row share equal or near-equal values, the labels
+  are spread horizontally with
+  [`spread_labels_x()`](https://worldjusticeproject.github.io/WJPr/reference/spread_labels_x.md)
+  so they do not overlap, and identical labels within a row are
+  collapsed to a single mark. Points are never moved. Default is
+  `FALSE`.
+
+- label_offset:
+
+  Numeric. Vertical distance (in category units) between each point and
+  its value label. Only used when `show_labels = TRUE`. Default is
+  `0.32`.
+
 - ptheme:
 
   ggplot theme to apply. Default is
-  [`WJP_theme()`](https://worldjusticeproject-org.github.io/WJPr/reference/WJP_theme.md).
+  [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md).
 
 - show_legend:
 
@@ -191,6 +216,16 @@ wjp_dots(
   draw_ci     = TRUE,
   sd          = "sd",
   sample_size = "n"
+)
+
+
+# With value labels spread horizontally to avoid collisions
+wjp_dots(
+  data4dots,
+  target      = "percentage",
+  grouping    = "institution",
+  colors      = "country",
+  show_labels = TRUE
 )
 
 ```

@@ -11,16 +11,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/worldjusticeproject-org/WJPr/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/worldjusticeproject/WJPr/blob/main/DESCRIPTION)
 
 Pardo S, Data Analytics Unit W (2026). *WJPr: World Justice Project Data
 and Visualization Tools*. R package version 1.1.0,
-<https://github.com/worldjusticeproject-org/WJPr>.
+<https://github.com/worldjusticeproject/WJPr>.
 
     @Manual{,
       title = {WJPr: World Justice Project Data and Visualization Tools},
       author = {Santiago Pardo and World Justice Project {Data Analytics Unit}},
       year = {2026},
       note = {R package version 1.1.0},
-      url = {https://github.com/worldjusticeproject-org/WJPr},
+      url = {https://github.com/worldjusticeproject/WJPr},
     }

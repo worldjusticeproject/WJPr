@@ -25,7 +25,7 @@ wjp_lines(
   x.breaks = NULL,
   x.labels = NULL,
   sec.ticks = NULL,
-  ngroups = NULL,
+  ngroups = deprecated(),
   ptheme = WJP_theme(),
   show_legend = FALSE
 )
@@ -55,7 +55,7 @@ wjp_lines(
 
   Named vector of colors, one per line. Names should match the values of
   the `colors` variable. Default is `NULL` (the WJP palette, see
-  [`wjp_palette()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_palette.md),
+  [`wjp_palette()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md),
   is applied).
 
 - labels:
@@ -105,7 +105,7 @@ wjp_lines(
 - ptheme:
 
   ggplot theme to apply. Default is
-  [`WJP_theme()`](https://worldjusticeproject-org.github.io/WJPr/reference/WJP_theme.md).
+  [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md).
 
 - show_legend:
 

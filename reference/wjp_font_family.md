@@ -4,7 +4,7 @@
 functions and themes. It defaults to `"Lato Full"` and can be changed
 globally for the session through the `wjpr.family` option, so a single
 line switches every chart to another family loaded by
-[`wjp_fonts()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_fonts.md)
+[`wjp_fonts()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_fonts.md)
 (e.g., Inter Tight).
 
 ## Usage
@@ -20,7 +20,7 @@ A single string with the active font family.
 ## Details
 
 Families registered by
-[`wjp_fonts()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_fonts.md):
+[`wjp_fonts()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_fonts.md):
 `"Lato Full"` (default), `"Lato Light"`, `"Lato Black"`, and
 `"Inter Tight"`. Any other family already registered in your session
 (via

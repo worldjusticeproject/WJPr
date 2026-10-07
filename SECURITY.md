@@ -4,15 +4,16 @@
 
 | Version | Supported |
 |---------|-----------|
-| 1.0.x   | ✅        |
-| \< 1.0  | ❌        |
+| 1.1.x   | ✅        |
+| \< 1.1  | ❌        |
 
 ## Reporting a Vulnerability
 
 If you discover a security vulnerability in WJPr, please report it by:
 
 1.  **DO NOT** open a public issue
-2.  Email the maintainer directly with details
+2.  Email the maintainer (<data-analytics@worldjusticeproject.org>) with
+    details
 3.  Include steps to reproduce the vulnerability
 4.  Allow reasonable time for a fix before public disclosure
 
@@ -29,7 +30,7 @@ WJPr is a visualization package that:
 ### Font Loading
 
 The
-[`wjp_fonts()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_fonts.md)
+[`wjp_fonts()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_fonts.md)
 function downloads fonts from Google Fonts using the `sysfonts` package.
 This requires an internet connection and trusts Google’s font servers.
 

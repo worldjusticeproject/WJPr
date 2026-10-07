@@ -15,7 +15,7 @@ WJP_theme(family = wjp_font_family())
 
   String. Font family for all text elements. Default is the active WJP
   font family (see
-  [`wjp_font_family()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_font_family.md)),
+  [`wjp_font_family()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_font_family.md)),
   which is `"Lato Full"` unless changed via `options(wjpr.family = )`.
 
 ## Value
@@ -31,7 +31,7 @@ The theme includes the following style specifications:
 - Dashed grey grid lines (`#5e5c5a`)
 
 - WJP font family for all text elements (Lato Full by default; see
-  [`wjp_font_family()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_font_family.md))
+  [`wjp_font_family()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_font_family.md))
 
 - Text color `#524F4C`
 

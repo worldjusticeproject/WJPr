@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Guía de Desarrollo: Cómo Agregar Funciones a WJPr • WJPr</title>
+<title>Development Guide: Adding Functions to WJPr • WJPr</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Lato-0.4.10/font.css" rel="stylesheet">
@@ -13,7 +13,7 @@
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Guía de Desarrollo: Cómo Agregar Funciones a WJPr">
+<meta property="og:title" content="Development Guide: Adding Functions to WJPr">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
@@ -66,6 +66,7 @@
     <li><a class="dropdown-item" href="../reference/wjp_fonts.html">wjp_fonts()</a></li>
     <li><a class="dropdown-item" href="../reference/wjp_font_family.html">wjp_font_family()</a></li>
     <li><a class="dropdown-item" href="../reference/wjp_palette.html">wjp_palette()</a></li>
+    <li><a class="dropdown-item" href="../reference/spread_labels_x.html">spread_labels_x()</a></li>
     <li><a class="dropdown-item" href="../reference/WJP_theme.html">WJP_theme()</a></li>
   </ul>
 </li>
@@ -90,7 +91,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/worldjusticeproject-org/WJPr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/worldjusticeproject/WJPr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -104,64 +105,66 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Guía de Desarrollo: Cómo Agregar Funciones a WJPr</h1>
+      <h1>Development Guide: Adding Functions to WJPr</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject-org/WJPr/blob/main/vignettes/articles/development-guide.Rmd" class="external-link"><code>vignettes/articles/development-guide.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject/WJPr/blob/main/vignettes/articles/development-guide.Rmd" class="external-link"><code>vignettes/articles/development-guide.Rmd</code></a></small>
       <div class="d-none name"><code>development-guide.Rmd</code></div>
     </div>
 
     
     
-<p>Esta guía técnica detalla el proceso completo para agregar nuevas
-funciones de visualización al paquete WJPr.</p>
+<p>This technical guide walks through the complete process for adding
+new visualization functions to the WJPr package.</p>
 <div class="section level2">
-<h2 id="requisitos-previos">Requisitos Previos<a class="anchor" aria-label="anchor" href="#requisitos-previos"></a>
+<h2 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
 </h2>
 <div class="section level3">
-<h3 id="dependencias-de-desarrollo">Dependencias de Desarrollo<a class="anchor" aria-label="anchor" href="#dependencias-de-desarrollo"></a>
+<h3 id="development-dependencies">Development Dependencies<a class="anchor" aria-label="anchor" href="#development-dependencies"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span><span class="st">"devtools"</span>,</span>
-<span><span class="st">"roxygen2"</span>,</span>
-<span><span class="st">"testthat"</span>,</span>
-<span><span class="st">"usethis"</span></span>
+<span>  <span class="st">"devtools"</span>,</span>
+<span>  <span class="st">"roxygen2"</span>,</span>
+<span>  <span class="st">"testthat"</span>,</span>
+<span>  <span class="st">"usethis"</span>,</span>
+<span>  <span class="st">"pkgdown"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="clonar-el-repositorio">Clonar el Repositorio<a class="anchor" aria-label="anchor" href="#clonar-el-repositorio"></a>
+<h3 id="clone-the-repository">Clone the Repository<a class="anchor" aria-label="anchor" href="#clone-the-repository"></a>
 </h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/worldjusticeproject-org/WJPr.git</span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/worldjusticeproject/WJPr.git</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="bu">cd</span> WJPr</span></code></pre></div>
+<p>Then restore the project environment with
+<code><a href="https://rstudio.github.io/renv/reference/restore.html" class="external-link">renv::restore()</a></code>.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="paso-1-crear-el-archivo-de-la-función">Paso 1: Crear el Archivo de la Función<a class="anchor" aria-label="anchor" href="#paso-1-crear-el-archivo-de-la-funci%C3%B3n"></a>
+<h2 id="step-1-create-the-function-file">Step 1: Create the Function File<a class="anchor" aria-label="anchor" href="#step-1-create-the-function-file"></a>
 </h2>
 <div class="section level3">
-<h3 id="ubicación-y-nomenclatura">Ubicación y Nomenclatura<a class="anchor" aria-label="anchor" href="#ubicaci%C3%B3n-y-nomenclatura"></a>
+<h3 id="location-and-naming">Location and Naming<a class="anchor" aria-label="anchor" href="#location-and-naming"></a>
 </h3>
-<p>Crear un nuevo archivo en <code>R/</code> siguiendo la
-convención:</p>
+<p>Create a new file in <code>R/</code> following the convention:</p>
 <ul>
 <li>
-<strong>Gráficos</strong>: <code>{tipo}Chart.R</code> (ej:
+<strong>Charts</strong>: <code>{type}Chart.R</code> (e.g.,
 <code>waterfallChart.R</code>)</li>
 <li>
-<strong>Utilidades</strong>: <code>{nombre}.R</code> (ej:
+<strong>Utilities</strong>: <code>{name}.R</code> (e.g.,
 <code>validation.R</code>)</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Crear archivo</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.create</a></span><span class="op">(</span><span class="st">"R/waterfallChart.R"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Create the file</span></span>
+<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">use_r</span><span class="op">(</span><span class="st">"waterfallChart"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="paso-2-estructura-de-la-función">Paso 2: Estructura de la Función<a class="anchor" aria-label="anchor" href="#paso-2-estructura-de-la-funci%C3%B3n"></a>
+<h2 id="step-2-function-structure">Step 2: Function Structure<a class="anchor" aria-label="anchor" href="#step-2-function-structure"></a>
 </h2>
 <div class="section level3">
-<h3 id="template-completo">Template Completo<a class="anchor" aria-label="anchor" href="#template-completo"></a>
+<h3 id="complete-template">Complete Template<a class="anchor" aria-label="anchor" href="#complete-template"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Plot a Waterfall Chart following WJP style guidelines</span></span>
@@ -169,33 +172,33 @@ convención:</p>
 <span><span class="co">#' @description</span></span>
 <span><span class="co">#' `r lifecycle::badge("experimental")`</span></span>
 <span><span class="co">#'</span></span>
-<span><span class="co">#' `wjp_waterfall()` creates a waterfall chart showing cumulative effects</span></span>
+<span><span class="co">#' `wjp_waterfall()` creates a waterfall chart showing the cumulative effect</span></span>
 <span><span class="co">#' of sequential positive and negative values.</span></span>
 <span><span class="co">#'</span></span>
-<span><span class="co">#' @param data A data frame containing the data to be plotted.</span></span>
+<span><span class="co">#' @param data Data frame containing the data to plot.</span></span>
 <span><span class="co">#' @param target String. Column name with numeric values to plot.</span></span>
 <span><span class="co">#' @param grouping String. Column name with category labels.</span></span>
-<span><span class="co">#' @param colors String. Column name for color grouping. Default is NULL.</span></span>
-<span><span class="co">#' @param cvec Named character vector of colors. Default is NULL.</span></span>
-<span><span class="co">#' @param labels String. Column name with value labels. Default is NULL.</span></span>
-<span><span class="co">#' @param direction String. "horizontal" or "vertical". Default is "vertical".</span></span>
-<span><span class="co">#' @param ptheme A ggplot2 theme. Default is WJP_theme().</span></span>
+<span><span class="co">#' @param colors String. Column name for color grouping. Default is `NULL`.</span></span>
+<span><span class="co">#' @param cvec Named vector of colors. Default is `NULL` (the WJP palette,</span></span>
+<span><span class="co">#'   see [wjp_palette()], is applied).</span></span>
+<span><span class="co">#' @param labels String. Column name with value labels. Default is `NULL`.</span></span>
+<span><span class="co">#' @param direction String. `"horizontal"` or `"vertical"`. Default is `"vertical"`.</span></span>
+<span><span class="co">#' @param ptheme ggplot theme to apply. Default is [WJP_theme()].</span></span>
+<span><span class="co">#' @param show_legend Logical. If `TRUE`, displays a horizontal legend above</span></span>
+<span><span class="co">#'   the chart. Default is `FALSE`.</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @return A ggplot object representing the waterfall chart.</span></span>
 <span><span class="co">#' @export</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @examples</span></span>
-<span><span class="co">#' library(dplyr)</span></span>
-<span><span class="co">#' library(ggplot2)</span></span>
-<span><span class="co">#'</span></span>
-<span><span class="co">#' # Load fonts</span></span>
+<span><span class="co">#' # Always load the WJP fonts</span></span>
 <span><span class="co">#' wjp_fonts()</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' # Prepare data</span></span>
 <span><span class="co">#' data_waterfall &lt;- data.frame(</span></span>
 <span><span class="co">#'   category = c("Start", "Gain A", "Loss B", "Gain C", "End"),</span></span>
-<span><span class="co">#'   value = c(100, 30, -20, 15, 125),</span></span>
-<span><span class="co">#'   type = c("total", "positive", "negative", "positive", "total")</span></span>
+<span><span class="co">#'   value    = c(100, 30, -20, 15, 125),</span></span>
+<span><span class="co">#'   type     = c("total", "positive", "negative", "positive", "total")</span></span>
 <span><span class="co">#' )</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' # Create chart</span></span>
@@ -204,7 +207,7 @@ convención:</p>
 <span><span class="co">#'   target   = "value",</span></span>
 <span><span class="co">#'   grouping = "category",</span></span>
 <span><span class="co">#'   colors   = "type",</span></span>
-<span><span class="co">#'   cvec     = c("total" = "#482d8b",</span></span>
+<span><span class="co">#'   cvec     = c("total"    = "#482d8b",</span></span>
 <span><span class="co">#'                "positive" = "#0f9581",</span></span>
 <span><span class="co">#'                "negative" = "#f26b21")</span></span>
 <span><span class="co">#' )</span></span>
@@ -213,171 +216,175 @@ convención:</p>
 <span>    <span class="va">data</span>,</span>
 <span>    <span class="va">target</span>,</span>
 <span>    <span class="va">grouping</span>,</span>
-<span>    <span class="va">colors</span>    <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    <span class="va">cvec</span>      <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    <span class="va">labels</span>    <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    <span class="va">direction</span> <span class="op">=</span> <span class="st">"vertical"</span>,</span>
-<span>    <span class="va">ptheme</span>    <span class="op">=</span> <span class="fu"><a href="../reference/WJP_theme.html">WJP_theme</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="va">colors</span>      <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    <span class="va">cvec</span>        <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    <span class="va">labels</span>      <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    <span class="va">direction</span>   <span class="op">=</span> <span class="st">"vertical"</span>,</span>
+<span>    <span class="va">ptheme</span>      <span class="op">=</span> <span class="fu"><a href="../reference/WJP_theme.html">WJP_theme</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    <span class="va">show_legend</span> <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
-<span><span class="co"># ===========================================================================</span></span>
-<span><span class="co"># SECCIÓN 1: VALIDACIÓN DE DATOS (Opcional pero recomendado)</span></span>
-<span><span class="co"># ===========================================================================</span></span>
+<span>  <span class="co"># ===========================================================================</span></span>
+<span>  <span class="co"># SECTION 1: INPUT VALIDATION (optional but recommended)</span></span>
+<span>  <span class="co"># ===========================================================================</span></span>
 <span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">is.data.frame</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"'data' must be a data frame"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">is.data.frame</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"`data` must be a data frame."</span>, call. <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
 <span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">target</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Column '"</span>, <span class="va">target</span>, <span class="st">"' not found in data"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">target</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Column '"</span>, <span class="va">target</span>, <span class="st">"' not found in `data`."</span>, call. <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
 <span></span>
-<span><span class="co"># ===========================================================================</span></span>
-<span><span class="co"># SECCIÓN 2: RENOMBRAR VARIABLES</span></span>
-<span><span class="co"># ===========================================================================</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">direction</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"vertical"</span>, <span class="st">"horizontal"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">'`direction` must be one of "vertical" or "horizontal".'</span>, call. <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
 <span></span>
-<span><span class="co"># Renombrar columnas obligatorias</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span></span>
-<span>    target_var   <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">target</span><span class="op">)</span>,</span>
-<span>    grouping_var <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">grouping</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
+<span>  <span class="co"># ===========================================================================</span></span>
+<span>  <span class="co"># SECTION 2: RENAME VARIABLES</span></span>
+<span>  <span class="co"># ===========================================================================</span></span>
 <span></span>
-<span><span class="co"># Manejar columna de colores</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">colors</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co"># Si no se especifica, usar grouping como color</span></span>
+<span>  <span class="co"># Rename the required columns</span></span>
 <span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>colors_var <span class="op">=</span> <span class="va">grouping_var</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">colors</span> <span class="op">==</span> <span class="va">grouping</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co"># Evitar doble rename si son la misma columna</span></span>
-<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>colors_var <span class="op">=</span> <span class="va">grouping_var</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>colors_var <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">colors</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co"># Manejar labels</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">labels</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>labels_var <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">labels</span> <span class="op">==</span> <span class="va">grouping</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>labels_var <span class="op">=</span> <span class="va">grouping_var</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">labels</span> <span class="op">==</span> <span class="va">colors</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">colors</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>labels_var <span class="op">=</span> <span class="va">colors_var</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>labels_var <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">labels</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co"># ===========================================================================</span></span>
-<span><span class="co"># SECCIÓN 3: TRANSFORMACIONES DE DATOS</span></span>
-<span><span class="co"># ===========================================================================</span></span>
-<span></span>
-<span><span class="co"># Calcular posiciones para waterfall</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    end   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">target_var</span><span class="op">)</span>,</span>
-<span>    start <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">end</span>, default <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,</span>
-<span>    <span class="co"># Ajustar para valores negativos</span></span>
-<span>    ymin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin</a></span><span class="op">(</span><span class="va">start</span>, <span class="va">end</span><span class="op">)</span>,</span>
-<span>    ymax <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="va">start</span>, <span class="va">end</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="co"># ===========================================================================</span></span>
-<span><span class="co"># SECCIÓN 4: CREAR GRÁFICO BASE</span></span>
-<span><span class="co"># ===========================================================================</span></span>
-<span></span>
-<span><span class="va">plt</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
-<span>  <span class="va">data</span>,</span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>    x    <span class="op">=</span> <span class="va">grouping_var</span>,</span>
-<span>    fill <span class="op">=</span> <span class="va">colors_var</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span></span>
-<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>      xmin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">grouping_var</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fl">0.4</span>,</span>
-<span>      xmax <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">grouping_var</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.4</span>,</span>
-<span>      ymin <span class="op">=</span> <span class="va">ymin</span>,</span>
-<span>      ymax <span class="op">=</span> <span class="va">ymax</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    show.legend <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Agregar labels si existen</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">labels_var</span> <span class="op">==</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">plt</span> <span class="op">&lt;-</span> <span class="va">plt</span> <span class="op">+</span></span>
-<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span></span>
-<span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>        x     <span class="op">=</span> <span class="va">grouping_var</span>,</span>
-<span>        y     <span class="op">=</span> <span class="va">ymax</span>,</span>
-<span>        label <span class="op">=</span> <span class="va">labels_var</span></span>
-<span>      <span class="op">)</span>,</span>
-<span>      vjust    <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span>,</span>
-<span>      family   <span class="op">=</span> <span class="st">"Lato Full"</span>,</span>
-<span>      fontface <span class="op">=</span> <span class="st">"bold"</span>,</span>
-<span>      color    <span class="op">=</span> <span class="st">"#4a4a49"</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span></span>
+<span>      target_var   <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">target</span><span class="op">)</span>,</span>
+<span>      grouping_var <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">grouping</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
-<span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># ===========================================================================</span></span>
-<span><span class="co"># SECCIÓN 5: APLICAR COLORES</span></span>
-<span><span class="co"># ===========================================================================</span></span>
+<span>  <span class="co"># Handle the colors column</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">colors</span><span class="op">)</span> <span class="op">||</span> <span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">colors</span>, <span class="va">grouping</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># If not supplied (or the same column as grouping), reuse grouping</span></span>
+<span>    <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>colors_var <span class="op">=</span> <span class="va">grouping_var</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>colors_var <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">colors</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
 <span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">cvec</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Handle labels</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">labels</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>labels_var <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">labels</span>, <span class="va">grouping</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>labels_var <span class="op">=</span> <span class="va">grouping_var</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">labels</span>, <span class="va">colors</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>labels_var <span class="op">=</span> <span class="va">colors_var</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>labels_var <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">labels</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="co"># ===========================================================================</span></span>
+<span>  <span class="co"># SECTION 3: DATA TRANSFORMATIONS</span></span>
+<span>  <span class="co"># ===========================================================================</span></span>
+<span></span>
+<span>  <span class="co"># Compute the waterfall positions</span></span>
+<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>      end   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">target_var</span><span class="op">)</span>,</span>
+<span>      start <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">end</span>, default <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,</span>
+<span>      <span class="co"># Handle negative values</span></span>
+<span>      ymin  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin</a></span><span class="op">(</span><span class="va">start</span>, <span class="va">end</span><span class="op">)</span>,</span>
+<span>      ymax  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="va">start</span>, <span class="va">end</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># ===========================================================================</span></span>
+<span>  <span class="co"># SECTION 4: DEFAULT COLORS</span></span>
+<span>  <span class="co"># ===========================================================================</span></span>
+<span></span>
+<span>  <span class="co"># Fall back to the WJP palette when no color vector is supplied</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">cvec</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">cvec</span> <span class="op">&lt;-</span> <span class="fu">wjp_default_cvec</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">colors_var</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="co"># ===========================================================================</span></span>
+<span>  <span class="co"># SECTION 5: BASE CHART</span></span>
+<span>  <span class="co"># ===========================================================================</span></span>
+<span></span>
+<span>  <span class="va">plt</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
+<span>    <span class="va">data</span>,</span>
+<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
+<span>      x    <span class="op">=</span> <span class="va">grouping_var</span>,</span>
+<span>      fill <span class="op">=</span> <span class="va">colors_var</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span></span>
+<span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
+<span>        xmin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">grouping_var</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fl">0.4</span>,</span>
+<span>        xmax <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">grouping_var</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.4</span>,</span>
+<span>        ymin <span class="op">=</span> <span class="va">ymin</span>,</span>
+<span>        ymax <span class="op">=</span> <span class="va">ymax</span></span>
+<span>      <span class="op">)</span>,</span>
+<span>      show.legend <span class="op">=</span> <span class="va">show_legend</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span></span>
+<span>      values <span class="op">=</span> <span class="va">cvec</span>,</span>
+<span>      breaks <span class="op">=</span> <span class="fu">wjp_legend_breaks</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">colors_var</span><span class="op">)</span>,</span>
+<span>      name   <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Add value labels if supplied</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">labels_var</span> <span class="op">==</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">plt</span> <span class="op">&lt;-</span> <span class="va">plt</span> <span class="op">+</span></span>
+<span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span></span>
+<span>        <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
+<span>          x     <span class="op">=</span> <span class="va">grouping_var</span>,</span>
+<span>          y     <span class="op">=</span> <span class="va">ymax</span>,</span>
+<span>          label <span class="op">=</span> <span class="va">labels_var</span></span>
+<span>        <span class="op">)</span>,</span>
+<span>        vjust    <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span>,</span>
+<span>        family   <span class="op">=</span> <span class="fu"><a href="../reference/wjp_font_family.html">wjp_font_family</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        fontface <span class="op">=</span> <span class="st">"bold"</span>,</span>
+<span>        size     <span class="op">=</span> <span class="fl">3.514598</span>,</span>
+<span>        color    <span class="op">=</span> <span class="st">"#4a4a49"</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="co"># ===========================================================================</span></span>
+<span>  <span class="co"># SECTION 6: DIRECTION</span></span>
+<span>  <span class="co"># ===========================================================================</span></span>
+<span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">direction</span> <span class="op">==</span> <span class="st">"horizontal"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">plt</span> <span class="op">&lt;-</span> <span class="va">plt</span> <span class="op">+</span></span>
+<span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="co"># ===========================================================================</span></span>
+<span>  <span class="co"># SECTION 7: THEME AND FINAL TWEAKS</span></span>
+<span>  <span class="co"># ===========================================================================</span></span>
+<span></span>
 <span>  <span class="va">plt</span> <span class="op">&lt;-</span> <span class="va">plt</span> <span class="op">+</span></span>
-<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">cvec</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
+<span>    <span class="va">ptheme</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>      panel.grid.major.x <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">wjp_legend_theme</span><span class="op">(</span><span class="va">show_legend</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># ===========================================================================</span></span>
-<span><span class="co"># SECCIÓN 6: APLICAR DIRECCIÓN</span></span>
-<span><span class="co"># ===========================================================================</span></span>
-<span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="va">direction</span> <span class="op">==</span> <span class="st">"horizontal"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">plt</span> <span class="op">&lt;-</span> <span class="va">plt</span> <span class="op">+</span></span>
-<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co"># ===========================================================================</span></span>
-<span><span class="co"># SECCIÓN 7: APLICAR TEMA Y AJUSTES FINALES</span></span>
-<span><span class="co"># ===========================================================================</span></span>
-<span></span>
-<span><span class="va">plt</span> <span class="op">&lt;-</span> <span class="va">plt</span> <span class="op">+</span></span>
-<span>  <span class="va">ptheme</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">""</span>, y <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
-<span>    panel.grid.major.x <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    legend.position    <span class="op">=</span> <span class="st">"none"</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">plt</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">plt</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="paso-3-patrones-importantes">Paso 3: Patrones Importantes<a class="anchor" aria-label="anchor" href="#paso-3-patrones-importantes"></a>
+<h2 id="step-3-important-patterns">Step 3: Important Patterns<a class="anchor" aria-label="anchor" href="#step-3-important-patterns"></a>
 </h2>
 <div class="section level3">
-<h3 id="manejo-de-parámetros-opcionales">Manejo de Parámetros Opcionales<a class="anchor" aria-label="anchor" href="#manejo-de-par%C3%A1metros-opcionales"></a>
+<h3 id="handling-optional-parameters">Handling Optional Parameters<a class="anchor" aria-label="anchor" href="#handling-optional-parameters"></a>
 </h3>
-<p>El patrón más importante es manejar correctamente cuando un parámetro
-es NULL o cuando dos parámetros apuntan a la misma columna:</p>
+<p>The most important pattern is handling a parameter that is NULL or
+two parameters that point to the same column:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># INCORRECTO - Causa error si colors == grouping</span></span>
+<code class="sourceCode R"><span><span class="co"># INCORRECT - Fails if colors == grouping</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span></span>
 <span>    grouping_var <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">grouping</span><span class="op">)</span>,</span>
-<span>    colors_var   <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">colors</span><span class="op">)</span>  <span class="co"># ERROR: columna ya renombrada</span></span>
+<span>    colors_var   <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">colors</span><span class="op">)</span>  <span class="co"># ERROR: column already renamed</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="co"># CORRECTO - Verificar antes de renombrar</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">colors</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>colors_var <span class="op">=</span> <span class="va">grouping_var</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">colors</span> <span class="op">==</span> <span class="va">grouping</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="co"># CORRECT - Check before renaming</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">colors</span><span class="op">)</span> <span class="op">||</span> <span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">colors</span>, <span class="va">grouping</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>colors_var <span class="op">=</span> <span class="va">grouping_var</span><span class="op">)</span></span>
 <span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
@@ -386,88 +393,120 @@ es NULL o cuando dos parámetros apuntan a la misma columna:</p>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="vector-de-colores-nombrado">Vector de Colores Nombrado<a class="anchor" aria-label="anchor" href="#vector-de-colores-nombrado"></a>
+<h3 id="named-color-vector">Named Color Vector<a class="anchor" aria-label="anchor" href="#named-color-vector"></a>
 </h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Los nombres deben coincidir EXACTAMENTE con valores de la variable colors</span></span>
+<code class="sourceCode R"><span><span class="co"># Names must match the values of the colors variable EXACTLY</span></span>
 <span><span class="va">cvec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"Trust"</span>    <span class="op">=</span> <span class="st">"#482d8b"</span>,</span>
 <span>  <span class="st">"No Trust"</span> <span class="op">=</span> <span class="st">"#f26b21"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># En la función, aplicar solo si no es NULL</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">cvec</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">plt</span> <span class="op">&lt;-</span> <span class="va">plt</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">cvec</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<span><span class="co"># Inside the function, fall back to the WJP palette when cvec is NULL</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">cvec</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">cvec</span> <span class="op">&lt;-</span> <span class="fu">wjp_default_cvec</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">colors_var</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">plt</span> <span class="op">&lt;-</span> <span class="va">plt</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">cvec</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="coordenadas-polares-gráficos-circulares">Coordenadas Polares (Gráficos Circulares)<a class="anchor" aria-label="anchor" href="#coordenadas-polares-gr%C3%A1ficos-circulares"></a>
+<h3 id="fonts">Fonts<a class="anchor" aria-label="anchor" href="#fonts"></a>
 </h3>
-<p>Para gráficos tipo radar, rose o gauge:</p>
+<p>Never hard-code a font family. Read the active one with
+<code><a href="../reference/wjp_font_family.html">wjp_font_family()</a></code> so
+<code>options(wjpr.family = "Inter Tight")</code> switches every
+chart:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span></span>
+<span>  family   <span class="op">=</span> <span class="fu"><a href="../reference/wjp_font_family.html">wjp_font_family</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  fontface <span class="op">=</span> <span class="st">"bold"</span>,</span>
+<span>  size     <span class="op">=</span> <span class="fl">3.514598</span>  <span class="co"># 10 pt value labels</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="polar-coordinates-circular-charts">Polar Coordinates (Circular Charts)<a class="anchor" aria-label="anchor" href="#polar-coordinates-circular-charts"></a>
+</h3>
+<p>For radar, rose, or gauge charts:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plt</span> <span class="op">&lt;-</span> <span class="va">plt</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_radial.html" class="external-link">coord_polar</a></span><span class="op">(</span></span>
-<span>    theta <span class="op">=</span> <span class="st">"y"</span>,      <span class="co"># Variable para el ángulo</span></span>
-<span>    start <span class="op">=</span> <span class="va">pi</span>        <span class="co"># Punto de inicio (pi = abajo)</span></span>
+<span>    theta <span class="op">=</span> <span class="st">"y"</span>,      <span class="co"># Variable mapped to the angle</span></span>
+<span>    start <span class="op">=</span> <span class="va">pi</span>        <span class="co"># Starting point (pi = bottom)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
-<span>    aspect.ratio <span class="op">=</span> <span class="fl">1</span>  <span class="co"># Mantener proporción 1:1 para círculo</span></span>
+<span>    aspect.ratio <span class="op">=</span> <span class="fl">1</span>  <span class="co"># Keep a 1:1 ratio for a circle</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="agregar-segmentos-invisibles">Agregar Segmentos Invisibles<a class="anchor" aria-label="anchor" href="#agregar-segmentos-invisibles"></a>
+<h3 id="invisible-segments">Invisible Segments<a class="anchor" aria-label="anchor" href="#invisible-segments"></a>
 </h3>
-<p>Para controlar el rango visual sin afectar los datos:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Agregar segmento de relleno transparente</span></span>
+<p>To control the visual range without affecting the data (as
+<code><a href="../reference/wjp_gauge.html">wjp_gauge()</a></code> does to draw a semicircle):</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Add a transparent padding segment</span></span>
 <span><span class="va">padding_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"___padding___"</span>,</span>
-<span>  value    <span class="op">=</span> <span class="fl">50</span>,</span>
-<span>  color    <span class="op">=</span> <span class="st">"transparent"</span></span>
+<span>  colors_var <span class="op">=</span> <span class="st">"___padding___"</span>,</span>
+<span>  target_var <span class="op">=</span> <span class="fl">50</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">padding_data</span><span class="op">)</span></span>
 <span><span class="va">cvec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">cvec</span>, <span class="st">"___padding___"</span> <span class="op">=</span> <span class="st">"transparent"</span><span class="op">)</span></span></code></pre></div>
+<p>Keep technical segments out of the legend by passing the visible
+categories as <code>breaks</code> (see
+<code>wjp_legend_breaks()</code>).</p>
+</div>
+<div class="section level3">
+<h3 id="deprecating-parameters">Deprecating Parameters<a class="anchor" aria-label="anchor" href="#deprecating-parameters"></a>
+</h3>
+<p>When a parameter is renamed, keep the old name working and signal the
+change:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">wjp_waterfall</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">target</span>, <span class="va">grouping</span>, <span class="va">order</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">order_var</span> <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">is_present</a></span><span class="op">(</span><span class="va">order_var</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecate_soft.html" class="external-link">deprecate_soft</a></span><span class="op">(</span><span class="st">"1.2.0"</span>, <span class="st">"wjp_waterfall(order_var)"</span>, <span class="st">"wjp_waterfall(order)"</span><span class="op">)</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">order</span><span class="op">)</span><span class="op">)</span> <span class="va">order</span> <span class="op">&lt;-</span> <span class="va">order_var</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="paso-4-documentación-roxygen2">Paso 4: Documentación Roxygen2<a class="anchor" aria-label="anchor" href="#paso-4-documentaci%C3%B3n-roxygen2"></a>
+<h2 id="step-4-roxygen2-documentation">Step 4: Roxygen2 Documentation<a class="anchor" aria-label="anchor" href="#step-4-roxygen2-documentation"></a>
 </h2>
 <div class="section level3">
-<h3 id="tags-obligatorios">Tags Obligatorios<a class="anchor" aria-label="anchor" href="#tags-obligatorios"></a>
+<h3 id="required-tags">Required Tags<a class="anchor" aria-label="anchor" href="#required-tags"></a>
 </h3>
 <table class="table">
 <thead><tr class="header">
 <th>Tag</th>
-<th>Descripción</th>
-<th>Ejemplo</th>
+<th>Description</th>
+<th>Example</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td><code>@description</code></td>
-<td>Descripción detallada</td>
-<td>Incluir lifecycle badge</td>
+<td>Detailed description</td>
+<td>Include the lifecycle badge</td>
 </tr>
 <tr class="even">
 <td><code>@param</code></td>
-<td>Cada parámetro</td>
-<td><code>@param data A data frame...</code></td>
+<td>Every parameter</td>
+<td><code>@param data Data frame containing...</code></td>
 </tr>
 <tr class="odd">
 <td><code>@return</code></td>
-<td>Valor de retorno</td>
+<td>Returned value</td>
 <td><code>@return A ggplot object</code></td>
 </tr>
 <tr class="even">
 <td><code>@export</code></td>
-<td>Exportar función</td>
-<td>Siempre incluir</td>
+<td>Export the function</td>
+<td>Always include</td>
 </tr>
 <tr class="odd">
 <td><code>@examples</code></td>
-<td>Ejemplo reproducible</td>
-<td>Código ejecutable</td>
+<td>Reproducible example</td>
+<td>Runnable code</td>
 </tr>
 </tbody>
 </table>
@@ -475,118 +514,156 @@ es NULL o cuando dos parámetros apuntan a la misma columna:</p>
 <div class="section level3">
 <h3 id="lifecycle-badge">Lifecycle Badge<a class="anchor" aria-label="anchor" href="#lifecycle-badge"></a>
 </h3>
-<p>Siempre incluir el estado de la función:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p>Always include the function status:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @description</span></span>
 <span><span class="co">#' `r lifecycle::badge("experimental")`</span></span>
 <span><span class="co">#'</span></span>
-<span><span class="co">#' Descripción de la función...</span></span></code></pre></div>
-<p>Opciones: - <code>"experimental"</code> - Nueva, puede cambiar -
-<code>"stable"</code> - API estable - <code>"deprecated"</code> - No
-usar, será eliminada</p>
+<span><span class="co">#' Description of the function...</span></span></code></pre></div>
+<p>Options: - <code>"experimental"</code> - New, may change -
+<code>"stable"</code> - Stable API - <code>"deprecated"</code> - Do not
+use, will be removed</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="paso-5-agregar-ejemplo-visual">Paso 5: Agregar Ejemplo Visual<a class="anchor" aria-label="anchor" href="#paso-5-agregar-ejemplo-visual"></a>
+<h2 id="step-5-add-tests">Step 5: Add Tests<a class="anchor" aria-label="anchor" href="#step-5-add-tests"></a>
+</h2>
+<p>Create or extend a file in <code>tests/testthat/</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">test_that</span><span class="op">(</span><span class="st">"wjp_waterfall returns a buildable ggplot"</span>, <span class="op">{</span></span>
+<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    category <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Start"</span>, <span class="st">"Gain"</span>, <span class="st">"Loss"</span><span class="op">)</span>,</span>
+<span>    value    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">30</span>, <span class="op">-</span><span class="fl">20</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu">wjp_waterfall</span><span class="op">(</span><span class="va">data</span>, target <span class="op">=</span> <span class="st">"value"</span>, grouping <span class="op">=</span> <span class="st">"category"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu">expect_s3_class</span><span class="op">(</span><span class="va">plot</span>, <span class="st">"ggplot"</span><span class="op">)</span></span>
+<span>  <span class="fu">expect_no_error</span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot_build.html" class="external-link">ggplot_build</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="step-6-add-a-visual-example">Step 6: Add a Visual Example<a class="anchor" aria-label="anchor" href="#step-6-add-a-visual-example"></a>
 </h2>
 <div class="section level3">
-<h3 id="actualizar-generate-examples-r">Actualizar generate-examples.R<a class="anchor" aria-label="anchor" href="#actualizar-generate-examples-r"></a>
+<h3 id="update-generate-examples-r">Update generate-examples.R<a class="anchor" aria-label="anchor" href="#update-generate-examples-r"></a>
 </h3>
-<p>Agregar sección en <code>data-raw/generate-examples.R</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p>Add a section to <code>data-raw/generate-examples.R</code>:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># =============================================================================</span></span>
 <span><span class="co"># XX. WATERFALL CHART</span></span>
 <span><span class="co"># =============================================================================</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"XX. Generating waterfall chart example..."</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data_waterfall</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>category <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Start"</span>, <span class="st">"Revenue"</span>, <span class="st">"Costs"</span>, <span class="st">"Taxes"</span>, <span class="st">"End"</span><span class="op">)</span>,</span>
-<span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">50</span>, <span class="op">-</span><span class="fl">30</span>, <span class="op">-</span><span class="fl">10</span>, <span class="fl">110</span><span class="op">)</span>,</span>
-<span>type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"total"</span>, <span class="st">"gain"</span>, <span class="st">"loss"</span>, <span class="st">"loss"</span>, <span class="st">"total"</span><span class="op">)</span></span>
+<span>  category <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Start"</span>, <span class="st">"Revenue"</span>, <span class="st">"Costs"</span>, <span class="st">"Taxes"</span>, <span class="st">"End"</span><span class="op">)</span>,</span>
+<span>  value    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">50</span>, <span class="op">-</span><span class="fl">30</span>, <span class="op">-</span><span class="fl">10</span>, <span class="fl">110</span><span class="op">)</span>,</span>
+<span>  type     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"total"</span>, <span class="st">"gain"</span>, <span class="st">"loss"</span>, <span class="st">"loss"</span>, <span class="st">"total"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">plot_waterfall</span> <span class="op">&lt;-</span> <span class="fu">wjp_waterfall</span><span class="op">(</span></span>
 <span>  <span class="va">data_waterfall</span>,</span>
-<span>  target <span class="op">=</span> <span class="st">"value"</span>,</span>
+<span>  target   <span class="op">=</span> <span class="st">"value"</span>,</span>
 <span>  grouping <span class="op">=</span> <span class="st">"category"</span>,</span>
-<span>  colors <span class="op">=</span> <span class="st">"type"</span>,</span>
-<span>  cvec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"total"</span> <span class="op">=</span> <span class="st">"#482d8b"</span>,</span>
-<span>           <span class="st">"gain"</span>  <span class="op">=</span> <span class="st">"#0f9581"</span>,</span>
-<span>           <span class="st">"loss"</span>  <span class="op">=</span> <span class="st">"#f26b21"</span><span class="op">)</span></span>
+<span>  colors   <span class="op">=</span> <span class="st">"type"</span>,</span>
+<span>  cvec     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"total"</span> <span class="op">=</span> <span class="st">"#482d8b"</span>,</span>
+<span>               <span class="st">"gain"</span>  <span class="op">=</span> <span class="st">"#0f9581"</span>,</span>
+<span>               <span class="st">"loss"</span>  <span class="op">=</span> <span class="st">"#f26b21"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">save_example</span><span class="op">(</span><span class="va">plot_waterfall</span>, <span class="st">"waterfall"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="generar-imagen">Generar Imagen<a class="anchor" aria-label="anchor" href="#generar-imagen"></a>
+<h3 id="generate-the-image">Generate the Image<a class="anchor" aria-label="anchor" href="#generate-the-image"></a>
 </h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"data-raw/generate-examples.R"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="paso-6-actualizar-claude-md">Paso 6: Actualizar CLAUDE.md<a class="anchor" aria-label="anchor" href="#paso-6-actualizar-claude-md"></a>
+<h2 id="step-7-register-the-function">Step 7: Register the Function<a class="anchor" aria-label="anchor" href="#step-7-register-the-function"></a>
 </h2>
-<p>Agregar la nueva función a la sección de funciones:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">### wjp_waterfall()</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="ss">- </span>**Archivo**: <span class="in">`R/waterfallChart.R`</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="ss">- </span>**Propósito**: Gráfico waterfall para mostrar cambios acumulativos</span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="ss">- </span>**Parámetros clave**: target, grouping, colors, direction</span></code></pre></div>
+<ul>
+<li>Add the function to <code>_pkgdown.yml</code> (the
+<code>functions</code> navbar menu and the <code>reference</code>
+index).</li>
+<li>Add a section to <code>vignettes/articles/gallery.Rmd</code>.</li>
+<li>Add an entry to <code>NEWS.md</code>.</li>
+<li>Add the function to the chart table in <code>CLAUDE.md</code>:</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="pp">|</span> <span class="in">`wjp_waterfall()`</span> <span class="pp">|</span> waterfallChart.R <span class="pp">|</span> Waterfall chart for cumulative changes <span class="pp">|</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="paso-7-verificación">Paso 7: Verificación<a class="anchor" aria-label="anchor" href="#paso-7-verificaci%C3%B3n"></a>
+<h2 id="step-8-verification">Step 8: Verification<a class="anchor" aria-label="anchor" href="#step-8-verification"></a>
 </h2>
 <div class="section level3">
-<h3 id="checklist-pre-pr">Checklist Pre-PR<a class="anchor" aria-label="anchor" href="#checklist-pre-pr"></a>
+<h3 id="pre-pr-checklist">Pre-PR Checklist<a class="anchor" aria-label="anchor" href="#pre-pr-checklist"></a>
 </h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 1. Regenerar documentación</span></span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># 1. Regenerate documentation</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># 2. Verificar paquete</span></span>
+<span><span class="co"># 2. Run the tests</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 3. Check the package</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># 3. Cargar y probar</span></span>
+<span><span class="co"># 4. Load and try it</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 4. Ejecutar ejemplo manualmente</span></span>
 <span><span class="fu"><a href="../reference/wjp_fonts.html">wjp_fonts</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co"># ... código del ejemplo</span></span>
+<span><span class="co"># ... example code</span></span>
 <span></span>
-<span><span class="co"># 5. Generar imagen</span></span>
+<span><span class="co"># 5. Generate the image</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"data-raw/generate-examples.R"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="errores-comunes">Errores Comunes<a class="anchor" aria-label="anchor" href="#errores-comunes"></a>
+<h3 id="common-errors">Common Errors<a class="anchor" aria-label="anchor" href="#common-errors"></a>
 </h3>
 <table class="table">
+<colgroup>
+<col width="29%">
+<col width="29%">
+<col width="41%">
+</colgroup>
 <thead><tr class="header">
 <th>Error</th>
-<th>Causa</th>
-<th>Solución</th>
+<th>Cause</th>
+<th>Solution</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td><code>object 'x' not found</code></td>
-<td>Variable no renombrada</td>
-<td>Verificar rename</td>
+<td>Variable not renamed</td>
+<td>Check the rename step</td>
 </tr>
 <tr class="even">
 <td><code>Column doesn't exist</code></td>
-<td>Doble rename</td>
-<td>Usar if/else para evitar</td>
+<td>Double rename</td>
+<td>Use if/else to avoid it</td>
 </tr>
 <tr class="odd">
 <td>
 <code>NULL</code> result</td>
-<td>Falta return()</td>
-<td>Agregar <code>return(plt)</code>
+<td>Missing <code><a href="https://rdrr.io/r/base/function.html" class="external-link">return()</a></code>
+</td>
+<td>Add <code>return(plt)</code>
 </td>
 </tr>
 <tr class="even">
 <td>Font not found</td>
-<td>Fonts no cargados</td>
-<td>Llamar <code><a href="../reference/wjp_fonts.html">wjp_fonts()</a></code>
+<td>Fonts not loaded</td>
+<td>Call <code><a href="../reference/wjp_fonts.html">wjp_fonts()</a></code>
+</td>
+</tr>
+<tr class="odd">
+<td>
+<code>no visible binding for global variable</code> (check
+NOTE)</td>
+<td>Column used in <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code>/<code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code>
+</td>
+<td>Add it to <code><a href="https://rdrr.io/r/utils/globalVariables.html" class="external-link">globalVariables()</a></code> in
+<code>R/WJPr-package.R</code>
 </td>
 </tr>
 </tbody>
@@ -594,50 +671,54 @@ usar, será eliminada</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="paso-8-pull-request">Paso 8: Pull Request<a class="anchor" aria-label="anchor" href="#paso-8-pull-request"></a>
+<h2 id="step-9-pull-request">Step 9: Pull Request<a class="anchor" aria-label="anchor" href="#step-9-pull-request"></a>
 </h2>
 <div class="section level3">
-<h3 id="crear-rama">Crear Rama<a class="anchor" aria-label="anchor" href="#crear-rama"></a>
+<h3 id="create-a-branch">Create a Branch<a class="anchor" aria-label="anchor" href="#create-a-branch"></a>
 </h3>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> feature/waterfall-chart</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> feature/waterfall-chart</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="commit">Commit<a class="anchor" aria-label="anchor" href="#commit"></a>
 </h3>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">git</span> add R/waterfallChart.R</span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">git</span> add man/wjp_waterfall.Rd</span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">git</span> add man/figures/example-waterfall.png</span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="fu">git</span> add data-raw/generate-examples.R</span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="fu">git</span> add CLAUDE.md</span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Add wjp_waterfall() chart function</span></span>
-<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="st">- New waterfall chart for cumulative changes</span></span>
-<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="st">- Supports horizontal/vertical direction</span></span>
-<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="st">- Full Roxygen2 documentation</span></span>
-<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="st">- Example image generated"</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">git</span> add R/waterfallChart.R</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">git</span> add man/wjp_waterfall.Rd</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">git</span> add man/figures/example-waterfall.png</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="fu">git</span> add tests/testthat/test-charts.R</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="fu">git</span> add data-raw/generate-examples.R</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="fu">git</span> add _pkgdown.yml NEWS.md CLAUDE.md</span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Add wjp_waterfall() chart function</span></span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a><span class="st">- New waterfall chart for cumulative changes</span></span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="st">- Supports horizontal/vertical direction</span></span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a><span class="st">- Full Roxygen2 documentation and tests</span></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="st">- Example image generated"</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="push-y-pr">Push y PR<a class="anchor" aria-label="anchor" href="#push-y-pr"></a>
+<h3 id="push-and-pr">Push and PR<a class="anchor" aria-label="anchor" href="#push-and-pr"></a>
 </h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">git</span> push origin feature/waterfall-chart</span></code></pre></div>
-<p>Crear PR en GitHub con: - Descripción de la función - Screenshot del
-gráfico - Checklist completado</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">git</span> push origin feature/waterfall-chart</span></code></pre></div>
+<p>Open a PR on GitHub with: - A description of the function - A
+screenshot of the chart - The completed checklist</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="recursos-adicionales">Recursos Adicionales<a class="anchor" aria-label="anchor" href="#recursos-adicionales"></a>
+<h2 id="additional-resources">Additional Resources<a class="anchor" aria-label="anchor" href="#additional-resources"></a>
 </h2>
 <ul>
 <li>
-<a href="https://r-pkgs.org/" class="external-link">R Packages (2e)</a> - Guía completa de
-desarrollo</li>
+<a href="https://r-pkgs.org/" class="external-link">R Packages (2e)</a> - Complete package
+development guide</li>
 <li>
 <a href="https://exts.ggplot2.tidyverse.org/" class="external-link">ggplot2 extensions</a>
-- Inspiración</li>
+- Inspiration</li>
 <li>
-<a href="https://roxygen2.r-lib.org/" class="external-link">Roxygen2 documentation</a> -
-Tags disponibles</li>
+<a href="https://roxygen2.r-lib.org/" class="external-link">roxygen2 documentation</a> -
+Available tags</li>
+<li>
+<a href="https://lifecycle.r-lib.org/" class="external-link">lifecycle</a> - Deprecating
+functions and arguments</li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

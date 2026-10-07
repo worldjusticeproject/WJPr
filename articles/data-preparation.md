@@ -301,21 +301,28 @@ pattern_dumbbell <- data.frame(
 
 ### Pattern 5: Composition (Diverging Bars/Stacked)
 
-Parts that sum to 100%:
+Parts that sum to 100%. All values can be positive:
+[`wjp_divbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_divbars.md)
+flips the group named in `negative` (here `negative = "Disagree"`) to
+the left side automatically.
 
 ``` r
 
 pattern_composition <- data.frame(
-  country   = rep(c("Atlantis", "Narnia"), each = 2),
-  response  = rep(c("Agree", "Disagree"), 2),
-  percent   = c(65, 35, 45, 55),
-  direction = rep(c("positive", "negative"), 2)
+  country  = rep(c("Atlantis", "Narnia"), each = 2),
+  response = rep(c("Agree", "Disagree"), 2),
+  percent  = c(65, 35, 45, 55)
 )
 ```
 
 ### Pattern 6: Multi-dimensional (Radar/Rose)
 
-Multiple variables per unit:
+Multiple variables per unit.
+[`wjp_rose()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_rose.md)
+accepts proportions (0-1) or percentages (0-100); for
+[`wjp_radar()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_radar.md),
+set `source = "QRQ"` for 0-1 scores (the default `"GPP"` expects
+percentages).
 
 ``` r
 
@@ -325,6 +332,22 @@ pattern_radar <- data.frame(
   label     = c("Speed", "Quality", "Cost", "Access", "Trust")
 )
 ```
+
+## Working with the GPP Sample Data
+
+Survey answers in
+[`WJPr::gpp`](https://worldjusticeproject.github.io/WJPr/reference/gpp.md)
+are stored as labelled vectors (`haven_labelled`). Convert them to plain
+numbers before comparing or summarizing them:
+
+``` r
+
+gpp_numeric <- WJPr::gpp %>%
+  mutate(across(c(gend, starts_with("q")), \(x) as.double(unclass(x))))
+```
+
+Code `99` means “Don’t know/No answer”; decide explicitly whether to
+exclude it (as in the examples above) or count it in the denominator.
 
 ## Using wjp_check_data()
 
@@ -439,17 +462,20 @@ data <- raw_data %>%
 
 ## Quick Reference: Data Structure by Chart Type
 
-| Chart Type | Required Columns | Optional Columns |
-|----|----|----|
-| [`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md) | target, grouping | colors, labels, lab_pos, order, show_legend |
-| [`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md) | target, grouping, colors | order, sd, sample_size (for CI), show_legend |
-| [`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md) | target, grouping | colors, labels, show_legend |
-| [`wjp_dumbbells()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dumbbells.md) | target, grouping, colors, cgroups | labels, labpos, label_offset, show_legend, order |
-| [`wjp_divbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_divbars.md) | target, grouping, diverging | negative, labels, order, show_legend |
-| [`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md) | target, axis_var, labels, colors | order, show_legend |
-| [`wjp_rose()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_rose.md) | target, grouping, labels | order |
-| [`wjp_slope()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_slope.md) | target, grouping | colors, labels, show_legend |
-| [`wjp_gauge()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_gauge.md) | target, colors | labels, factor_order, show_legend |
-| [`wjp_lollipops()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lollipops.md) | target, grouping | labels, order |
-| [`wjp_edgebars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_edgebars.md) | target, grouping | labels, x_lab_pos |
-| [`wjp_groupbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_groupbars.md) | target, grouping, levels | labels, group_order, level_order, ci_lower + ci_upper or sd + sample_size (for CI), show_national + national_value, national_style, national_ci_lower + national_ci_upper, show_axis, label_position |
+Required and optional column arguments (each one names a column of your
+data), plus the main non-column options:
+
+| Chart Type | Required Columns | Optional Columns | Main Options |
+|----|----|----|----|
+| [`wjp_bars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_bars.md) | target, grouping | colors, labels, lab_pos, order | direction, stacked, expand, show_legend |
+| [`wjp_dots()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dots.md) | target, grouping, colors | order, labels, sd + sample_size (for CI) | draw_ci, show_labels, opacities, shapes, show_legend |
+| [`wjp_lines()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_lines.md) | target, grouping | colors, labels | repel, transparency + transparencies, show_legend |
+| [`wjp_dumbbells()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dumbbells.md) | target, grouping, colors | labels, labpos | cgroups (required), order (named vector), label_offset, show_legend |
+| [`wjp_divbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_divbars.md) | target, grouping, diverging | labels, order | negative, show_legend |
+| [`wjp_radar()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_radar.md) | target, axis_var, labels, colors | order, maincat | source, show_legend |
+| [`wjp_rose()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_rose.md) | target, grouping, labels | order | cvec |
+| [`wjp_slope()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_slope.md) | target, grouping | colors, labels | repel, show_legend |
+| [`wjp_gauge()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_gauge.md) | target, colors | labels | factor_order, show_legend |
+| [`wjp_lollipops()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_lollipops.md) | target, grouping | labels, order | line_color, point_color |
+| [`wjp_edgebars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_edgebars.md) | target, grouping | labels, x_lab_pos | bar_width |
+| [`wjp_groupbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_groupbars.md) | target, grouping, levels | labels, ci_lower + ci_upper or sd + sample_size (for CI) | group_order, level_order, draw_ci, show_national + national_value, national_style, national_ci_lower + national_ci_upper, show_axis, label_position |

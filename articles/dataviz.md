@@ -17,6 +17,12 @@ with the package. WJPr includes functions for the following chart types:
 11. Grouped Bars
 12. Gauge
 
+This article walks through the most common ones step by step. See the
+[Chart
+Gallery](https://worldjusticeproject.github.io/WJPr/articles/gallery.md)
+for ready-to-use examples of every chart type, including lollipops,
+grouped bars, and gauges.
+
 ``` r
 
 library(ggplot2)
@@ -31,7 +37,7 @@ library(WJPr)
 
 ``` r
 
-# Always load the WJP fonts if not passing a custom theme to function
+# Always load the WJP fonts before plotting
 wjp_fonts()
 
 # Loading data
@@ -86,7 +92,7 @@ kbl(data4bars)
 
 Once the data is prepared, we can create a basic vertical bar chart
 using the
-[`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md)
+[`wjp_bars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_bars.md)
 function. You only need to specify the names of the columns that contain
 the values to be plotted on the Y-axis (`target`) and the categories to
 be displayed on the X-axis (`grouping`).
@@ -219,7 +225,7 @@ wjp_bars(
 ## Stacked Bars Chart
 
 The
-[`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md)
+[`wjp_bars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_bars.md)
 function can also be used to create stacked bar charts. For instance,
 instead of plotting the percentage of respondents who have “a lot” or
 “some” trust in Institution A, we can visualize the percentage
@@ -268,14 +274,25 @@ data4stackedbars <- gpp_data %>%
     country, q1a, percentage, value_label, label_position
   )
 
-kbl(data4bars)
+kbl(data4stackedbars)
 ```
 
-| country   | year |    trust | color_variable | value_label | label_position |
-|:----------|:-----|---------:|:---------------|:------------|---------------:|
-| Atlantis  | 2022 | 49.09091 | Atlantis       | 49%         |       54.09091 |
-| Narnia    | 2022 | 45.65217 | Narnia         | 46%         |       50.65217 |
-| Neverland | 2022 | 63.63636 | Neverland      | 64%         |       68.63636 |
+| country   | q1a       | percentage | value_label | label_position |
+|:----------|:----------|-----------:|:------------|---------------:|
+| Atlantis  | No answer |   3.508772 | NA          |      1.7543860 |
+| Atlantis  | None      |  14.035088 | 14.0%       |     10.5263158 |
+| Atlantis  | Little    |  35.087719 | 35.1%       |     35.0877193 |
+| Atlantis  | Some      |  28.070175 | 28.1%       |     66.6666667 |
+| Atlantis  | A lot     |  19.298246 | 19.3%       |     90.3508772 |
+| Narnia    | None      |  19.565217 | 19.6%       |      9.7826087 |
+| Narnia    | Little    |  34.782609 | 34.8%       |     36.9565217 |
+| Narnia    | Some      |  28.260870 | 28.3%       |     68.4782609 |
+| Narnia    | A lot     |  17.391304 | 17.4%       |     91.3043478 |
+| Neverland | No answer |   1.785714 | NA          |      0.8928571 |
+| Neverland | None      |  12.500000 | 12.5%       |      8.0357143 |
+| Neverland | Little    |  23.214286 | 23.2%       |     25.8928571 |
+| Neverland | Some      |  42.857143 | 42.9%       |     58.9285714 |
+| Neverland | A lot     |  19.642857 | 19.6%       |     90.1785714 |
 
 Notice that we transform the q1a column into a factor variable and
 define the specific levels (order) of responses. Specifying factor
@@ -285,27 +302,34 @@ alphabetical order, which may not align with the intended order of this
 ordinal variable.
 
 Once the data is ready, we can use the
-[`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md)
-function again, this time setting the `stacked` parameter to “TRUE”:
+[`wjp_bars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_bars.md)
+function again, this time setting the `stacked` parameter to `TRUE` (so
+the value labels are drawn in white inside each segment) and
+`show_legend = TRUE` (so readers can identify each answer):
 
 ``` r
 
 stacked_bar <- wjp_bars(
-    data4stackedbars,              
-    target    = "percentage",        
-    grouping  = "country",
-    labels    = "value_label",
-    lab_pos   = "label_position",
-    colors    = "q1a",
-    cvec      = c("A lot"     = "#482d8b",
-                  "Some"      = "#2894aa",
-                  "Little"    = "#869d3b",
-                  "None"      = "#f26b21",
-                  "No answer" = "#555659"),
-    direction = "horizontal",
-    stacked   = TRUE
+    data4stackedbars,
+    target      = "percentage",
+    grouping    = "country",
+    labels      = "value_label",
+    lab_pos     = "label_position",
+    colors      = "q1a",
+    cvec        = c("A lot"     = "#482d8b",
+                    "Some"      = "#2894aa",
+                    "Little"    = "#869d3b",
+                    "None"      = "#f26b21",
+                    "No answer" = "#555659"),
+    direction   = "horizontal",
+    stacked     = TRUE,
+    show_legend = TRUE
 )
+
+stacked_bar
 ```
+
+![](dataviz_files/figure-html/unnamed-chunk-10-1.png)
 
 ## Diverging Bars Chart
 
@@ -332,11 +356,11 @@ data4divbars <- gpp_data %>%
       q1a <= 4  ~ "No Trust"
     )
   ) %>%
-  group_by(country, q1a) %>%
-  count() %>%
   filter(
     !is.na(q1a)
   ) %>%
+  group_by(country, q1a) %>%
+  count() %>%
   group_by(country) %>%
   mutate(
     total       = sum(n),
@@ -348,84 +372,70 @@ data4divbars <- gpp_data %>%
       ),
       "%"
     ),
-    value_label    = if_else(percentage >= 5, 
-                             value_label, 
-                             NA_character_),
-    direction      = if_else(q1a == "Trust", 
-                             "positive", 
-                             "negative"),
-    percentage     = if_else(direction == "negative", 
-                             percentage*-1, 
-                             percentage),
-    label_position = (percentage/2)
+    value_label = if_else(percentage >= 5,
+                          value_label,
+                          NA_character_)
   ) %>%
   select(
-    country, q1a, percentage, value_label, label_position, direction
+    country, q1a, percentage, value_label
   )
 
 kbl(data4divbars)
 ```
 
-| country   | q1a      | percentage | value_label | label_position | direction |
-|:----------|:---------|-----------:|:------------|---------------:|:----------|
-| Atlantis  | No Trust |  -50.90909 | 50.9%       |      -25.45455 | negative  |
-| Atlantis  | Trust    |   49.09091 | 49.1%       |       24.54545 | positive  |
-| Narnia    | No Trust |  -54.34783 | 54.3%       |      -27.17391 | negative  |
-| Narnia    | Trust    |   45.65217 | 45.7%       |       22.82609 | positive  |
-| Neverland | No Trust |  -36.36364 | 36.4%       |      -18.18182 | negative  |
-| Neverland | Trust    |   63.63636 | 63.6%       |       31.81818 | positive  |
+| country   | q1a      | percentage | value_label |
+|:----------|:---------|-----------:|:------------|
+| Atlantis  | No Trust |   50.90909 | 50.9%       |
+| Atlantis  | Trust    |   49.09091 | 49.1%       |
+| Narnia    | No Trust |   54.34783 | 54.3%       |
+| Narnia    | Trust    |   45.65217 | 45.7%       |
+| Neverland | No Trust |   36.36364 | 36.4%       |
+| Neverland | Trust    |   63.63636 | 63.6%       |
 
-Diverging bar charts are a variation of standard bar charts that use
-both the positive and negative sides of the Cartesian plane to display
-information. For example, let’s revisit our earlier case where we
-plotted levels of trust in Institution A. With diverging bars, we can
-plot the percentage of respondents who answered “A lot” and “Some” on
-one side, and the percentage of respondents who answered “Little” and
-“None” on the other. To achieve this, we first need to wrangle the data
-slightly differently:
-
-Pay close attention to how we create a new variable, `direction`, to
-specify the direction in which the values should be plotted. Values
-associated with a “negative” direction are converted into negative
-numbers.
-
-Once the data is prepared, we can use the
-[`wjp_divbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_divbars.md)
+Notice that all percentages are positive: there is no need to flip the
+sign of one group yourself. Once the data is prepared, we can use the
+[`wjp_divbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_divbars.md)
 function to create the chart. Several parameters are used in the same
-way as in the wjp_bars() function:
+way as in the
+[`wjp_bars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_bars.md)
+function:
 
 - `target`: Specifies the column containing the values to be plotted.
-- `grouping`: Specifies the column containing the categorical groupings.
+- `grouping`: Specifies the column containing the categories shown on
+  each row.
 - `cvec`: Contains a named vector that links specific values to color
   codes.
 - `labels`: Specifies the column containing the value labels to display
   (optional).
 
 In addition to these familiar parameters, the
-[`wjp_divbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_divbars.md)
+[`wjp_divbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_divbars.md)
 function has two unique parameters essential for diverging bar charts:
 
-- `diverging`: Specifies the column name that identifies the direction
-  of the values (positive or negative).
-- `negative`: Specifies the value in the diverging column that indicates
-  negative values.
+- `diverging`: Specifies the column that contains the opposing groups
+  (here, “Trust” and “No Trust”).
+- `negative`: Specifies the value of the `diverging` column whose bars
+  should extend to the left. The function flips its values into the
+  negative side automatically. If you prefer to supply pre-signed
+  values, leave `negative = NULL`.
 
 By combining these parameters, the
-[`wjp_divbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_divbars.md)
+[`wjp_divbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_divbars.md)
 function allows for clear and effective visualization of contrasting
 groups within the data.
 
 ``` r
 
 wjp_divbars(
-    data4divbars,             
-    target      = "percentage",       
-    grouping    = "country",         
-    diverging   = "q1a",     
-    negative    = "negative",   
+    data4divbars,
+    target      = "percentage",
+    grouping    = "country",
+    diverging   = "q1a",
+    negative    = "No Trust",
     cvec        = c("Trust"     = "#482d8b",
                     "No Trust"  = "#f26b21"),
-    labels      = "value_label"
+    labels      = "value_label",
+    show_legend = TRUE
 )
 ```
 
@@ -433,11 +443,12 @@ wjp_divbars(
 
 ## Edgebars
 
-Edgebars is a specific type of horizontal bars that have the Y-Axis text
-on top of the bar instead that along the axis. This design modification
-is a good option when the dimensions of the plot are small (narrow) and
-the axis texts are expected to be long. Use the wjp_edgebars()\`
-function to plot these bars in a similar way than previous examples.
+Edgebars are a specific type of horizontal bars that place the Y-axis
+text on top of each bar instead of along the axis. This design
+modification is a good option when the dimensions of the plot are small
+(narrow) and the axis texts are expected to be long. Use the
+[`wjp_edgebars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_edgebars.md)
+function to plot these bars in a similar way to the previous examples.
 
 ``` r
 
@@ -456,7 +467,7 @@ wjp_edgebars(
 
 Line charts are a great way to display the evolution of values over
 time. The
-[`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md)
+[`wjp_lines()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_lines.md)
 function allows you to create line charts with ease. Let’s assume we
 want to examine the percentage of people who have “a lot” or “some”
 trust in Institution A in Atlantis over time. To begin, we need to
@@ -538,7 +549,7 @@ Institution C, and we are pivoting the dataset to a long format.
 However, for simplicity, we will start by plotting only the percentage
 of people who trust Institution A over time. We can achieve this with
 the
-[`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md)
+[`wjp_lines()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_lines.md)
 function. Many of the parameters work similarly to those in other
 functions:
 
@@ -573,8 +584,8 @@ wjp_lines(
 ![](dataviz_files/figure-html/unnamed-chunk-15-1.png)
 
 2.  For multiple lines, pass the full data. In this case, also consider
-    setting repel = TRUE to prevent overlapping value labels. Note that
-    the ggrepel package must be loaded for this feature to work.
+    setting `repel = TRUE` to prevent overlapping value labels. Note
+    that the ggrepel package must be installed for this feature to work.
 
 ``` r
 
@@ -597,7 +608,7 @@ wjp_lines(
 ### Controlling opacities
 
 The
-[`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md)
+[`wjp_lines()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_lines.md)
 function includes a special feature that allows you to highlight
 specific lines by adjusting their opacity. For instance, if you want to
 highlight the line representing trust levels in Institution A, start by
@@ -632,12 +643,12 @@ wjp_lines(
 Slope charts are a great choice for visualizing the evolution of
 variables between two specific points in time. They provide a more
 aesthetically pleasing alternative to line charts in such cases. The
-[`wjp_slope()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_slope.md)
+[`wjp_slope()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_slope.md)
 function is designed for this purpose.
 
 Let’s use an example where we disaggregate the evolution of trust in
-Institution A between 2017 and 2022 across three countries. We begin by
-preparing the data to fit this design:
+Institution A between 2017 and 2019 by gender. We begin by preparing the
+data to fit this design:
 
 ``` r
 
@@ -683,9 +694,10 @@ kbl(data4slopes)
 | 2019 | Female | 65.90909 | 66%         |
 | 2019 | Male   | 63.46154 | 63%         |
 
-Once the data is ready, we can use the wjp_slope() function. This
-function relies on parameters that have been covered in previous
-examples:
+Once the data is ready, we can use the
+[`wjp_slope()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_slope.md)
+function. This function relies on parameters that have been covered in
+previous examples:
 
 - `target`: Specifies the column containing the values to be plotted on
   the Y-axis.
@@ -698,11 +710,11 @@ examples:
 - `labels`: Specifies the column containing value labels to display, if
   any.
 - `repel`: Activates the `ggrepel` feature to prevent overlapping
-  labels. Note that the `ggrepel` package must be loaded for this
+  labels. Note that the `ggrepel` package must be installed for this
   feature to work.
 
 As with
-[`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md),
+[`wjp_lines()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_lines.md),
 the lines are defined by the `colors` variable. Using these parameters,
 you can create a slope chart that effectively highlights changes between
 two points in time while maintaining clarity and visual appeal.
@@ -729,7 +741,7 @@ wjp_slope(
 
 Dot charts are an excellent option for displaying multiple variables and
 comparing results across different agents, regions, or categories. The
-[`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md)
+[`wjp_dots()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dots.md)
 function allows you to create dot charts efficiently and effectively.
 
 Let’s walk through an example where we plot the percentage of people who
@@ -791,7 +803,7 @@ kbl(data4dots)
 | Neverland | q1d      |   44.39834 | Institution D |
 
 Once the data is prepared, we can use the
-[`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md)
+[`wjp_dots()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dots.md)
 function to create the dot chart. The required parameters for this
 function are consistent with those explained in earlier sections:
 
@@ -820,7 +832,7 @@ wjp_dots(
 ### Controlling opacities and shapes
 
 A special feature of the
-[`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md)
+[`wjp_dots()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dots.md)
 is that it allows you to apply a special highlight to certain data
 points through the manipulation of shapes and opacities. For this, we
 begin by setting the `diffOpac` and the `diffShp` parameters to TRUE.
@@ -857,7 +869,7 @@ wjp_dots(
 ### Adding confidence intervals
 
 The
-[`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md)
+[`wjp_dots()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dots.md)
 function has a special feature that allows us to add confidence
 intervals to the plotted data points. This comes very handy when we want
 to visualize if two data points are statistically different from each
@@ -939,7 +951,7 @@ kbl(data4dots_errorbars)
 | Male   | q1d      | 46.24625 | 333 | 49.93393 | Institution D |
 
 Once that we have the data ready. We make use of the
-[`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md)
+[`wjp_dots()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dots.md)
 function and we set `draw_ci = TRUE` inside the function call.
 Additionally, we also need to specify the `sd` and `sample_size`
 parameters, which are the column names that contain the standard
@@ -969,7 +981,7 @@ points in time for multiple variables. The `wjp_dumbbells` function is
 used to plot dumbbells for this purpose. We can use the data that we
 used for plotting our line chart above and just filtering for two points
 in time. Once we have the data we can apply the
-[`wjp_dumbbells()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dumbbells.md)
+[`wjp_dumbbells()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dumbbells.md)
 function as usual with the parameters that we have reviewed in previous
 sections:
 
@@ -1018,7 +1030,7 @@ wjp_dumbbells(
 
 An alternative when trying to compare data points in multiple dimensions
 across groups is to use a radar chart. The
-[`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md)
+[`wjp_radar()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_radar.md)
 function can help you to quickly display a radar chart given a specific
 set of variables. Let’s assume that we want to plot the data points for
 a given set of variables that measure the performance of the justice
@@ -1085,7 +1097,7 @@ kbl(data4radar)
 | Male   | q49e_G2  |   53.98230 | q49e_G2    |
 
 Once that we have the data ready, we can proceed by applying the
-[`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md)
+[`wjp_radar()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_radar.md)
 function. Several parameters are used in the same way as in the previous
 functions:
 
@@ -1094,12 +1106,12 @@ functions:
   functions. It specifies the column containing the categorical
   groupings or variables that will be shown in each axis of the polar
   chart.
-- `color_var`: The column name used to assign different data points to
+- `colors`: The column name used to assign different data points to
   different lines. Each line will have a different color.
 - `cvec`: Contains a named vector that links specific values to color
   codes.
-- `label_var`: Specifies the column containing the value labels to
-  display.
+- `labels`: Specifies the column containing the axis labels to display
+  around the radar.
 
 ``` r
 
@@ -1117,7 +1129,7 @@ wjp_radar(
 ### Markdown support
 
 One unique feature of the
-[`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md)
+[`wjp_radar()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_radar.md)
 function is its ability to support markdown and HTML aesthetics for the
 axis labels. Let’s assume that we want to extend the previous plot by
 displaying some explanatory text along with the specific value labels
@@ -1180,9 +1192,9 @@ multiple variables for a single unit or for a disaggregated overview
 within an unit. However, an alternative to display multiple data points
 for a single unit would be a rose chart, which also uses polar
 coordinates. For this, the user can make use of the
-[`wjp_rose()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_rose.md)
+[`wjp_rose()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_rose.md)
 function. All the parameters used by
-[`wjp_rose()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_rose.md)
+[`wjp_rose()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_rose.md)
 are used in the same way as in the previous functions:
 
 - `target`: Specifies the column containing the values to be plotted.
@@ -1206,9 +1218,7 @@ wjp_rose(
     target    = "percentage",
     grouping  = "category",
     labels    = "axis_label",
-    cvec      = c("#482d8b", "#2894aa", "#f26b21",
-                  "#137b3f", "#869d3b", "#0f9581",
-                  "#1a74b6", "#8f2e8c", "#555659")
+    cvec      = wjp_palette(9)
 )
 ```
 
@@ -1240,7 +1250,7 @@ wjp_divbars(
     target       = "percentage",
     grouping     = "country",
     diverging    = "q1a",
-    negative     = "negative",
+    negative     = "No Trust",
     cvec         = c("Trust"     = "#482d8b",
                      "No Trust"  = "#f26b21"),
     labels       = "value_label",
@@ -1288,14 +1298,14 @@ from before and completely remove the panel grid and add some title and
 subtitle to it. We can do it by using the
 [`labs()`](https://ggplot2.tidyverse.org/reference/labs.html) and
 [`theme()`](https://ggplot2.tidyverse.org/reference/theme.html)
-functions from the ggplot2 package as shown bellow:
+functions from the ggplot2 package as shown below:
 
 ``` r
 
 stacked_bar +
   labs(
     title    = "Trust in Institution A",
-    subtitle = "Percentage of people who has a lot, some, little, or no trust in Institution A"
+    subtitle = "Percentage of people who have a lot, some, little, or no trust in Institution A"
   ) +
   theme(
     axis.text.x         = element_blank(),

@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Agregar una función nueva • WJPr</title>
+<title>Adding a New Function • WJPr</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Lato-0.4.10/font.css" rel="stylesheet">
@@ -13,7 +13,7 @@
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Agregar una función nueva">
+<meta property="og:title" content="Adding a New Function">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
@@ -66,6 +66,7 @@
     <li><a class="dropdown-item" href="../reference/wjp_fonts.html">wjp_fonts()</a></li>
     <li><a class="dropdown-item" href="../reference/wjp_font_family.html">wjp_font_family()</a></li>
     <li><a class="dropdown-item" href="../reference/wjp_palette.html">wjp_palette()</a></li>
+    <li><a class="dropdown-item" href="../reference/spread_labels_x.html">spread_labels_x()</a></li>
     <li><a class="dropdown-item" href="../reference/WJP_theme.html">WJP_theme()</a></li>
   </ul>
 </li>
@@ -90,7 +91,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/worldjusticeproject-org/WJPr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/worldjusticeproject/WJPr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -104,48 +105,49 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Agregar una función nueva</h1>
+      <h1>Adding a New Function</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject-org/WJPr/blob/main/vignettes/articles/add-function.Rmd" class="external-link"><code>vignettes/articles/add-function.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject/WJPr/blob/main/vignettes/articles/add-function.Rmd" class="external-link"><code>vignettes/articles/add-function.Rmd</code></a></small>
       <div class="d-none name"><code>add-function.Rmd</code></div>
     </div>
 
     
     
-<p>Esta guía resume el flujo recomendado para insertar una función nueva
-en WJPr. Para detalles más extensos, ver la <a href="development-guide.html">guía de desarrollo completa</a>.</p>
+<p>This guide summarizes the recommended workflow for adding a new
+function to WJPr. For more detail, see the <a href="development-guide.html">complete development guide</a>.</p>
 <div class="section level2">
-<h2 id="crear-el-archivo">1. Crear el archivo<a class="anchor" aria-label="anchor" href="#crear-el-archivo"></a>
+<h2 id="create-the-file">1. Create the file<a class="anchor" aria-label="anchor" href="#create-the-file"></a>
 </h2>
-<p>Las funciones de gráficos viven en <code>R/</code> y siguen la
-convención:</p>
+<p>Chart functions live in <code>R/</code> and follow this
+convention:</p>
 <ul>
 <li>
-<code>R/{tipo}Chart.R</code> para gráficos, por ejemplo
+<code>R/{type}Chart.R</code> for charts, for example
 <code>R/waterfallChart.R</code>.</li>
 <li>
-<code>R/{nombre}.R</code> para utilidades, validadores o funciones
-no gráficas.</li>
+<code>R/{name}.R</code> for utilities, validators, or non-chart
+functions.</li>
 </ul>
-<p>La función exportada debe usar el prefijo <code>wjp_</code>:</p>
+<p>The exported function must use the <code>wjp_</code> prefix:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wjp_waterfall</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span></span>
 <span>    <span class="va">data</span>,</span>
 <span>    <span class="va">target</span>,</span>
 <span>    <span class="va">grouping</span>,</span>
-<span>    <span class="va">colors</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    <span class="va">cvec</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    <span class="va">labels</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    <span class="va">ptheme</span> <span class="op">=</span> <span class="fu"><a href="../reference/WJP_theme.html">WJP_theme</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="va">colors</span>      <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    <span class="va">cvec</span>        <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    <span class="va">labels</span>      <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    <span class="va">ptheme</span>      <span class="op">=</span> <span class="fu"><a href="../reference/WJP_theme.html">WJP_theme</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    <span class="va">show_legend</span> <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co"># implementación</span></span>
+<span>  <span class="co"># implementation</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="documentar-con-roxygen2">2. Documentar con roxygen2<a class="anchor" aria-label="anchor" href="#documentar-con-roxygen2"></a>
+<h2 id="document-with-roxygen2">2. Document with roxygen2<a class="anchor" aria-label="anchor" href="#document-with-roxygen2"></a>
 </h2>
-<p>Toda función pública necesita documentación roxygen completa:</p>
+<p>Every public function needs complete roxygen documentation:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Plot a Waterfall Chart following WJP style guidelines</span></span>
 <span><span class="co">#'</span></span>
@@ -154,50 +156,49 @@ no gráficas.</li>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' `wjp_waterfall()` creates a waterfall chart following WJP style guidelines.</span></span>
 <span><span class="co">#'</span></span>
-<span><span class="co">#' @param data A data frame containing the data to be plotted.</span></span>
+<span><span class="co">#' @param data Data frame containing the data to plot.</span></span>
 <span><span class="co">#' @param target String. Column name containing numeric values.</span></span>
 <span><span class="co">#' @param grouping String. Column name containing categories.</span></span>
-<span><span class="co">#' @param colors String. Column name for color groups. Default is NULL.</span></span>
-<span><span class="co">#' @param cvec Named vector of colors. Default is NULL.</span></span>
-<span><span class="co">#' @param labels String. Column name with labels. Default is NULL.</span></span>
-<span><span class="co">#' @param ptheme A ggplot2 theme. Default is WJP_theme().</span></span>
+<span><span class="co">#' @param colors String. Column name for color groups. Default is `NULL`.</span></span>
+<span><span class="co">#' @param cvec Named vector of colors. Default is `NULL` (the WJP palette,</span></span>
+<span><span class="co">#'   see [wjp_palette()], is applied).</span></span>
+<span><span class="co">#' @param labels String. Column name with labels. Default is `NULL`.</span></span>
+<span><span class="co">#' @param ptheme ggplot theme to apply. Default is [WJP_theme()].</span></span>
+<span><span class="co">#' @param show_legend Logical. If `TRUE`, displays a horizontal legend above</span></span>
+<span><span class="co">#'   the chart. Default is `FALSE`.</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @return A ggplot object.</span></span>
 <span><span class="co">#' @export</span></span></code></pre></div>
-<p>Después de documentar, ejecutar:</p>
+<p>After documenting, run:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">roxygen2</span><span class="fu">::</span><span class="fu">roxygenise</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Esto actualiza <code>NAMESPACE</code> y los archivos en
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>This updates <code>NAMESPACE</code> and the files in
 <code>man/</code>.</p>
 </div>
 <div class="section level2">
-<h2 id="usar-el-patrón-interno-de-columnas">3. Usar el patrón interno de columnas<a class="anchor" aria-label="anchor" href="#usar-el-patr%C3%B3n-interno-de-columnas"></a>
+<h2 id="use-the-internal-column-pattern">3. Use the internal column pattern<a class="anchor" aria-label="anchor" href="#use-the-internal-column-pattern"></a>
 </h2>
-<p>Las funciones deben renombrar columnas de entrada a nombres internos
-estables. Esto hace que el código sea consistente entre gráficos:</p>
+<p>Functions rename the input columns to stable internal names. This
+keeps the code consistent across charts:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span></span>
-<span>    target_var <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">target</span><span class="op">)</span>,</span>
+<span>    target_var   <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">target</span><span class="op">)</span>,</span>
 <span>    grouping_var <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">grouping</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">colors</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>colors_var <span class="op">=</span> <span class="va">grouping_var</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">colors</span> <span class="op">==</span> <span class="va">grouping</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">|&gt;</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">colors</span><span class="op">)</span> <span class="op">||</span> <span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">colors</span>, <span class="va">grouping</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>colors_var <span class="op">=</span> <span class="va">grouping_var</span><span class="op">)</span></span>
 <span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>colors_var <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">colors</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="validar-entradas-importantes">4. Validar entradas importantes<a class="anchor" aria-label="anchor" href="#validar-entradas-importantes"></a>
+<h2 id="validate-important-inputs">4. Validate important inputs<a class="anchor" aria-label="anchor" href="#validate-important-inputs"></a>
 </h2>
-<p>Agregar errores claros para casos que producirían gráficos
-inválidos:</p>
+<p>Add clear errors for cases that would produce invalid charts:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">is.data.frame</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"`data` must be a data frame."</span>, call. <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -206,78 +207,90 @@ inválidos:</p>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">target_var</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">data</span><span class="op">$</span><span class="va">target_var</span> <span class="op">&lt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"`target` must contain non-negative values."</span>, call. <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Para validaciones generales, usar o extender
+<p>For general validations, use or extend
 <code><a href="../reference/wjp_check_data.html">wjp_check_data()</a></code>.</p>
 </div>
 <div class="section level2">
-<h2 id="aplicar-colores-y-tema">5. Aplicar colores y tema<a class="anchor" aria-label="anchor" href="#aplicar-colores-y-tema"></a>
+<h2 id="apply-colors-fonts-and-theme">5. Apply colors, fonts, and theme<a class="anchor" aria-label="anchor" href="#apply-colors-fonts-and-theme"></a>
 </h2>
-<p>Las funciones deben retornar un objeto <code>ggplot</code> y respetar
-<code>cvec</code> y <code>ptheme</code>:</p>
+<p>Functions return a <code>ggplot</code> object, fall back to the WJP
+palette when <code>cvec</code> is <code>NULL</code>, read the active
+font with <code><a href="../reference/wjp_font_family.html">wjp_font_family()</a></code>, and respect
+<code>ptheme</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">plt</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">grouping_var</span>, <span class="va">target_var</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">cvec</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">plt</span> <span class="op">&lt;-</span> <span class="va">plt</span> <span class="op">+</span></span>
-<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">cvec</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">cvec</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">cvec</span> <span class="op">&lt;-</span> <span class="fu">wjp_default_cvec</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">colors_var</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="va">plt</span> <span class="op">&lt;-</span> <span class="va">plt</span> <span class="op">+</span> <span class="va">ptheme</span></span>
+<span><span class="va">plt</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">grouping_var</span>, <span class="va">target_var</span>, fill <span class="op">=</span> <span class="va">colors_var</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>show.legend <span class="op">=</span> <span class="va">show_legend</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span></span>
+<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">labels_var</span><span class="op">)</span>,</span>
+<span>    family   <span class="op">=</span> <span class="fu"><a href="../reference/wjp_font_family.html">wjp_font_family</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    fontface <span class="op">=</span> <span class="st">"bold"</span>,</span>
+<span>    size     <span class="op">=</span> <span class="fl">3.514598</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span></span>
+<span>    values <span class="op">=</span> <span class="va">cvec</span>,</span>
+<span>    breaks <span class="op">=</span> <span class="fu">wjp_legend_breaks</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">colors_var</span><span class="op">)</span>,</span>
+<span>    name   <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">plt</span> <span class="op">&lt;-</span> <span class="va">plt</span> <span class="op">+</span> <span class="va">ptheme</span> <span class="op">+</span> <span class="fu">wjp_legend_theme</span><span class="op">(</span><span class="va">show_legend</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">plt</span><span class="op">)</span></span></code></pre></div>
-<p>No llamar <code><a href="../reference/WJP_theme.html">WJP_theme()</a></code> directamente dentro de la función
-si ya existe un argumento <code>ptheme</code>.</p>
+<p>Do not call <code><a href="../reference/WJP_theme.html">WJP_theme()</a></code> directly inside the function
+when a <code>ptheme</code> argument already exists.</p>
 </div>
 <div class="section level2">
-<h2 id="agregar-pruebas">6. Agregar pruebas<a class="anchor" aria-label="anchor" href="#agregar-pruebas"></a>
+<h2 id="add-tests">6. Add tests<a class="anchor" aria-label="anchor" href="#add-tests"></a>
 </h2>
-<p>Agregar al menos una prueba en <code>tests/testthat/</code> que
-confirme:</p>
+<p>Add at least one test in <code>tests/testthat/</code> that
+confirms:</p>
 <ul>
-<li>La función devuelve un objeto <code>ggplot</code>.</li>
+<li>The function returns a <code>ggplot</code> object.</li>
 <li>
-<code><a href="https://ggplot2.tidyverse.org/reference/ggplot_build.html" class="external-link">ggplot2::ggplot_build()</a></code> no falla.</li>
-<li>Los argumentos opcionales importantes funcionan.</li>
-<li>Los errores esperados tienen mensajes claros.</li>
+<code><a href="https://ggplot2.tidyverse.org/reference/ggplot_build.html" class="external-link">ggplot2::ggplot_build()</a></code> does not fail.</li>
+<li>The important optional arguments work.</li>
+<li>Expected errors have clear messages.</li>
 </ul>
-<p>Ejemplo:</p>
+<p>Example:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">test_that</span><span class="op">(</span><span class="st">"wjp_waterfall returns a buildable ggplot"</span>, <span class="op">{</span></span>
 <span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>    category <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Start"</span>, <span class="st">"Gain"</span>, <span class="st">"Loss"</span><span class="op">)</span>,</span>
-<span>    value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">30</span>, <span class="op">-</span><span class="fl">20</span><span class="op">)</span></span>
+<span>    value    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">30</span>, <span class="op">-</span><span class="fl">20</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span>  <span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu">wjp_waterfall</span><span class="op">(</span><span class="va">data</span>, target <span class="op">=</span> <span class="st">"value"</span>, grouping <span class="op">=</span> <span class="st">"category"</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/inheritance-expectations.html" class="external-link">expect_s3_class</a></span><span class="op">(</span><span class="va">plot</span>, <span class="st">"ggplot"</span><span class="op">)</span></span>
-<span>  <span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/expect_no_error.html" class="external-link">expect_no_error</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot_build.html" class="external-link">ggplot_build</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu">expect_s3_class</span><span class="op">(</span><span class="va">plot</span>, <span class="st">"ggplot"</span><span class="op">)</span></span>
+<span>  <span class="fu">expect_no_error</span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot_build.html" class="external-link">ggplot_build</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="agregar-la-función-al-sitio-web">7. Agregar la función al sitio web<a class="anchor" aria-label="anchor" href="#agregar-la-funci%C3%B3n-al-sitio-web"></a>
+<h2 id="add-the-function-to-the-website">7. Add the function to the website<a class="anchor" aria-label="anchor" href="#add-the-function-to-the-website"></a>
 </h2>
-<p>Actualizar <code>_pkgdown.yml</code>:</p>
+<p>Update <code>_pkgdown.yml</code>:</p>
 <ol style="list-style-type: decimal">
-<li>Agregar la función en el dropdown
-<code>navbar &gt; components &gt; functions</code>.</li>
-<li>Agregarla a la sección correcta en <code>reference</code>.</li>
-<li>Si corresponde, agregar un ejemplo visual en
-<code>vignettes/articles/gallery.Rmd</code>.</li>
+<li>Add the function to the
+<code>navbar &gt; components &gt; functions</code> dropdown.</li>
+<li>Add it to the right section in <code>reference</code>.</li>
+<li>If relevant, add a visual example to
+<code>vignettes/articles/gallery.Rmd</code> and
+<code>data-raw/generate-examples.R</code>.</li>
 </ol>
+<p>Also add an entry to <code>NEWS.md</code>.</p>
 </div>
 <div class="section level2">
-<h2 id="verificar-antes-de-subir">8. Verificar antes de subir<a class="anchor" aria-label="anchor" href="#verificar-antes-de-subir"></a>
+<h2 id="check-before-pushing">8. Check before pushing<a class="anchor" aria-label="anchor" href="#check-before-pushing"></a>
 </h2>
-<p>Ejecutar:</p>
+<p>Run:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_dir.html" class="external-link">test_dir</a></span><span class="op">(</span><span class="st">"tests/testthat"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Y para revisión de paquete:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="ex">R</span> CMD build <span class="at">--no-build-vignettes</span> .</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="ex">R</span> CMD check <span class="at">--no-manual</span> <span class="at">--no-build-vignettes</span> <span class="at">--no-examples</span> WJPr_1.0.1.tar.gz</span></code></pre></div>
-<p>Si todo pasa, la función está lista para revisión.</p>
+<p>If everything passes, the function is ready for review.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

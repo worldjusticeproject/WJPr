@@ -213,8 +213,11 @@ wjp_groupbars(
 
   String. Value in the `grouping` column that identifies the national
   average row (e.g., "general", "Overall"). When specified, this row is
-  displayed with a special formatted label (bold, italic, colored) using
-  `geom_richtext()`. Default is NULL.
+  displayed in a blank facet with a special formatted label (bold,
+  italic, colored) drawn with
+  [`ggtext::geom_richtext()`](https://wilkelab.org/ggtext/reference/geom_richtext.html).
+  The value can be used as is in `group_order` and `level_order`.
+  Default is NULL.
 
 - national_level:
 
@@ -232,7 +235,7 @@ A ggplot object representing the grouped stacked bar chart.
 library(dplyr)
 library(ggplot2)
 
-# Load WJP fonts (optional)
+# Always load the WJP fonts
 wjp_fonts()
 
 # Create sample data
@@ -267,7 +270,7 @@ data_ci <- data.frame(
   group    = c("Gender", "Gender", "Age", "Age", "Age"),
   category = c("Male", "Female", "18-29", "30-49", "50+"),
   value    = c(0.45, 0.52, 0.38, 0.48, 0.55),
-  se       = c(0.50, 0.50, 0.49, 0.50, 0.50),
+  sd       = c(0.50, 0.50, 0.49, 0.50, 0.50),
   n        = c(420, 460, 180, 510, 240)
 )
 
@@ -277,7 +280,7 @@ wjp_groupbars(
   grouping    = "group",
   levels      = "category",
   draw_ci     = TRUE,
-  sd          = "se",
+  sd          = "sd",
   sample_size = "n"
 )
 
@@ -371,7 +374,7 @@ wjp_groupbars(
   target         = "pct_weighted",
   grouping       = "disaggregation",
   levels         = "demographics",
-  group_order    = c(" ", "Age Group", "Gender"),
+  group_order    = c("general", "Age Group", "Gender"),
   national_var   = "general",
   national_level = "National Average"
 )

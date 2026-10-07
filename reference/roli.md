@@ -14,7 +14,7 @@ roli
 
 ### `roli`
 
-A data frame with 1,341 rows and 57 columns:
+A tibble with 1,341 rows and 57 columns:
 
 - country:
 
@@ -23,6 +23,14 @@ A data frame with 1,341 rows and 57 columns:
 - year:
 
   Year of measurement (2012-2024)
+
+- code:
+
+  Three-letter ISO country code
+
+- region:
+
+  WJP region
 
 - roli:
 

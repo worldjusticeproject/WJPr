@@ -22,7 +22,7 @@ wjp_dumbbells(
   cvec = NULL,
   order = NULL,
   bgcolor = "#ffffff",
-  color = NULL,
+  color = deprecated(),
   ptheme = WJP_theme(),
   label_offset = 4,
   show_legend = TRUE
@@ -88,7 +88,7 @@ wjp_dumbbells(
 - ptheme:
 
   ggplot theme to apply. Default is
-  [`WJP_theme()`](https://worldjusticeproject-org.github.io/WJPr/reference/WJP_theme.md).
+  [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md).
 
 - label_offset:
 

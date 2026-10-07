@@ -1,132 +1,150 @@
-# Checklist de Revisión para PRs
+# PR Review Checklist
 
-Usa esta lista para revisar pull requests de nuevas funciones en WJPr.
+Use this list to review pull requests that add or change functions in
+WJPr.
 
-## Estructura del Código
+## Code Structure
 
-### Nomenclatura
+### Naming
 
-Archivo nombrado `{tipo}Chart.R`
+File named `{type}Chart.R`
 
-Función nombrada `wjp_{tipo}()`
+Function named `wjp_{type}()`
 
-Variables internas con sufijo `_var` (ej: `target_var`, `colors_var`)
+Internal variables use the `_var` suffix (e.g., `target_var`,
+`colors_var`)
 
-### Parámetros
+### Parameters
 
-Usa parámetros estándar: `data`, `target`, `grouping`
+Uses the standard parameters: `data`, `target`, `grouping`
 
-Parámetros opcionales tienen defaults: `colors = NULL`, `cvec = NULL`
+Optional parameters have defaults: `colors = NULL`, `cvec = NULL`
 
-Incluye `ptheme = WJP_theme()` como último parámetro
+Includes `ptheme = WJP_theme()` (and `show_legend = FALSE` for
+categorical charts)
 
-### Manejo de Columnas
+Renamed or obsolete arguments use `deprecated()` +
+[`lifecycle::deprecate_soft()`](https://lifecycle.r-lib.org/reference/deprecate_soft.html)
 
-Usa `all_of()` para renombrar columnas
+### Column Handling
 
-Verifica [`is.null()`](https://rdrr.io/r/base/NULL.html) antes de
-renombrar parámetros opcionales
+Uses `all_of()` to rename columns
 
-Evita doble rename cuando `colors == grouping` o `labels == grouping`
+Checks [`is.null()`](https://rdrr.io/r/base/NULL.html) before renaming
+optional parameters
+
+Avoids a double rename when `colors == grouping` or `labels == grouping`
 
 ``` r
 
-# Patrón correcto
-if (is.null(colors)) {
-  data <- data %>% mutate(colors_var = grouping_var)
-} else if (colors == grouping) {
+# Correct pattern
+if (is.null(colors) || identical(colors, grouping)) {
   data <- data %>% mutate(colors_var = grouping_var)
 } else {
   data <- data %>% rename(colors_var = all_of(colors))
 }
 ```
 
-### Colores
+### Colors
 
-Aplica `scale_*_manual(values = cvec)` solo si `!is.null(cvec)`
+Falls back to the WJP palette when `cvec` is NULL (`wjp_default_cvec()`)
 
-No asume colores por defecto para datos del usuario
+Legends use `wjp_legend_breaks()` and `wjp_legend_theme(show_legend)`
 
-### Tema
+### Typography
 
-Aplica `ptheme` antes de ajustes específicos
+Text layers use `family = wjp_font_family()` (no hard-coded
+`"Lato Full"`)
 
-Usa `theme()` para sobrescribir elementos específicos
+Value labels use `size = 3.514598` (10 pt) and bold face
 
-### Retorno
+### Theme
 
-Función retorna objeto ggplot con `return(plt)`
+Applies `ptheme` before chart-specific tweaks
+
+Uses `theme()` to override specific elements
+
+### Return
+
+Function returns a ggplot object with `return(plt)`
 
 ------------------------------------------------------------------------
 
-## Documentación Roxygen2
+## Roxygen2 Documentation
 
-### Tags Obligatorios
+### Required Tags
 
-`#' @description` con `lifecycle::badge("experimental")`
+`#' @description` with `lifecycle::badge("experimental")`
 
-`#' @param` para TODOS los parámetros
+`#' @param` for ALL parameters
 
-`#' @return` describiendo el valor de retorno
+`#' @return` describing the returned value
 
 `#' @export`
 
-`#' @examples` con código reproducible
+`#' @examples` with reproducible code
 
-### Formato de @param
+### @param Format
 
-Incluye tipo de dato: `@param target String. Column name...`
+Includes the data type: `@param target String. Column name...`
 
-Describe valor por defecto si existe: `Default is NULL.`
+States the default value if any: `Default is NULL.`
 
-### Ejemplo
+### Example
 
-Carga librerías necesarias
+Loads the required libraries
 ([`library(dplyr)`](https://dplyr.tidyverse.org), etc.)
 
-Usa datos de ejemplo simples o
-[`WJPr::gpp`](https://worldjusticeproject-org.github.io/WJPr/reference/gpp.md)/[`WJPr::roli`](https://worldjusticeproject-org.github.io/WJPr/reference/roli.md)
+Uses simple sample data or
+[`WJPr::gpp`](https://worldjusticeproject.github.io/WJPr/reference/gpp.md)/[`WJPr::roli`](https://worldjusticeproject.github.io/WJPr/reference/roli.md)
 
-Ejemplo ejecuta sin errores
-
-------------------------------------------------------------------------
-
-## Archivos Actualizados
-
-`data-raw/generate-examples.R` - Nueva sección para generar imagen
-
-`man/figures/example-{tipo}.png` - Imagen generada
-
-`CLAUDE.md` - Nueva función documentada
-
-`NAMESPACE` - Función exportada (generado por `devtools::document()`)
+Example runs without errors
 
 ------------------------------------------------------------------------
 
-## Verificación Final
+## Updated Files
+
+`tests/testthat/` - Tests for the new behavior
+
+`data-raw/generate-examples.R` - New section to generate the image
+
+`man/figures/example-{type}.png` - Generated image
+
+`_pkgdown.yml` - Function in the navbar menu and reference index
+
+`NEWS.md` - Changelog entry
+
+`CLAUDE.md` - New function documented
+
+`NAMESPACE` - Function exported (generated by `devtools::document()`)
+
+------------------------------------------------------------------------
+
+## Final Verification
 
 ``` r
 
-# Ejecutar estos comandos antes de aprobar:
+# Run these commands before approving:
 devtools::document()
+devtools::test()
 devtools::check()
 
-# Probar la función
+# Try the function
 devtools::load_all()
 wjp_fonts()
-# ... ejecutar ejemplo de la función
+# ... run the function example
 ```
 
-### Resultado de `devtools::check()`
+### `devtools::check()` result
 
 0 errors
 
 0 warnings
 
-Notes aceptables (no relacionadas con la nueva función)
+0 notes (or notes unrelated to the change)
 
 ------------------------------------------------------------------------
 
-## Notas del Revisor
+## Reviewer Notes
 
-*Espacio para comentarios adicionales…*
+*Space for additional comments…*

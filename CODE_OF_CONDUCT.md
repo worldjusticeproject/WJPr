@@ -1,58 +1,56 @@
-# Código de Conducta
+# Code of Conduct
 
-## Nuestro Compromiso
+## Our Pledge
 
-En el interés de fomentar un ambiente abierto y acogedor, nosotros como
-contribuidores y mantenedores nos comprometemos a hacer de la
-participación en nuestro proyecto y nuestra comunidad una experiencia
-libre de acoso para todos.
+In the interest of fostering an open and welcoming environment, we as
+contributors and maintainers pledge to make participation in our project
+and our community a harassment-free experience for everyone.
 
-## Nuestros Estándares
+## Our Standards
 
-Ejemplos de comportamiento que contribuye a crear un ambiente positivo:
+Examples of behavior that contributes to a positive environment:
 
-- Uso de lenguaje amable e inclusivo
-- Respeto a diferentes puntos de vista y experiencias
-- Aceptación de críticas constructivas
-- Enfocarse en lo que es mejor para la comunidad
-- Mostrar empatía hacia otros miembros de la comunidad
+- Using welcoming and inclusive language
+- Being respectful of differing viewpoints and experiences
+- Gracefully accepting constructive criticism
+- Focusing on what is best for the community
+- Showing empathy towards other community members
 
-Ejemplos de comportamiento inaceptable:
+Examples of unacceptable behavior:
 
-- Uso de lenguaje o imágenes sexualizadas
-- Comentarios insultantes o despectivos
-- Ataques personales o políticos
-- Acoso público o privado
-- Publicar información privada de otros sin permiso
-- Otras conductas que puedan considerarse inapropiadas en un entorno
-  profesional
+- The use of sexualized language or imagery
+- Insulting or derogatory comments
+- Personal or political attacks
+- Public or private harassment
+- Publishing others’ private information without explicit permission
+- Other conduct which could reasonably be considered inappropriate in a
+  professional setting
 
-## Nuestras Responsabilidades
+## Our Responsibilities
 
-Los mantenedores del proyecto son responsables de clarificar los
-estándares de comportamiento aceptable y se espera que tomen acciones
-correctivas apropiadas y justas en respuesta a cualquier instancia de
-comportamiento inaceptable.
+Project maintainers are responsible for clarifying the standards of
+acceptable behavior and are expected to take appropriate and fair
+corrective action in response to any instances of unacceptable behavior.
 
-Los mantenedores tienen el derecho y la responsabilidad de eliminar,
-editar o rechazar comentarios, commits, código, ediciones de wiki,
-issues y otras contribuciones que no estén alineadas con este Código de
-Conducta.
+Project maintainers have the right and responsibility to remove, edit,
+or reject comments, commits, code, wiki edits, issues, and other
+contributions that are not aligned with this Code of Conduct.
 
-## Alcance
+## Scope
 
-Este Código de Conducta aplica tanto dentro de los espacios del proyecto
-como en espacios públicos cuando un individuo representa al proyecto o
-su comunidad.
+This Code of Conduct applies within all project spaces, and also applies
+when an individual is representing the project or its community in
+public spaces.
 
-## Aplicación
+## Enforcement
 
-Instancias de comportamiento abusivo, acosador o inaceptable pueden ser
-reportadas contactando al equipo del proyecto. Todas las quejas serán
-revisadas e investigadas y resultarán en una respuesta que se considere
-necesaria y apropiada a las circunstancias.
+Instances of abusive, harassing, or otherwise unacceptable behavior may
+be reported by contacting the project team at
+<data-analytics@worldjusticeproject.org>. All complaints will be
+reviewed and investigated and will result in a response that is deemed
+necessary and appropriate to the circumstances.
 
-## Atribución
+## Attribution
 
-Este Código de Conducta es una adaptación del [Contributor
-Covenant](https://www.contributor-covenant.org), versión 2.1.
+This Code of Conduct is adapted from the [Contributor
+Covenant](https://www.contributor-covenant.org), version 2.1.

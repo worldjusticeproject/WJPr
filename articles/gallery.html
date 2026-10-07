@@ -66,6 +66,7 @@
     <li><a class="dropdown-item" href="../reference/wjp_fonts.html">wjp_fonts()</a></li>
     <li><a class="dropdown-item" href="../reference/wjp_font_family.html">wjp_font_family()</a></li>
     <li><a class="dropdown-item" href="../reference/wjp_palette.html">wjp_palette()</a></li>
+    <li><a class="dropdown-item" href="../reference/spread_labels_x.html">spread_labels_x()</a></li>
     <li><a class="dropdown-item" href="../reference/WJP_theme.html">WJP_theme()</a></li>
   </ul>
 </li>
@@ -90,7 +91,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/worldjusticeproject-org/WJPr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/worldjusticeproject/WJPr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -107,7 +108,7 @@
       <h1>Chart Gallery</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject-org/WJPr/blob/main/vignettes/articles/gallery.Rmd" class="external-link"><code>vignettes/articles/gallery.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject/WJPr/blob/main/vignettes/articles/gallery.Rmd" class="external-link"><code>vignettes/articles/gallery.Rmd</code></a></small>
       <div class="d-none name"><code>gallery.Rmd</code></div>
     </div>
 
@@ -123,7 +124,7 @@ a specific report.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/worldjusticeproject-org/WJPr" class="external-link">WJPr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/worldjusticeproject/WJPr" class="external-link">WJPr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Always load the WJP fonts before plotting</span></span>
 <span><span class="fu"><a href="../reference/wjp_fonts.html">wjp_fonts</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -218,28 +219,7 @@ value labels keep the session font in that case. See
 <code><a href="../reference/wjp_font_family.html">wjp_font_family()</a></code> for details.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load sample data</span></span>
-<span><span class="va">gpp_data</span> <span class="op">&lt;-</span> <span class="fu">WJPr</span><span class="fu">::</span><span class="va"><a href="../reference/gpp.html">gpp</a></span></span>
-<span></span>
-<span><span class="co"># WJP Color Palettes</span></span>
-<span><span class="va">wjp_categorical</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  <span class="st">"#482d8b"</span>, <span class="st">"#2894aa"</span>, <span class="st">"#f26b21"</span>, <span class="st">"#137b3f"</span>, <span class="st">"#869d3b"</span>,</span>
-<span>  <span class="st">"#0f9581"</span>, <span class="st">"#1a74b6"</span>, <span class="st">"#8f2e8c"</span>, <span class="st">"#555659"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Colors for contrasting two groups</span></span>
-<span><span class="va">wjp_contrast</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#482d8b"</span>, <span class="st">"#f26b21"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Factor colors (Rule of Law Index)</span></span>
-<span><span class="va">wjp_factors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  <span class="st">"Constraints"</span> <span class="op">=</span> <span class="st">"#137b3f"</span>,</span>
-<span>  <span class="st">"Corruption"</span>  <span class="op">=</span> <span class="st">"#869d3b"</span>,</span>
-<span>  <span class="st">"Open Gov"</span>    <span class="op">=</span> <span class="st">"#0f9581"</span>,</span>
-<span>  <span class="st">"Rights"</span>      <span class="op">=</span> <span class="st">"#1a74b6"</span>,</span>
-<span>  <span class="st">"Security"</span>    <span class="op">=</span> <span class="st">"#413179"</span>,</span>
-<span>  <span class="st">"Regulatory"</span>  <span class="op">=</span> <span class="st">"#8f2e8c"</span>,</span>
-<span>  <span class="st">"Civil"</span>       <span class="op">=</span> <span class="st">"#89191c"</span>,</span>
-<span>  <span class="st">"Criminal"</span>    <span class="op">=</span> <span class="st">"#f07623"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">gpp_data</span> <span class="op">&lt;-</span> <span class="fu">WJPr</span><span class="fu">::</span><span class="va"><a href="../reference/gpp.html">gpp</a></span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
@@ -851,8 +831,7 @@ multi-dimensional data.</p>
 <span>  target   <span class="op">=</span> <span class="st">"score"</span>,</span>
 <span>  grouping <span class="op">=</span> <span class="st">"category"</span>,</span>
 <span>  labels   <span class="op">=</span> <span class="st">"label"</span>,</span>
-<span>  cvec     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#482d8b"</span>, <span class="st">"#2894aa"</span>, <span class="st">"#f26b21"</span>, <span class="st">"#137b3f"</span>, <span class="st">"#869d3b"</span>,</span>
-<span>               <span class="st">"#0f9581"</span>, <span class="st">"#1a74b6"</span>, <span class="st">"#8f2e8c"</span>, <span class="st">"#555659"</span><span class="op">)</span></span>
+<span>  cvec     <span class="op">=</span> <span class="fu"><a href="../reference/wjp_palette.html">wjp_palette</a></span><span class="op">(</span><span class="fl">9</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="gallery_files/figure-html/rose-1.png" class="r-plt" alt="" width="100%"></p>
 <p><strong>Expected input structure</strong> — a single unit: one row

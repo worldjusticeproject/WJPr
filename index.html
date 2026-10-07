@@ -70,6 +70,7 @@
     <li><a class="dropdown-item" href="reference/wjp_fonts.html">wjp_fonts()</a></li>
     <li><a class="dropdown-item" href="reference/wjp_font_family.html">wjp_font_family()</a></li>
     <li><a class="dropdown-item" href="reference/wjp_palette.html">wjp_palette()</a></li>
+    <li><a class="dropdown-item" href="reference/spread_labels_x.html">spread_labels_x()</a></li>
     <li><a class="dropdown-item" href="reference/WJP_theme.html">WJP_theme()</a></li>
   </ul>
 </li>
@@ -94,7 +95,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/worldjusticeproject-org/WJPr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/worldjusticeproject/WJPr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -105,32 +106,36 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="wjpr">WJPr<a class="anchor" aria-label="anchor" href="#wjpr"></a>
 </h1></div>
+<!-- badges: start -->
+
 <p>WJPr is an R package from the World Justice Project Data Analytics Unit for producing WJP-style graphics and working with Rule of Law Index data. It is designed for analysts who need publication-ready charts, reproducible examples, and consistent visual language across country-report and research workflows.</p>
 <div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
 </h2>
 <p>WJPr provides:</p>
 <ul>
-<li>Chart functions for bars, diverging bars, grouped bars, dots, lines, slopes, dumbbells, lollipops, radar, rose, and gauge visualizations.</li>
+<li>Chart functions for bars, diverging bars, grouped bars, edge bars, dots, lines, slopes, dumbbells, lollipops, radar, rose, and gauge visualizations.</li>
 <li>Built-in sample datasets for Rule of Law Index and General Population Poll workflows.</li>
-<li>A shared WJP theme, fonts, and color guidance for consistent report graphics.</li>
-<li>Validation helpers for checking chart-ready data before plotting.</li>
+<li>A shared WJP theme (<code><a href="reference/WJP_theme.html">WJP_theme()</a></code>), fonts (<code><a href="reference/wjp_fonts.html">wjp_fonts()</a></code>, <code><a href="reference/wjp_font_family.html">wjp_font_family()</a></code>), and color palette (<code><a href="reference/wjp_palette.html">wjp_palette()</a></code>) for consistent report graphics.</li>
+<li>
+<code><a href="reference/spread_labels_x.html">spread_labels_x()</a></code>, a deterministic helper that keeps value labels in row-based point charts from overlapping.</li>
+<li>Validation helpers for checking chart-ready data (<code><a href="reference/wjp_check_data.html">wjp_check_data()</a></code>) and dependencies (<code><a href="reference/wjp_check_deps.html">wjp_check_deps()</a></code>), plus <code><a href="reference/diffmeans.html">diffmeans()</a></code> for difference-in-means tests.</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>WJPr is hosted on GitHub. To install the package, ensure you have the <code>devtools</code> package installed and use the following commands:</p>
+<p>WJPr is hosted on GitHub. Install it with <code>remotes</code> (or <code>devtools</code>):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install WJPr from GitHub</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"worldjusticeproject-org/WJPr"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"worldjusticeproject/WJPr"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <p>Load the package into your R session:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/worldjusticeproject-org/WJPr" class="external-link">WJPr</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/worldjusticeproject/WJPr" class="external-link">WJPr</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="example-accessing-rule-of-law-index-data">Example: Accessing Rule of Law Index Data<a class="anchor" aria-label="anchor" href="#example-accessing-rule-of-law-index-data"></a>
 </h3>
@@ -144,42 +149,31 @@
 </h3>
 <p>Create a simple WJP-style bar chart:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Load WJP fonts when using the default theme</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Load the WJP fonts before plotting</span></span>
 <span><span class="fu"><a href="reference/wjp_fonts.html">wjp_fonts</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Loading data</span></span>
-<span><span class="va">gpp_data</span> <span class="op">&lt;-</span> <span class="fu">WJPr</span><span class="fu">::</span><span class="va"><a href="reference/gpp.html">gpp</a></span></span>
-<span></span>
-<span><span class="co"># Prepare the data</span></span>
-<span><span class="va">data4bars</span> <span class="op">&lt;-</span> <span class="va">gpp_data</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">country</span>, <span class="va">year</span>, <span class="va">q1a</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">country</span>, <span class="va">year</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span></span>
-<span>    q1a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">q1a</span><span class="op">)</span>,</span>
-<span>    trust <span class="op">=</span> <span class="fu">case_when</span><span class="op">(</span></span>
-<span>      <span class="va">q1a</span> <span class="op">&lt;=</span> <span class="fl">2</span>  <span class="op">~</span> <span class="fl">1</span>,</span>
-<span>      <span class="va">q1a</span> <span class="op">&lt;=</span> <span class="fl">4</span>  <span class="op">~</span> <span class="fl">0</span>,</span>
-<span>      <span class="va">q1a</span> <span class="op">==</span> <span class="fl">99</span> <span class="op">~</span> <span class="cn">NA_real_</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span></span>
+<span><span class="co"># Prepare the data: % of respondents who trust Institution A, 2022</span></span>
+<span><span class="va">data4bars</span> <span class="op">&lt;-</span> <span class="fu">WJPr</span><span class="fu">::</span><span class="va"><a href="reference/gpp.html">gpp</a></span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">==</span> <span class="fl">2022</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    q1a   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">unclass</a></span><span class="op">(</span><span class="va">q1a</span><span class="op">)</span><span class="op">)</span>,  <span class="co"># survey answers are labelled vectors</span></span>
+<span>    trust <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">q1a</span> <span class="op">&lt;=</span> <span class="fl">2</span> <span class="op">~</span> <span class="fl">1</span>, <span class="va">q1a</span> <span class="op">&lt;=</span> <span class="fl">4</span> <span class="op">~</span> <span class="fl">0</span><span class="op">)</span>,</span>
+<span>    year  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">summarise</span><span class="op">(</span></span>
-<span>    trust   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">trust</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>    .groups <span class="op">=</span> <span class="st">"keep"</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span></span>
-<span>    trust <span class="op">=</span> <span class="va">trust</span><span class="op">*</span><span class="fl">100</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">==</span> <span class="st">"2022"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">year</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>trust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">trust</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Draw the chart</span></span>
 <span><span class="fu"><a href="reference/wjp_bars.html">wjp_bars</a></span><span class="op">(</span></span>
-<span>    <span class="va">data4bars</span>,              </span>
-<span>    target    <span class="op">=</span> <span class="st">"trust"</span>,        </span>
-<span>    grouping  <span class="op">=</span> <span class="st">"country"</span>,</span>
-<span>    colors    <span class="op">=</span> <span class="st">"year"</span>,</span>
-<span>    cvec      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2022"</span> <span class="op">=</span> <span class="st">"#482d8b"</span><span class="op">)</span></span>
+<span>  <span class="va">data4bars</span>,</span>
+<span>  target   <span class="op">=</span> <span class="st">"trust"</span>,</span>
+<span>  grouping <span class="op">=</span> <span class="st">"country"</span>,</span>
+<span>  colors   <span class="op">=</span> <span class="st">"year"</span>,</span>
+<span>  cvec     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2022"</span> <span class="op">=</span> <span class="st">"#482d8b"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>When <code>cvec</code> is omitted, every chart falls back to the WJP palette (<code><a href="reference/wjp_palette.html">wjp_palette()</a></code>).</p>
 </div>
 <div class="section level3">
 <h3 id="example-changing-the-chart-font">Example: Changing the Chart Font<a class="anchor" aria-label="anchor" href="#example-changing-the-chart-font"></a>
@@ -212,7 +206,7 @@
 <div class="wjp-gallery-grid">
 <p><a class="wjp-gallery-card" href="reference/wjp_bars.html"> <img src="reference/figures/example-bars.png" alt="Example vertical bar chart"><strong>Bar Chart</strong> <code>wjp_bars()</code> </a> <a class="wjp-gallery-card" href="reference/wjp_dots.html"> <img src="reference/figures/example-dots.png" alt="Example dot chart with confidence intervals"><strong>Dots Chart</strong> <code>wjp_dots()</code> </a> <a class="wjp-gallery-card" href="reference/wjp_lines.html"> <img src="reference/figures/example-lines.png" alt="Example line chart"><strong>Line Chart</strong> <code>wjp_lines()</code> </a> <a class="wjp-gallery-card" href="reference/wjp_divbars.html"> <img src="reference/figures/example-divbars.png" alt="Example diverging bar chart"><strong>Diverging Bars</strong> <code>wjp_divbars()</code> </a> <a class="wjp-gallery-card" href="reference/wjp_dumbbells.html"> <img src="reference/figures/example-dumbbells.png" alt="Example dumbbell chart"><strong>Dumbbells</strong> <code>wjp_dumbbells()</code> </a> <a class="wjp-gallery-card" href="reference/wjp_slope.html"> <img src="reference/figures/example-slope.png" alt="Example slope chart"><strong>Slope Chart</strong> <code>wjp_slope()</code> </a> <a class="wjp-gallery-card" href="reference/wjp_radar.html"> <img src="reference/figures/example-radar.png" alt="Example radar chart"><strong>Radar Chart</strong> <code>wjp_radar()</code> </a> <a class="wjp-gallery-card" href="reference/wjp_rose.html"> <img src="reference/figures/example-rose.png" alt="Example rose chart"><strong>Rose Chart</strong> <code>wjp_rose()</code> </a> <a class="wjp-gallery-card" href="reference/wjp_gauge.html"> <img src="reference/figures/example-gauge.png" alt="Example gauge chart"><strong>Gauge Chart</strong> <code>wjp_gauge()</code> </a> <a class="wjp-gallery-card" href="reference/wjp_lollipops.html"> <img src="reference/figures/example-lollipops.png" alt="Example lollipop chart"><strong>Lollipop Chart</strong> <code>wjp_lollipops()</code> </a> <a class="wjp-gallery-card" href="reference/wjp_edgebars.html"> <img src="reference/figures/example-edgebars.png" alt="Example edge bar chart"><strong>Edgebars</strong> <code>wjp_edgebars()</code> </a> <a class="wjp-gallery-card" href="reference/wjp_groupbars.html"> <img src="reference/figures/example-groupbars.png" alt="Example grouped bar chart with confidence intervals"><strong>Grouped Bars</strong> <code>wjp_groupbars()</code> </a></p>
 </div>
-<p>For a complete interactive gallery with code examples, see the <a href="https://worldjusticeproject-org.github.io/WJPr/articles/gallery.html">Chart Gallery vignette</a>.</p>
+<p>For a complete interactive gallery with code examples, see the <a href="https://worldjusticeproject.github.io/WJPr/articles/gallery.html">Chart Gallery vignette</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="data-structure">Data Structure<a class="anchor" aria-label="anchor" href="#data-structure"></a>
@@ -272,7 +266,7 @@
 <span>  colors   <span class="op">=</span> <span class="st">"group"</span>,</span>
 <span>  cvec     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Group 1"</span> <span class="op">=</span> <span class="st">"#482d8b"</span>, <span class="st">"Group 2"</span> <span class="op">=</span> <span class="st">"#2894aa"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>For detailed guidance, see the <a href="https://worldjusticeproject-org.github.io/WJPr/articles/data-preparation.html">Data Preparation vignette</a>.</p>
+<p>For detailed guidance, see the <a href="https://worldjusticeproject.github.io/WJPr/articles/data-preparation.html">Data Preparation vignette</a>.</p>
 </div>
 </div>
 <div class="section level2">
@@ -314,9 +308,9 @@
 <span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># 1. Rename columns using all_of()</span></span>
 <span>  <span class="co"># 2. Handle NULL parameters</span></span>
-<span>  <span class="co"># 3. Create ggplot</span></span>
-<span>  <span class="co"># 4. Apply colors if cvec provided</span></span>
-<span>  <span class="co"># 5. Apply theme</span></span>
+<span>  <span class="co"># 3. Fall back to the WJP palette when cvec is NULL (wjp_default_cvec())</span></span>
+<span>  <span class="co"># 4. Create ggplot, using wjp_font_family() for text layers</span></span>
+<span>  <span class="co"># 5. Apply ptheme, then chart-specific theme() tweaks</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">plt</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -327,9 +321,9 @@
 <li>Roxygen2 with <code>@export</code>, <code>@param</code>, <code>@return</code>, <code>@examples</code>
 </li>
 <li>Include <code>lifecycle::badge("experimental")</code> in description</li>
-<li>Add example to <code>data-raw/generate-examples.R</code>
+<li>Add tests in <code>tests/testthat/</code> and an example to <code>data-raw/generate-examples.R</code>
 </li>
-<li>Update <code>CLAUDE.md</code>
+<li>Register the function in <code>_pkgdown.yml</code> and update <code>NEWS.md</code>
 </li>
 </ul>
 </div>
@@ -340,9 +334,9 @@
 <li>
 <strong><a href="CONTRIBUTING.html">CONTRIBUTING.md</a></strong> - Complete contribution guidelines</li>
 <li>
-<strong><a href="https://worldjusticeproject-org.github.io/WJPr/articles/development-guide.html">Development Guide</a></strong> - Step-by-step tutorial</li>
+<strong><a href="https://worldjusticeproject.github.io/WJPr/articles/development-guide.html">Development Guide</a></strong> - Step-by-step tutorial</li>
 <li>
-<strong><a href="https://github.com/worldjusticeproject-org/WJPr/issues" class="external-link">Issues</a></strong> - Report bugs or request features</li>
+<strong><a href="https://github.com/worldjusticeproject/WJPr/issues" class="external-link">Issues</a></strong> - Report bugs or request features</li>
 </ul>
 </div>
 </div>
@@ -360,8 +354,8 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/worldjusticeproject-org/WJPr/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/worldjusticeproject-org/WJPr/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/worldjusticeproject/WJPr/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/worldjusticeproject/WJPr/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -392,14 +386,9 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>
-<a href="https://github.com/aspardog" class="external-link">Santiago Pardo</a> <br><small class="roles"> Author </small>   </li>
-<li>World Justice Project Data Analytics Unit <br><small class="roles"> Author, maintainer, copyright holder </small>   </li>
-<li><a href="authors.html">More about authors...</a></li>
+<li><p><a href="https://github.com/aspardog" class="external-link">Santiago Pardo</a> — Author</p></li>
 </ul>
 </div>
-
-
 
   </aside>
 </div>

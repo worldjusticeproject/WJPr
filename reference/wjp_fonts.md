@@ -32,7 +32,7 @@ WJPr charts use **Lato Full** by default. To switch every chart and
 theme to another loaded family (e.g., Inter Tight), set the
 `wjpr.family` option once per session:
 `options(wjpr.family = "Inter Tight")`. See
-[`wjp_font_family()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_font_family.md).
+[`wjp_font_family()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_font_family.md).
 
 ## Examples
 

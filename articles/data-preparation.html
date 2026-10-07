@@ -66,6 +66,7 @@
     <li><a class="dropdown-item" href="../reference/wjp_fonts.html">wjp_fonts()</a></li>
     <li><a class="dropdown-item" href="../reference/wjp_font_family.html">wjp_font_family()</a></li>
     <li><a class="dropdown-item" href="../reference/wjp_palette.html">wjp_palette()</a></li>
+    <li><a class="dropdown-item" href="../reference/spread_labels_x.html">spread_labels_x()</a></li>
     <li><a class="dropdown-item" href="../reference/WJP_theme.html">WJP_theme()</a></li>
   </ul>
 </li>
@@ -90,7 +91,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/worldjusticeproject-org/WJPr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/worldjusticeproject/WJPr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -107,7 +108,7 @@
       <h1>Data Preparation for WJPr</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject-org/WJPr/blob/main/vignettes/articles/data-preparation.Rmd" class="external-link"><code>vignettes/articles/data-preparation.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject/WJPr/blob/main/vignettes/articles/data-preparation.Rmd" class="external-link"><code>vignettes/articles/data-preparation.Rmd</code></a></small>
       <div class="d-none name"><code>data-preparation.Rmd</code></div>
     </div>
 
@@ -120,7 +121,7 @@ quickly and avoid common errors.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/worldjusticeproject-org/WJPr" class="external-link">WJPr</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/worldjusticeproject/WJPr" class="external-link">WJPr</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="the-golden-rule-long-tidy-format">The Golden Rule: Long (Tidy) Format<a class="anchor" aria-label="anchor" href="#the-golden-rule-long-tidy-format"></a>
 </h2>
@@ -659,19 +660,24 @@ Here’s what each parameter expects:</p>
 <div class="section level3">
 <h3 id="pattern-5-composition-diverging-barsstacked">Pattern 5: Composition (Diverging Bars/Stacked)<a class="anchor" aria-label="anchor" href="#pattern-5-composition-diverging-barsstacked"></a>
 </h3>
-<p>Parts that sum to 100%:</p>
+<p>Parts that sum to 100%. All values can be positive:
+<code><a href="../reference/wjp_divbars.html">wjp_divbars()</a></code> flips the group named in
+<code>negative</code> (here <code>negative = "Disagree"</code>) to the
+left side automatically.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pattern_composition</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  country   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Atlantis"</span>, <span class="st">"Narnia"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span>  response  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Agree"</span>, <span class="st">"Disagree"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>  percent   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">65</span>, <span class="fl">35</span>, <span class="fl">45</span>, <span class="fl">55</span><span class="op">)</span>,</span>
-<span>  direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"positive"</span>, <span class="st">"negative"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span>  country  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Atlantis"</span>, <span class="st">"Narnia"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Agree"</span>, <span class="st">"Disagree"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  percent  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">65</span>, <span class="fl">35</span>, <span class="fl">45</span>, <span class="fl">55</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="pattern-6-multi-dimensional-radarrose">Pattern 6: Multi-dimensional (Radar/Rose)<a class="anchor" aria-label="anchor" href="#pattern-6-multi-dimensional-radarrose"></a>
 </h3>
-<p>Multiple variables per unit:</p>
+<p>Multiple variables per unit. <code><a href="../reference/wjp_rose.html">wjp_rose()</a></code> accepts
+proportions (0-1) or percentages (0-100); for <code><a href="../reference/wjp_radar.html">wjp_radar()</a></code>,
+set <code>source = "QRQ"</code> for 0-1 scores (the default
+<code>"GPP"</code> expects percentages).</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pattern_radar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  dimension <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Speed"</span>, <span class="st">"Quality"</span>, <span class="st">"Cost"</span>, <span class="st">"Access"</span>, <span class="st">"Trust"</span><span class="op">)</span>,</span>
@@ -681,11 +687,24 @@ Here’s what each parameter expects:</p>
 </div>
 </div>
 <div class="section level2">
+<h2 id="working-with-the-gpp-sample-data">Working with the GPP Sample Data<a class="anchor" aria-label="anchor" href="#working-with-the-gpp-sample-data"></a>
+</h2>
+<p>Survey answers in <code><a href="../reference/gpp.html">WJPr::gpp</a></code> are stored as labelled
+vectors (<code>haven_labelled</code>). Convert them to plain numbers
+before comparing or summarizing them:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gpp_numeric</span> <span class="op">&lt;-</span> <span class="fu">WJPr</span><span class="fu">::</span><span class="va"><a href="../reference/gpp.html">gpp</a></span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gend</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"q"</span><span class="op">)</span><span class="op">)</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">unclass</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Code <code>99</code> means “Don’t know/No answer”; decide explicitly
+whether to exclude it (as in the examples above) or count it in the
+denominator.</p>
+</div>
+<div class="section level2">
 <h2 id="using-wjp_check_data">Using wjp_check_data()<a class="anchor" aria-label="anchor" href="#using-wjp_check_data"></a>
 </h2>
 <p>WJPr includes a helper function to validate your data structure
 before plotting:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check if data is ready for a bar chart</span></span>
 <span><span class="fu"><a href="../reference/wjp_check_data.html">wjp_check_data</a></span><span class="op">(</span></span>
 <span>  data     <span class="op">=</span> <span class="va">my_data</span>,</span>
@@ -709,7 +728,7 @@ before plotting:</p>
 <h3 id="mistake-1-data-in-wide-format">Mistake 1: Data in Wide Format<a class="anchor" aria-label="anchor" href="#mistake-1-data-in-wide-format"></a>
 </h3>
 <p><strong>Problem:</strong></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># This won't work</span></span>
 <span><span class="va">bad_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  country    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,</span>
@@ -717,7 +736,7 @@ before plotting:</p>
 <span>  year_2022  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">52</span>, <span class="fl">55</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><strong>Solution:</strong> Use <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer()</a></code>:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">good_data</span> <span class="op">&lt;-</span> <span class="va">bad_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span></span>
 <span>    cols      <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"year_"</span><span class="op">)</span>,</span>
@@ -729,12 +748,12 @@ before plotting:</p>
 <h3 id="mistake-2-missing-color-mapping">Mistake 2: Missing Color Mapping<a class="anchor" aria-label="anchor" href="#mistake-2-missing-color-mapping"></a>
 </h3>
 <p><strong>Problem:</strong></p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># cvec names don't match data values</span></span>
 <span><span class="va">cvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Group1"</span> <span class="op">=</span> <span class="st">"#482d8b"</span><span class="op">)</span>  <span class="co"># But data has "group1" (lowercase)</span></span></code></pre></div>
 <p><strong>Solution:</strong> Ensure exact match between cvec names and
 data values:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check unique values first</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">color_column</span><span class="op">)</span></span>
 <span></span>
@@ -745,12 +764,12 @@ data values:</p>
 <h3 id="mistake-3-target-column-is-character">Mistake 3: Target Column is Character<a class="anchor" aria-label="anchor" href="#mistake-3-target-column-is-character"></a>
 </h3>
 <p><strong>Problem:</strong></p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Values stored as text</span></span>
 <span><span class="va">data</span><span class="op">$</span><span class="va">value</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"45%"</span>, <span class="st">"50%"</span>, <span class="st">"38%"</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Solution:</strong> Keep numeric values separate from
 labels:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">45</span>, <span class="fl">50</span>, <span class="fl">38</span><span class="op">)</span>,</span>
@@ -763,7 +782,7 @@ labels:</p>
 <p><strong>Problem:</strong> Raw survey data with one row per
 respondent.</p>
 <p><strong>Solution:</strong> Aggregate first:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">raw_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">year</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
@@ -775,79 +794,96 @@ respondent.</p>
 <div class="section level2">
 <h2 id="quick-reference-data-structure-by-chart-type">Quick Reference: Data Structure by Chart Type<a class="anchor" aria-label="anchor" href="#quick-reference-data-structure-by-chart-type"></a>
 </h2>
+<p>Required and optional column arguments (each one names a column of
+your data), plus the main non-column options:</p>
 <table class="table">
 <colgroup>
-<col width="25%">
-<col width="37%">
-<col width="37%">
+<col width="19%">
+<col width="29%">
+<col width="29%">
+<col width="22%">
 </colgroup>
 <thead><tr class="header">
 <th>Chart Type</th>
 <th>Required Columns</th>
 <th>Optional Columns</th>
+<th>Main Options</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td><code><a href="../reference/wjp_bars.html">wjp_bars()</a></code></td>
 <td>target, grouping</td>
-<td>colors, labels, lab_pos, order, show_legend</td>
+<td>colors, labels, lab_pos, order</td>
+<td>direction, stacked, expand, show_legend</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/wjp_dots.html">wjp_dots()</a></code></td>
 <td>target, grouping, colors</td>
-<td>order, sd, sample_size (for CI), show_legend</td>
+<td>order, labels, sd + sample_size (for CI)</td>
+<td>draw_ci, show_labels, opacities, shapes, show_legend</td>
 </tr>
 <tr class="odd">
 <td><code><a href="../reference/wjp_lines.html">wjp_lines()</a></code></td>
 <td>target, grouping</td>
-<td>colors, labels, show_legend</td>
+<td>colors, labels</td>
+<td>repel, transparency + transparencies, show_legend</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/wjp_dumbbells.html">wjp_dumbbells()</a></code></td>
-<td>target, grouping, colors, cgroups</td>
-<td>labels, labpos, label_offset, show_legend, order</td>
+<td>target, grouping, colors</td>
+<td>labels, labpos</td>
+<td>cgroups (required), order (named vector), label_offset,
+show_legend</td>
 </tr>
 <tr class="odd">
 <td><code><a href="../reference/wjp_divbars.html">wjp_divbars()</a></code></td>
 <td>target, grouping, diverging</td>
-<td>negative, labels, order, show_legend</td>
+<td>labels, order</td>
+<td>negative, show_legend</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/wjp_radar.html">wjp_radar()</a></code></td>
 <td>target, axis_var, labels, colors</td>
-<td>order, show_legend</td>
+<td>order, maincat</td>
+<td>source, show_legend</td>
 </tr>
 <tr class="odd">
 <td><code><a href="../reference/wjp_rose.html">wjp_rose()</a></code></td>
 <td>target, grouping, labels</td>
 <td>order</td>
+<td>cvec</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/wjp_slope.html">wjp_slope()</a></code></td>
 <td>target, grouping</td>
-<td>colors, labels, show_legend</td>
+<td>colors, labels</td>
+<td>repel, show_legend</td>
 </tr>
 <tr class="odd">
 <td><code><a href="../reference/wjp_gauge.html">wjp_gauge()</a></code></td>
 <td>target, colors</td>
-<td>labels, factor_order, show_legend</td>
+<td>labels</td>
+<td>factor_order, show_legend</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/wjp_lollipops.html">wjp_lollipops()</a></code></td>
 <td>target, grouping</td>
 <td>labels, order</td>
+<td>line_color, point_color</td>
 </tr>
 <tr class="odd">
 <td><code><a href="../reference/wjp_edgebars.html">wjp_edgebars()</a></code></td>
 <td>target, grouping</td>
 <td>labels, x_lab_pos</td>
+<td>bar_width</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/wjp_groupbars.html">wjp_groupbars()</a></code></td>
 <td>target, grouping, levels</td>
-<td>labels, group_order, level_order, ci_lower + ci_upper or sd +
-sample_size (for CI), show_national + national_value, national_style,
-national_ci_lower + national_ci_upper, show_axis, label_position</td>
+<td>labels, ci_lower + ci_upper or sd + sample_size (for CI)</td>
+<td>group_order, level_order, draw_ci, show_national + national_value,
+national_style, national_ci_lower + national_ci_upper, show_axis,
+label_position</td>
 </tr>
 </tbody>
 </table>

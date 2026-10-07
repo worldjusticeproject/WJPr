@@ -19,7 +19,7 @@ wjp_slope(
   cvec = NULL,
   labels = NULL,
   repel = FALSE,
-  ngroups = NULL,
+  ngroups = deprecated(),
   ptheme = WJP_theme(),
   show_legend = FALSE
 )
@@ -38,7 +38,7 @@ wjp_slope(
 - grouping:
 
   String. Column name of the numeric variable that supplies the two
-  X-axis values (usually years).
+  X-axis values (usually years). Numbers stored as text are converted.
 
 - colors:
 
@@ -49,7 +49,7 @@ wjp_slope(
 
   Named vector of colors, one per line. Names should match the values of
   the `colors` variable. Default is `NULL` (the WJP palette, see
-  [`wjp_palette()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_palette.md),
+  [`wjp_palette()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md),
   is applied).
 
 - labels:
@@ -71,7 +71,7 @@ wjp_slope(
 - ptheme:
 
   ggplot theme to apply. Default is
-  [`WJP_theme()`](https://worldjusticeproject-org.github.io/WJPr/reference/WJP_theme.md).
+  [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md).
 
 - show_legend:
 
@@ -86,7 +86,8 @@ A ggplot object.
 
 The function expects long-format data with exactly two `grouping` values
 (the two time points) per series. `grouping` must be numeric (e.g.,
-years) so the value labels can be placed just outside each endpoint.
+years) so the value labels can be placed just outside each endpoint;
+numbers stored as text (e.g., `"2019"`) are converted automatically.
 When labels overlap, set `repel = TRUE` (requires the ggrepel package).
 
 ## Examples

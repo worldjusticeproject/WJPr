@@ -18,7 +18,7 @@ wjp_rose(
   labels,
   cvec = NULL,
   order = NULL,
-  order_var = NULL,
+  order_var = deprecated(),
   ptheme = WJP_theme()
 )
 ```
@@ -47,7 +47,7 @@ wjp_rose(
 
   Vector of colors, one per dimension. Default is `NULL` (the WJP
   palette, see
-  [`wjp_palette()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_palette.md),
+  [`wjp_palette()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md),
   is applied).
 
 - order:
@@ -62,7 +62,7 @@ wjp_rose(
 - ptheme:
 
   ggplot theme to apply. Default is
-  [`WJP_theme()`](https://worldjusticeproject-org.github.io/WJPr/reference/WJP_theme.md).
+  [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md).
 
 ## Value
 

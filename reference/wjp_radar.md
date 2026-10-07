@@ -19,7 +19,7 @@ wjp_radar(
   cvec = NULL,
   order = NULL,
   source = "GPP",
-  order_var = NULL,
+  order_var = deprecated(),
   show_legend = FALSE
 )
 ```

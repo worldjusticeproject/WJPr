@@ -56,7 +56,7 @@ wjp_bars(
 
   Named vector of colors. Names should match the values of the `colors`
   variable. Default is `NULL` (the WJP palette, see
-  [`wjp_palette()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_palette.md),
+  [`wjp_palette()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md),
   is applied).
 
 - direction:
@@ -65,8 +65,10 @@ wjp_bars(
 
 - stacked:
 
-  Logical. If `TRUE`, bars are stacked on top of each other per group.
-  Default is `FALSE`.
+  Logical. Set to `TRUE` for stacked bars (several rows per category,
+  one per segment) so value labels are drawn in white inside each
+  segment. Rows that share a category are always stacked; this flag only
+  switches the label styling. Default is `FALSE`.
 
 - lab_pos:
 
@@ -92,7 +94,7 @@ wjp_bars(
 - ptheme:
 
   ggplot theme to apply. Default is
-  [`WJP_theme()`](https://worldjusticeproject-org.github.io/WJPr/reference/WJP_theme.md).
+  [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md).
 
 - show_legend:
 

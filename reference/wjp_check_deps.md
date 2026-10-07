@@ -51,16 +51,17 @@ wjp_check_deps()
 #>   magrittr     [OK] v2.0.5
 #>   rlang        [OK] v1.3.0
 #>   tibble       [OK] v3.3.1
+#>   purrr        [OK] v1.2.2
 #>   sysfonts     [OK] v0.8.9
 #>   showtext     [OK] v0.9.8
 #> 
 #> OPTIONAL DEPENDENCIES
 #> ---------------------------------------- 
-#>   ggtext       [OK] v0.1.2                Rich text labels (wjp_radar, wjp_edgebars)
+#>   ggtext       [OK] v0.2.0                Rich text labels (radar, rose, edgebars, groupbars)
 #>   ggrepel      [OK] v0.9.8                Non-overlapping labels (wjp_lines, wjp_slope)
-#>   ggh4x        [OK] v0.3.1                Extended faceting
+#>   ggh4x        [OK] v0.3.1                Minor axis ticks (wjp_lines custom.axis)
+#>   systemfonts  [OK] v1.3.2                Label width measurement (spread_labels_x)
 #>   haven        [OK] v2.5.5                Reading Stata/SPSS files
-#>   purrr        [OK] v1.2.2                Functional programming (wjp_radar)
 #> 
 #> All dependencies are installed!
 #> 
