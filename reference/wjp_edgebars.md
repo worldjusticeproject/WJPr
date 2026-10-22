@@ -22,7 +22,30 @@ wjp_edgebars(
   nudge_lab = 2.5,
   margin_top = 20,
   bar_width = 0.35,
-  ptheme = WJP_theme()
+  ptheme = WJP_theme(),
+  order = NULL,
+  sort = c("none", "ascending", "descending"),
+  label_start = NULL,
+  scale = c("fixed", "auto"),
+  na_action = c("error", "omit"),
+  label_style = c("plain", "rich"),
+  label_wrap = 55,
+  label_size = 3.514598,
+  value_size = 3.514598,
+  row_spacing = 1,
+  accuracy = 1,
+  label_format = NULL,
+  show_values = TRUE,
+  value_position = c("end", "column"),
+  background_track = FALSE,
+  track_color = "#ecebed",
+  highlight = NULL,
+  neutral_color = "#b9b7bf",
+  series = NULL,
+  show_legend = TRUE,
+  ci_lower = NULL,
+  ci_upper = NULL,
+  ci_color = "#333333"
 )
 ```
 
@@ -48,17 +71,19 @@ wjp_edgebars(
 
 - cvec:
 
-  String. Hex code of the color for the bars. Default is `NULL` (the WJP
-  primary violet `#482d8b` is applied).
+  One bar color, or two colors for paired series. A named pair must
+  match the series names. Defaults to WJP violet for single bars and
+  violet/teal for pairs.
 
 - x_lab_pos:
 
   String. Column name of the variable that contains the display order of
-  the bars. Default is `NULL` (data order).
+  the bars. Default is `NULL` (data order). Prefer `order` in new code.
 
 - y_lab_pos:
 
-  Numeric. Y-axis position for the text labels. Default is `0`.
+  Numeric. Legacy alias for the horizontal label start. Default is `0`;
+  prefer `label_start` in new code.
 
 - nudge_lab:
 
@@ -71,12 +96,112 @@ wjp_edgebars(
 - bar_width:
 
   Numeric. Width of the bars. The default of `0.35` is recommended for
-  single bars; use `0.5` for plots with two bars.
+  single bars. Paired bars occupy separate rows within each category.
 
 - ptheme:
 
   ggplot theme to apply. Default is
   [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md).
+
+- order:
+
+  Column name for numeric category order (ascending, top to bottom).
+  Preferred alias for `x_lab_pos`; do not supply both.
+
+- sort:
+
+  One of `"none"`, `"ascending"`, or `"descending"`. Sorts by value;
+  paired bars use the mean of the two values. Cannot be combined with
+  `order`.
+
+- label_start:
+
+  Horizontal start of category labels. Preferred alias for `y_lab_pos`;
+  do not supply both.
+
+- scale:
+
+  One of `"fixed"` (0-100, default) or `"auto"`.
+
+- na_action:
+
+  `"error"` (default) or `"omit"`. Omission removes entire categories
+  with missing required values, preserving complete pairs.
+
+- label_style:
+
+  `"plain"` (default) or `"rich"` (requires ggtext). Rich labels support
+  HTML; insert `<br>` for line breaks.
+
+- label_wrap:
+
+  Positive integer character width for plain-text wrapping. Use `Inf` to
+  disable wrapping. Rich labels use explicit line breaks.
+
+- label_size, value_size:
+
+  Text sizes in millimeters.
+
+- row_spacing:
+
+  Positive spacing multiplier; increase for crowded exports.
+
+- accuracy:
+
+  Positive rounding increment for percentage labels.
+
+- label_format:
+
+  Optional function taking numeric percentages and returning one
+  character label per value. Overrides `accuracy` formatting.
+
+- show_values:
+
+  Logical. Show numeric value labels.
+
+- value_position:
+
+  `"end"` or `"column"` (aligned at the right). With confidence
+  intervals, end labels follow the upper bound.
+
+- background_track:
+
+  Logical. Draw a neutral track from 0 to 100.
+
+- track_color:
+
+  Color of the background track.
+
+- highlight:
+
+  Character vector of categories to highlight. Other categories use
+  `neutral_color`. With paired bars, highlighted pairs retain series
+  colors.
+
+- neutral_color:
+
+  Color for categories outside `highlight`.
+
+- series:
+
+  Optional column identifying exactly two series. Supply one row per
+  category and series, with both series present in every category. First
+  appearance determines series order, or use factor levels. For paired
+  bars, `cvec` may be two colors named for the series.
+
+- show_legend:
+
+  Logical. Show the series legend for paired bars.
+
+- ci_lower, ci_upper:
+
+  Optional columns of precomputed confidence bounds, on the same 0-100
+  scale. Supply both; bounds must enclose the estimate. The function
+  does not estimate intervals or assume a survey design.
+
+- ci_color:
+
+  Color of confidence interval lines and end caps.
 
 ## Value
 
@@ -86,9 +211,21 @@ A ggplot object representing the edgebars plot.
 
 The function expects one row per bar: the category in `grouping` and its
 value in `target`. The text above each bar defaults to the `grouping`
-values; pass a `labels` column to customize it (HTML/markdown is
-supported when the ggtext package is installed). Percentage value labels
-are added automatically at the end of each bar.
+values; pass a `labels` column to customize it (HTML is supported with
+`label_style = "rich"` and the ggtext package installed). Percentage
+value labels are added automatically at the end of each bar.
+
+Categories must be unique unless `series` is supplied. Custom labels and
+explicit order values must be constant within a category. Invalid or
+infinite percentages are rejected. Missing values follow `na_action`.
+The fixed scale makes separate charts comparable; tracks always span
+0-100. Labels are positioned independently of optional rich-text
+support. Wrapped labels reserve additional vertical space. Export height
+should grow with the number of categories and label lines; very small
+devices can still crowd text. `nudge_lab` controls the gap above bars in
+millimeters. Positive plot margins leave room for titles and captions.
+Font registration is optional; use `options(wjpr.family = "sans")` for a
+portable system font.
 
 ## Examples
 
@@ -128,7 +265,32 @@ wjp_edgebars(
   data4edgebars_lab,
   target   = "trust",
   grouping = "country",
-  labels   = "bar_label"
+  labels   = "bar_label",
+  label_style = "rich"
 )
+
+
+# 100% background tracks behind each bar (fictional data; see examples/edgebars.R)
+institutions <- data.frame(
+  institution = c("Police", "Courts", "Local government", "Parliament"),
+  trust       = c(72.4, 64.8, 51.2, 38.6),
+  bar_label   = c(
+    "Trust in the police", "Trust in the courts and justice system",
+    "Trust in local government officials", "Trust in members of parliament"
+  )
+)
+
+wjp_edgebars(
+  institutions,
+  target   = "trust",
+  grouping = "institution",
+  labels   = "bar_label",
+  background_track = TRUE
+) +
+  ggplot2::labs(
+    title    = "How much of the public trusts each institution?",
+    subtitle = "Each light background track represents 100%",
+    caption  = "Fictional data for demonstration only."
+  )
 
 ```

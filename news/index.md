@@ -1,5 +1,23 @@
 # Changelog
 
+## WJPr (development version)
+
+- [`wjp_edgebars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_edgebars.md)
+  now supports 100% background tracks, highlighted categories, complete
+  paired series, and precomputed confidence intervals. Paired rows
+  receive direct series labels, including when highlighting makes bars
+  neutral.
+- Edgebars validate percentages, categories, ordering, colors, and
+  confidence bounds; missing required data can explicitly omit whole
+  categories. Internal plotting names no longer conflict with user
+  columns, and a value column can also supply ordering.
+- Edgebars use a fixed percentage scale and plain text by default.
+  Automatic scaling and rich text are explicit options. Added label
+  wrapping, formatting, aligned values, spacing controls, and positive
+  margins. Legacy position arguments remain available as aliases. See
+  `examples/edgebars.R` for six rendered examples and
+  `examples/edgebars-audit.md` for visual audit results.
+
 ## WJPr 1.1.0
 
 ### New features

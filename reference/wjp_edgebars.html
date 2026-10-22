@@ -109,7 +109,30 @@ Values are expected on a 0-100 percentage scale.</p>
 <span>  nudge_lab <span class="op">=</span> <span class="fl">2.5</span>,</span>
 <span>  margin_top <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  bar_width <span class="op">=</span> <span class="fl">0.35</span>,</span>
-<span>  ptheme <span class="op">=</span> <span class="fu"><a href="WJP_theme.html">WJP_theme</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  ptheme <span class="op">=</span> <span class="fu"><a href="WJP_theme.html">WJP_theme</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sort <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"ascending"</span>, <span class="st">"descending"</span><span class="op">)</span>,</span>
+<span>  label_start <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"auto"</span><span class="op">)</span>,</span>
+<span>  na_action <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"error"</span>, <span class="st">"omit"</span><span class="op">)</span>,</span>
+<span>  label_style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plain"</span>, <span class="st">"rich"</span><span class="op">)</span>,</span>
+<span>  label_wrap <span class="op">=</span> <span class="fl">55</span>,</span>
+<span>  label_size <span class="op">=</span> <span class="fl">3.514598</span>,</span>
+<span>  value_size <span class="op">=</span> <span class="fl">3.514598</span>,</span>
+<span>  row_spacing <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  accuracy <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  label_format <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show_values <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  value_position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"end"</span>, <span class="st">"column"</span><span class="op">)</span>,</span>
+<span>  background_track <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  track_color <span class="op">=</span> <span class="st">"#ecebed"</span>,</span>
+<span>  highlight <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  neutral_color <span class="op">=</span> <span class="st">"#b9b7bf"</span>,</span>
+<span>  series <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show_legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ci_lower <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ci_upper <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ci_color <span class="op">=</span> <span class="st">"#333333"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -135,17 +158,19 @@ display above each bar. Default is <code>NULL</code> (the <code>grouping</code> 
 
 
 <dt id="arg-cvec">cvec<a class="anchor" aria-label="anchor" href="#arg-cvec"></a></dt>
-<dd><p>String. Hex code of the color for the bars. Default is <code>NULL</code>
-(the WJP primary violet <code>#482d8b</code> is applied).</p></dd>
+<dd><p>One bar color, or two colors for paired series. A named pair
+must match the series names. Defaults to WJP violet for single bars and
+violet/teal for pairs.</p></dd>
 
 
 <dt id="arg-x-lab-pos">x_lab_pos<a class="anchor" aria-label="anchor" href="#arg-x-lab-pos"></a></dt>
 <dd><p>String. Column name of the variable that contains the display
-order of the bars. Default is <code>NULL</code> (data order).</p></dd>
+order of the bars. Default is <code>NULL</code> (data order). Prefer <code>order</code> in new code.</p></dd>
 
 
 <dt id="arg-y-lab-pos">y_lab_pos<a class="anchor" aria-label="anchor" href="#arg-y-lab-pos"></a></dt>
-<dd><p>Numeric. Y-axis position for the text labels. Default is <code>0</code>.</p></dd>
+<dd><p>Numeric. Legacy alias for the horizontal label start.
+Default is <code>0</code>; prefer <code>label_start</code> in new code.</p></dd>
 
 
 <dt id="arg-nudge-lab">nudge_lab<a class="anchor" aria-label="anchor" href="#arg-nudge-lab"></a></dt>
@@ -159,11 +184,109 @@ Default is <code>2.5</code>.</p></dd>
 
 <dt id="arg-bar-width">bar_width<a class="anchor" aria-label="anchor" href="#arg-bar-width"></a></dt>
 <dd><p>Numeric. Width of the bars. The default of <code>0.35</code> is recommended
-for single bars; use <code>0.5</code> for plots with two bars.</p></dd>
+for single bars. Paired bars occupy separate rows within each category.</p></dd>
 
 
 <dt id="arg-ptheme">ptheme<a class="anchor" aria-label="anchor" href="#arg-ptheme"></a></dt>
 <dd><p>ggplot theme to apply. Default is <code><a href="WJP_theme.html">WJP_theme()</a></code>.</p></dd>
+
+
+<dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
+<dd><p>Column name for numeric category order (ascending, top to bottom).
+Preferred alias for <code>x_lab_pos</code>; do not supply both.</p></dd>
+
+
+<dt id="arg-sort">sort<a class="anchor" aria-label="anchor" href="#arg-sort"></a></dt>
+<dd><p>One of <code>"none"</code>, <code>"ascending"</code>, or <code>"descending"</code>. Sorts by value;
+paired bars use the mean of the two values. Cannot be combined with <code>order</code>.</p></dd>
+
+
+<dt id="arg-label-start">label_start<a class="anchor" aria-label="anchor" href="#arg-label-start"></a></dt>
+<dd><p>Horizontal start of category labels. Preferred alias for
+<code>y_lab_pos</code>; do not supply both.</p></dd>
+
+
+<dt id="arg-scale">scale<a class="anchor" aria-label="anchor" href="#arg-scale"></a></dt>
+<dd><p>One of <code>"fixed"</code> (0-100, default) or <code>"auto"</code>.</p></dd>
+
+
+<dt id="arg-na-action">na_action<a class="anchor" aria-label="anchor" href="#arg-na-action"></a></dt>
+<dd><p><code>"error"</code> (default) or <code>"omit"</code>. Omission removes entire
+categories with missing required values, preserving complete pairs.</p></dd>
+
+
+<dt id="arg-label-style">label_style<a class="anchor" aria-label="anchor" href="#arg-label-style"></a></dt>
+<dd><p><code>"plain"</code> (default) or <code>"rich"</code> (requires ggtext).
+Rich labels support HTML; insert <code>&lt;br&gt;</code> for line breaks.</p></dd>
+
+
+<dt id="arg-label-wrap">label_wrap<a class="anchor" aria-label="anchor" href="#arg-label-wrap"></a></dt>
+<dd><p>Positive integer character width for plain-text wrapping.
+Use <code>Inf</code> to disable wrapping. Rich labels use explicit line breaks.</p></dd>
+
+
+<dt id="arg-label-size-value-size">label_size, value_size<a class="anchor" aria-label="anchor" href="#arg-label-size-value-size"></a></dt>
+<dd><p>Text sizes in millimeters.</p></dd>
+
+
+<dt id="arg-row-spacing">row_spacing<a class="anchor" aria-label="anchor" href="#arg-row-spacing"></a></dt>
+<dd><p>Positive spacing multiplier; increase for crowded exports.</p></dd>
+
+
+<dt id="arg-accuracy">accuracy<a class="anchor" aria-label="anchor" href="#arg-accuracy"></a></dt>
+<dd><p>Positive rounding increment for percentage labels.</p></dd>
+
+
+<dt id="arg-label-format">label_format<a class="anchor" aria-label="anchor" href="#arg-label-format"></a></dt>
+<dd><p>Optional function taking numeric percentages and returning
+one character label per value. Overrides <code>accuracy</code> formatting.</p></dd>
+
+
+<dt id="arg-show-values">show_values<a class="anchor" aria-label="anchor" href="#arg-show-values"></a></dt>
+<dd><p>Logical. Show numeric value labels.</p></dd>
+
+
+<dt id="arg-value-position">value_position<a class="anchor" aria-label="anchor" href="#arg-value-position"></a></dt>
+<dd><p><code>"end"</code> or <code>"column"</code> (aligned at the right).
+With confidence intervals, end labels follow the upper bound.</p></dd>
+
+
+<dt id="arg-background-track">background_track<a class="anchor" aria-label="anchor" href="#arg-background-track"></a></dt>
+<dd><p>Logical. Draw a neutral track from 0 to 100.</p></dd>
+
+
+<dt id="arg-track-color">track_color<a class="anchor" aria-label="anchor" href="#arg-track-color"></a></dt>
+<dd><p>Color of the background track.</p></dd>
+
+
+<dt id="arg-highlight">highlight<a class="anchor" aria-label="anchor" href="#arg-highlight"></a></dt>
+<dd><p>Character vector of categories to highlight. Other categories
+use <code>neutral_color</code>. With paired bars, highlighted pairs retain series colors.</p></dd>
+
+
+<dt id="arg-neutral-color">neutral_color<a class="anchor" aria-label="anchor" href="#arg-neutral-color"></a></dt>
+<dd><p>Color for categories outside <code>highlight</code>.</p></dd>
+
+
+<dt id="arg-series">series<a class="anchor" aria-label="anchor" href="#arg-series"></a></dt>
+<dd><p>Optional column identifying exactly two series. Supply one row
+per category and series, with both series present in every category.
+First appearance determines series order, or use factor levels.
+For paired bars, <code>cvec</code> may be two colors named for the series.</p></dd>
+
+
+<dt id="arg-show-legend">show_legend<a class="anchor" aria-label="anchor" href="#arg-show-legend"></a></dt>
+<dd><p>Logical. Show the series legend for paired bars.</p></dd>
+
+
+<dt id="arg-ci-lower-ci-upper">ci_lower, ci_upper<a class="anchor" aria-label="anchor" href="#arg-ci-lower-ci-upper"></a></dt>
+<dd><p>Optional columns of precomputed confidence bounds,
+on the same 0-100 scale. Supply both; bounds must enclose the estimate.
+The function does not estimate intervals or assume a survey design.</p></dd>
+
+
+<dt id="arg-ci-color">ci_color<a class="anchor" aria-label="anchor" href="#arg-ci-color"></a></dt>
+<dd><p>Color of confidence interval lines and end caps.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -174,9 +297,19 @@ for single bars; use <code>0.5</code> for plots with two bars.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The function expects one row per bar: the category in <code>grouping</code> and its
 value in <code>target</code>. The text above each bar defaults to the <code>grouping</code>
-values; pass a <code>labels</code> column to customize it (HTML/markdown is supported
-when the ggtext package is installed). Percentage value labels are added
+values; pass a <code>labels</code> column to customize it (HTML is supported
+with <code>label_style = "rich"</code> and the ggtext package installed). Percentage value labels are added
 automatically at the end of each bar.</p>
+<p>Categories must be unique unless <code>series</code> is supplied. Custom labels and
+explicit order values must be constant within a category. Invalid or infinite
+percentages are rejected. Missing values follow <code>na_action</code>.
+The fixed scale makes separate charts comparable; tracks always span 0-100.
+Labels are positioned independently of optional rich-text support. Wrapped
+labels reserve additional vertical space. Export height should grow with the
+number of categories and label lines; very small devices can still crowd text.
+<code>nudge_lab</code> controls the gap above bars in millimeters. Positive plot margins
+leave room for titles and captions. Font registration is optional; use
+<code>options(wjpr.family = "sans")</code> for a portable system font.</p>
     </div>
 
     <div class="section level2">
@@ -216,9 +349,34 @@ automatically at the end of each bar.</p>
 <span class="r-in"><span>  <span class="va">data4edgebars_lab</span>,</span></span>
 <span class="r-in"><span>  target   <span class="op">=</span> <span class="st">"trust"</span>,</span></span>
 <span class="r-in"><span>  grouping <span class="op">=</span> <span class="st">"country"</span>,</span></span>
-<span class="r-in"><span>  labels   <span class="op">=</span> <span class="st">"bar_label"</span></span></span>
+<span class="r-in"><span>  labels   <span class="op">=</span> <span class="st">"bar_label"</span>,</span></span>
+<span class="r-in"><span>  label_style <span class="op">=</span> <span class="st">"rich"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="wjp_edgebars-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># 100% background tracks behind each bar (fictional data; see examples/edgebars.R)</span></span></span>
+<span class="r-in"><span><span class="va">institutions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  institution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Police"</span>, <span class="st">"Courts"</span>, <span class="st">"Local government"</span>, <span class="st">"Parliament"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  trust       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">72.4</span>, <span class="fl">64.8</span>, <span class="fl">51.2</span>, <span class="fl">38.6</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  bar_label   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"Trust in the police"</span>, <span class="st">"Trust in the courts and justice system"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"Trust in local government officials"</span>, <span class="st">"Trust in members of parliament"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">wjp_edgebars</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">institutions</span>,</span></span>
+<span class="r-in"><span>  target   <span class="op">=</span> <span class="st">"trust"</span>,</span></span>
+<span class="r-in"><span>  grouping <span class="op">=</span> <span class="st">"institution"</span>,</span></span>
+<span class="r-in"><span>  labels   <span class="op">=</span> <span class="st">"bar_label"</span>,</span></span>
+<span class="r-in"><span>  background_track <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    title    <span class="op">=</span> <span class="st">"How much of the public trusts each institution?"</span>,</span></span>
+<span class="r-in"><span>    subtitle <span class="op">=</span> <span class="st">"Each light background track represents 100%"</span>,</span></span>
+<span class="r-in"><span>    caption  <span class="op">=</span> <span class="st">"Fictional data for demonstration only."</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-plt img"><img src="wjp_edgebars-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
