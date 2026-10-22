@@ -15,7 +15,30 @@ wjp_edgebars(
   nudge_lab = 2.5,
   margin_top = 20,
   bar_width = 0.35,
-  ptheme = WJP_theme()
+  ptheme = WJP_theme(),
+  order = NULL,
+  sort = c("none", "ascending", "descending"),
+  label_start = NULL,
+  scale = c("fixed", "auto"),
+  na_action = c("error", "omit"),
+  label_style = c("plain", "rich"),
+  label_wrap = 55,
+  label_size = 3.514598,
+  value_size = 3.514598,
+  row_spacing = 1,
+  accuracy = 1,
+  label_format = NULL,
+  show_values = TRUE,
+  value_position = c("end", "column"),
+  background_track = FALSE,
+  track_color = "#ecebed",
+  highlight = NULL,
+  neutral_color = "#b9b7bf",
+  series = NULL,
+  show_legend = TRUE,
+  ci_lower = NULL,
+  ci_upper = NULL,
+  ci_color = "#333333"
 )
 }
 \arguments{
@@ -28,13 +51,15 @@ wjp_edgebars(
 \item{labels}{String. Column name of the variable containing the text labels to
 display above each bar. Default is \code{NULL} (the \code{grouping} values are used).}
 
-\item{cvec}{String. Hex code of the color for the bars. Default is \code{NULL}
-(the WJP primary violet \verb{#482d8b} is applied).}
+\item{cvec}{One bar color, or two colors for paired series. A named pair
+must match the series names. Defaults to WJP violet for single bars and
+violet/teal for pairs.}
 
 \item{x_lab_pos}{String. Column name of the variable that contains the display
-order of the bars. Default is \code{NULL} (data order).}
+order of the bars. Default is \code{NULL} (data order). Prefer \code{order} in new code.}
 
-\item{y_lab_pos}{Numeric. Y-axis position for the text labels. Default is \code{0}.}
+\item{y_lab_pos}{Numeric. Legacy alias for the horizontal label start.
+Default is \code{0}; prefer \code{label_start} in new code.}
 
 \item{nudge_lab}{Numeric. Padding for the text labels in millimeters.
 Default is \code{2.5}.}
@@ -42,9 +67,65 @@ Default is \code{2.5}.}
 \item{margin_top}{Numeric. Top margin of the plot. Default is \code{20}.}
 
 \item{bar_width}{Numeric. Width of the bars. The default of \code{0.35} is recommended
-for single bars; use \code{0.5} for plots with two bars.}
+for single bars. Paired bars occupy separate rows within each category.}
 
 \item{ptheme}{ggplot theme to apply. Default is \code{\link[=WJP_theme]{WJP_theme()}}.}
+
+\item{order}{Column name for numeric category order (ascending, top to bottom).
+Preferred alias for \code{x_lab_pos}; do not supply both.}
+
+\item{sort}{One of \code{"none"}, \code{"ascending"}, or \code{"descending"}. Sorts by value;
+paired bars use the mean of the two values. Cannot be combined with \code{order}.}
+
+\item{label_start}{Horizontal start of category labels. Preferred alias for
+\code{y_lab_pos}; do not supply both.}
+
+\item{scale}{One of \code{"fixed"} (0-100, default) or \code{"auto"}.}
+
+\item{na_action}{\code{"error"} (default) or \code{"omit"}. Omission removes entire
+categories with missing required values, preserving complete pairs.}
+
+\item{label_style}{\code{"plain"} (default) or \code{"rich"} (requires ggtext).
+Rich labels support HTML; insert \verb{<br>} for line breaks.}
+
+\item{label_wrap}{Positive integer character width for plain-text wrapping.
+Use \code{Inf} to disable wrapping. Rich labels use explicit line breaks.}
+
+\item{label_size, value_size}{Text sizes in millimeters.}
+
+\item{row_spacing}{Positive spacing multiplier; increase for crowded exports.}
+
+\item{accuracy}{Positive rounding increment for percentage labels.}
+
+\item{label_format}{Optional function taking numeric percentages and returning
+one character label per value. Overrides \code{accuracy} formatting.}
+
+\item{show_values}{Logical. Show numeric value labels.}
+
+\item{value_position}{\code{"end"} or \code{"column"} (aligned at the right).
+With confidence intervals, end labels follow the upper bound.}
+
+\item{background_track}{Logical. Draw a neutral track from 0 to 100.}
+
+\item{track_color}{Color of the background track.}
+
+\item{highlight}{Character vector of categories to highlight. Other categories
+use \code{neutral_color}. With paired bars, highlighted pairs retain series colors.}
+
+\item{neutral_color}{Color for categories outside \code{highlight}.}
+
+\item{series}{Optional column identifying exactly two series. Supply one row
+per category and series, with both series present in every category.
+First appearance determines series order, or use factor levels.
+For paired bars, \code{cvec} may be two colors named for the series.}
+
+\item{show_legend}{Logical. Show the series legend for paired bars.}
+
+\item{ci_lower, ci_upper}{Optional columns of precomputed confidence bounds,
+on the same 0-100 scale. Supply both; bounds must enclose the estimate.
+The function does not estimate intervals or assume a survey design.}
+
+\item{ci_color}{Color of confidence interval lines and end caps.}
 }
 \value{
 A ggplot object representing the edgebars plot.
@@ -61,9 +142,20 @@ Values are expected on a 0-100 percentage scale.
 \details{
 The function expects one row per bar: the category in \code{grouping} and its
 value in \code{target}. The text above each bar defaults to the \code{grouping}
-values; pass a \code{labels} column to customize it (HTML/markdown is supported
-when the ggtext package is installed). Percentage value labels are added
+values; pass a \code{labels} column to customize it (HTML is supported
+with \code{label_style = "rich"} and the ggtext package installed). Percentage value labels are added
 automatically at the end of each bar.
+
+Categories must be unique unless \code{series} is supplied. Custom labels and
+explicit order values must be constant within a category. Invalid or infinite
+percentages are rejected. Missing values follow \code{na_action}.
+The fixed scale makes separate charts comparable; tracks always span 0-100.
+Labels are positioned independently of optional rich-text support. Wrapped
+labels reserve additional vertical space. Export height should grow with the
+number of categories and label lines; very small devices can still crowd text.
+\code{nudge_lab} controls the gap above bars in millimeters. Positive plot margins
+leave room for titles and captions. Font registration is optional; use
+\code{options(wjpr.family = "sans")} for a portable system font.
 }
 \examples{
 library(dplyr)
@@ -100,7 +192,31 @@ wjp_edgebars(
   data4edgebars_lab,
   target   = "trust",
   grouping = "country",
-  labels   = "bar_label"
+  labels   = "bar_label",
+  label_style = "rich"
 )
+
+# 100\% background tracks behind each bar (fictional data; see examples/edgebars.R)
+institutions <- data.frame(
+  institution = c("Police", "Courts", "Local government", "Parliament"),
+  trust       = c(72.4, 64.8, 51.2, 38.6),
+  bar_label   = c(
+    "Trust in the police", "Trust in the courts and justice system",
+    "Trust in local government officials", "Trust in members of parliament"
+  )
+)
+
+wjp_edgebars(
+  institutions,
+  target   = "trust",
+  grouping = "institution",
+  labels   = "bar_label",
+  background_track = TRUE
+) +
+  ggplot2::labs(
+    title    = "How much of the public trusts each institution?",
+    subtitle = "Each light background track represents 100\%",
+    caption  = "Fictional data for demonstration only."
+  )
 
 }

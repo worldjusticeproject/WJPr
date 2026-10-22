@@ -55,6 +55,8 @@ if (getRversion() >= "2.15.1") {
     "target_var",
     "upper",
     "value",
+    "value_label",
+    "value_x",
     "variable",
     "x",
     "x_var",
