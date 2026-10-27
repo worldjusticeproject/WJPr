@@ -18,7 +18,43 @@ wjp_dumbbells(
   color = deprecated(),
   ptheme = WJP_theme(),
   label_offset = 4,
-  show_legend = TRUE
+  show_legend = TRUE,
+  legend_labels = NULL,
+  legend_position = "top",
+  legend_direction = "horizontal",
+  legend_text_size = 11,
+  legend_key_size = NULL,
+  legend_fontface = "bold",
+  legend_justification = "left",
+  headers = NULL,
+  header_fontface = "bold",
+  header_colour = NULL,
+  header_size = NULL,
+  highlight_levels = NULL,
+  highlight_fontface = "bold",
+  highlight_colour = NULL,
+  label_align = c("left", "right"),
+  label_size = NULL,
+  label_colour = NULL,
+  breaks = seq(0, 100, 20),
+  expand_mult = NULL,
+  axis_line = FALSE,
+  axis_line_color = "#1A1A1A",
+  value_axis = TRUE,
+  strips = TRUE,
+  strip_color = "#EBEBEB",
+  grid = TRUE,
+  grid_ontop = TRUE,
+  value_position = c("offset", "outside"),
+  value_gap = 3,
+  value_size = 10,
+  value_fontface = "bold",
+  point_size = 4.5,
+  point_stroke = 0.5,
+  segment_color = "#BFBFBF",
+  segment_width = 2.5,
+  clip = "on",
+  layout = NULL
 )
 }
 \arguments{
@@ -57,11 +93,105 @@ strips. Default is \code{"#ffffff"}.}
 \item{ptheme}{ggplot theme to apply. Default is \code{\link[=WJP_theme]{WJP_theme()}}.}
 
 \item{label_offset}{Numeric. Distance in percentage points between an endpoint
-and its automatically positioned label. Ignored when \code{labpos} is supplied.
-Default is \code{4}.}
+and its automatically positioned label (\code{value_position = "offset"}).
+Ignored when \code{labpos} is supplied. Default is \code{4}.}
 
 \item{show_legend}{Logical. If \code{TRUE}, displays a horizontal point legend above
 the chart using the \code{cgroups} values as labels. Default is \code{TRUE}.}
+
+\item{legend_labels}{Character vector of length 2 with the legend text of the
+start and end points. Default is \code{NULL} (the \code{cgroups} values).}
+
+\item{legend_position}{Legend position: \code{"top"} (default), \code{"bottom"},
+\code{"left"}, \code{"right"}, or \code{c(x, y)} inside the panel.}
+
+\item{legend_direction}{String. \code{"horizontal"} (default) or \code{"vertical"}.}
+
+\item{legend_text_size}{Numeric. Size of the legend text, in points. Default is \code{11}.}
+
+\item{legend_key_size}{Numeric. Size of the legend keys, in points.
+Default is \code{NULL}.}
+
+\item{legend_fontface}{String. Font face of the legend text. Default is \code{"bold"}.}
+
+\item{legend_justification}{String. Horizontal justification of a legend
+above or below the chart: \code{"left"} (default), \code{"center"}, or \code{"right"}.}
+
+\item{headers}{String. Column name with the group of each category; a header
+row is drawn above each group. Default is \code{NULL} (no headers).}
+
+\item{header_fontface}{String. Font face of the headers. Default is \code{"bold"}.
+Weight faces such as \code{"semibold.italic"} are accepted (see \code{\link[=wjp_fonts]{wjp_fonts()}}).}
+
+\item{header_colour}{String. Color of the headers. Default is \code{NULL} (the
+color of the end points).}
+
+\item{header_size}{Numeric. Size of the headers, in points. Default is
+\code{NULL} (the size of the category labels).}
+
+\item{highlight_levels}{Character vector of categories whose labels are
+highlighted (e.g., a national average). Default is \code{NULL}.}
+
+\item{highlight_fontface}{String. Font face of highlighted labels. Default
+is \code{"bold"}.}
+
+\item{highlight_colour}{String. Color of highlighted labels. Default is
+\code{NULL} (the color of the headers).}
+
+\item{label_align}{String. Alignment of the category labels: \code{"left"}
+(default) or \code{"right"}.}
+
+\item{label_size}{Numeric. Size of the category labels, in points. Default
+is \code{NULL} (the size of \code{ptheme}).}
+
+\item{label_colour}{String. Color of the category labels. Default is \code{NULL}
+(\code{"#524F4C"}).}
+
+\item{breaks}{Numeric vector with the breaks of the value axis. Default is
+every 20 points from 0 to 100.}
+
+\item{expand_mult}{Numeric vector of length 1 or 2. Multiplicative expansion
+of the value axis. Default is \code{NULL} (ggplot2's default; none with a
+\code{layout}).}
+
+\item{axis_line}{Logical. Draw a line under the value-axis labels.
+Default is \code{FALSE}.}
+
+\item{axis_line_color}{String. Color of the axis line. Default is \code{"#1A1A1A"}.}
+
+\item{value_axis}{Logical. Show the labels of the value axis. Default is \code{TRUE}.}
+
+\item{strips}{Logical. Draw alternating row strips. Default is \code{TRUE}.}
+
+\item{strip_color}{String. Color of the shaded strips. Default is \code{"#EBEBEB"}.}
+
+\item{grid}{Logical. Draw grid lines across the value axis. Default is \code{TRUE}.}
+
+\item{grid_ontop}{Logical. Draw the grid above the points. Default is \code{TRUE}.}
+
+\item{value_position}{String. \code{"offset"} (default) or \code{"outside"}. See Details.}
+
+\item{value_gap}{Numeric. Distance, in points, between the edge of a point and
+its label when \code{value_position = "outside"}. Default is \code{3}.}
+
+\item{value_size}{Numeric. Size of the value labels, in points. Default is \code{10}.}
+
+\item{value_fontface}{String. Font face of the value labels. Default is \code{"bold"}.}
+
+\item{point_size}{Numeric. Size of the points (ggplot2 units). Default is \code{4.5}.}
+
+\item{point_stroke}{Numeric. Stroke of the points (ggplot2 units). Default is \code{0.5}.}
+
+\item{segment_color}{String. Color of the connecting segment. Default is \code{"#BFBFBF"}.}
+
+\item{segment_width}{Numeric. Width of the segment (ggplot2 \code{linewidth}).
+Default is \code{2.5}.}
+
+\item{clip}{String. \code{"on"} (default) or \code{"off"} (labels next to 0\% or 100\%
+stay visible).}
+
+\item{layout}{A \code{\link[=wjp_layout]{wjp_layout()}} with the geometry of the chart in points.
+Default is \code{NULL}.}
 }
 \value{
 A ggplot object.
@@ -78,11 +208,30 @@ percentage scale.
 \details{
 The function expects long-format data with one row per \code{grouping} (category)
 and \code{colors} (endpoint) combination; \code{cgroups} names the two endpoint values
-in order (start, end). When \code{labels} is supplied without \code{labpos}, labels
-are placed automatically just outside each endpoint and use the endpoint
-color. By default, a horizontal legend is built from the two \code{cgroups}
-values and displayed above the chart. Use \code{order} (a named vector such as
-\code{c("A" = 1, "B" = 2)}) to control the top-to-bottom order of the rows.
+in order (start, end). A category may have a single value (the other row
+missing or \code{NA}): its point and label are still drawn. When \code{labels} is
+supplied without \code{labpos}, labels are placed automatically just outside each
+endpoint and use the endpoint color. By default, a horizontal legend is
+built from the two \code{cgroups} values (or \code{legend_labels}) and displayed above
+the chart. Use \code{order} (a named vector such as \code{c("A" = 1, "B" = 2)}) to
+control the top-to-bottom order of the rows.
+
+\strong{Group headers.} \code{headers} names a column with the group of each
+category (e.g., "Gender", "Age Group"). A header row with the group name is
+drawn above the first category of each group, styled with \code{header_fontface},
+\code{header_colour}, and \code{header_size}. Categories with an empty or missing
+group (such as a national average at the top) get no header.
+
+\strong{Value labels.} \code{value_position = "offset"} (default) centers each
+label \code{label_offset} percentage points from its endpoint, as in earlier
+versions. \code{"outside"} anchors each label \code{value_gap} points from the edge of
+its point, on the outer side of the pair.
+
+\strong{Geometry in points.} With a \code{\link[=wjp_layout]{wjp_layout()}}, the label column
+(\code{label_width}, \code{label_gap}), the 0-100\% track (\code{track_width}), the value
+column (\code{value_gap}, \code{value_width}), the row and header heights
+(\code{row_height}, \code{header_height}, \code{header_baseline}), and the \code{margins} are
+fixed in points, and the category labels are drawn as a text layer.
 }
 \examples{
 library(dplyr)
@@ -122,6 +271,43 @@ wjp_dumbbells(
   cvec     = c("2017" = "#2894aa", "2022" = "#482d8b"),
   show_legend = TRUE,
   label_offset = 4
+)
+
+# Report style: group headers, a single-value row, values outside the pair,
+# no strips or grid, and an axis every 25\% (fictional data)
+perception <- data.frame(
+  category = rep(c("National Average", "Male", "Female", "18-24", "25-34"), 2),
+  group    = rep(c("", "Gender", "Gender", "Age Group", "Age Group"), 2),
+  series   = rep(c("Perception", "Experience"), each = 5),
+  value    = c(27, 29, 25, NA, 26, 61, 60, 62, 68, 59)
+)
+perception$text <- ifelse(is.na(perception$value), "", paste0(perception$value, "\%"))
+
+wjp_dumbbells(
+  perception,
+  target          = "value",
+  grouping        = "category",
+  colors          = "series",
+  cgroups         = c("Perception", "Experience"),
+  labels          = "text",
+  cvec            = c("#575796", "#B200AA"),
+  legend_labels   = c("General population: perception",
+                      "People with a problem: experience"),
+  legend_direction = "vertical",
+  headers         = "group",
+  header_fontface = "bold.italic",
+  header_colour   = "#575796",
+  label_align     = "right",
+  breaks          = seq(0, 100, 25),
+  axis_line       = TRUE,
+  strips          = FALSE,
+  grid            = FALSE,
+  value_position  = "outside",
+  point_size      = 3,
+  point_stroke    = 0,
+  segment_color   = "#E5E8E8",
+  segment_width   = 3,
+  clip            = "off"
 )
 
 }

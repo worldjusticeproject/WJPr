@@ -18,9 +18,10 @@ line switches every chart to another family loaded by \code{\link[=wjp_fonts]{wj
 }
 \details{
 Families registered by \code{\link[=wjp_fonts]{wjp_fonts()}}: \code{"Lato Full"} (default),
-\code{"Lato Light"}, \code{"Lato Black"}, and \code{"Inter Tight"}. Any other family
-already registered in your session (via \code{\link[sysfonts:font_add_google]{sysfonts::font_add_google()}} or
-similar) can also be used.
+\code{"Lato Light"}, \code{"Lato Black"}, and \code{"Inter Tight"} (plus one family per
+weight of Inter Tight with the systemfonts engine). Any other family
+already registered in your session (via \code{\link[sysfonts:font_add_google]{sysfonts::font_add_google()}},
+\code{\link[systemfonts:register_font]{systemfonts::register_font()}} or similar) can also be used.
 
 There are three ways to control the font of a WJPr chart:
 \enumerate{

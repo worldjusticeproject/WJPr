@@ -359,6 +359,8 @@ wjp_dots <- function(
                                             hjust = 0)) +
     legend_theme
 
+  plt <- wjp_apply_ptheme(plt, ptheme)
+
   return(plt)
 
 }

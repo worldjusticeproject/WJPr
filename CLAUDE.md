@@ -34,7 +34,12 @@ devtools::test()                    # Run all tests
 testthat::test_file("tests/testthat/test-charts.R")  # Run single test file
 ```
 
-Test files: `test-charts.R` (chart functions), `test-spread_labels.R` (label solver), `test-analysis.R` (`diffmeans()`, `wjp_check_data()`, `wjp_check_deps()`).
+Test files: `test-charts.R` (chart functions), `test-report-arguments.R` (1.2.0 arguments of existing charts), `test-<chart>.R` for `edgebars`, `funnel`, `cards`, `heatmap`, `scatter`, `network`, `upset`, `sankey`, `test-infrastructure.R` (theme, palettes, layout, `ptheme` overrides, `wjp_drawn()`, `wjp_save()`), `test-visual-snapshots.R` (snapshots of the texts every chart draws, in order: `tests/testthat/_snaps/visual-snapshots.md`; review changes with `testthat::snapshot_review()`), `test-report-fidelity.R` (runs only when `SRC_REPORTS_ROOT` points to the report pipeline), `test-spread_labels.R` (label solver), `test-analysis.R` (`diffmeans()`, `wjp_check_data()`, `wjp_check_deps()`).
+
+Report fidelity (42 figures of *Paths to Justice*, drawn with WJPr arguments only and compared with the published PNGs):
+```bash
+SRC_REPORTS_ROOT=<path to src_reports> Rscript dev/report-fidelity.R [--figs 1,9,13] [--out <dir>]
+```
 
 ### Documentation
 ```r
@@ -53,8 +58,13 @@ All visualization functions follow a consistent pattern:
 - Known exceptions: `wjp_groupbars()` takes `colors` as a length-2 hex vector (primary, complement) and `levels` for the rows; `wjp_radar()` uses `axis_var` instead of `grouping` and has no `ptheme`; `wjp_dumbbells()` takes `order` as a named vector instead of a column name
 
 ### Key Files
-- `R/utils.R` - `wjp_fonts()` loads Lato and Inter Tight fonts; `wjp_font_family()` returns the active family (`options(wjpr.family = )`); `WJP_theme()` provides the base ggplot2 theme; `wjp_palette()` exposes the WJP categorical palette; internal helpers `wjp_default_cvec()` (palette fallback when `cvec` is NULL), `wjp_legend_breaks()` and `wjp_legend_theme()` (shared top legend)
-- `R/*Chart.R` - Each chart type has its own file (barsChart.R, lineChart.R, radarChart.R, etc.)
+- `R/utils.R` - `wjp_font_family()` returns the active family (`options(wjpr.family = )`); `WJP_theme()` provides the base ggplot2 theme (`base_size`, `text_colour`, `grid`, `grid_colour`, `grid_linetype`, `base_theme`); `wjp_palette()` / `wjp_colors()` expose the categorical and report palettes; `scale_fill_wjp_seq()` / `scale_colour_wjp_seq()` sequential scales (RGB mixing, `wjp_mix_rgb()`); internal helpers `wjp_default_cvec()` (palette fallback when `cvec` is NULL), `wjp_legend_breaks()` and `wjp_legend_theme()` (shared legend: position, direction, text size/face, key size, justification)
+- `R/fonts.R` - `wjp_fonts()` with two engines: `"showtext"` (default, sysfonts + showtext) and `"systemfonts"` (static Inter Tight and Lato files added with `systemfonts::add_fonts()` and registered as `Lato Full`, `Lato Light`, `Lato Black`, `Inter Tight Medium/SemiBold/Bold`); internal `wjp_face()` resolves role faces such as `"semibold.italic"` to a family + fontface (falls back to bold)
+- `R/layout.R` - `wjp_layout()` (geometry in points) and its resolver `wjp_layout_resolve()`; point conversions `wjp_pt_text()`, `wjp_pt_line()`, `wjp_pt_point()`, `wjp_bp()`, `wjp_margin_bp()`; `wjp_apply_ptheme()` (applies the elements of `ptheme` that differ from the default `WJP_theme()` after the chart's styling; must be the last step of every chart function); `wjp_text_width_pt()`
+- `R/save.R` - `wjp_save()` (SVG with text outlines, PNG laid out like the SVG, PDF; exact size), `wjp_plot_size()`, `wjp_outline_svg()`, `wjp_frozen_gtable()`
+- `R/drawn.R` - `wjp_drawn()` returns the texts (layers, axes, strips) or marks a chart draws
+- `R/geometry.R` - shared polygons (`wjp_round_rect_df()`, `wjp_circle_df()`, `wjp_bezier_band()`), `wjp_contrast_text()`, `wjp_wrap()`
+- `R/*Chart.R` - Each chart type has its own file (barsChart.R, lineChart.R, radarChart.R, etc.); `barsChart.R` also holds `wjp_check_number()`, `wjp_offset_text()` (text a fixed number of points from its anchor, via a transparent `geom_label()`) and `wjp_ref_line_layers()`
 - `R/spread_labels.R` - `spread_labels_x()` deterministic horizontal collision solver that spreads overlapping point labels for row-based charts (dots, lollipops); keeps points fixed and moves only labels
 - `R/check_data.R` - `wjp_check_data()` validates data structure before plotting
 - `R/check_deps.R` - `wjp_check_deps()` reports core/optional dependency status
@@ -63,37 +73,47 @@ All visualization functions follow a consistent pattern:
 - `R/WJPr-package.R` - `globalVariables()` for NSE column names and the `.onAttach()` optional-dependency message
 - `R/data.R` - Documentation of the `gpp` and `roli` datasets (`data/*.rda`, built by `data-raw/gpp.R` and `data-raw/roli.R`)
 - `data-raw/generate-examples.R` - Regenerates the gallery/README images in `man/figures/`
-- `dev/` - Ad-hoc visual preview scripts (excluded from the build)
+- `dev/` - Ad-hoc visual preview scripts and `report-fidelity.R` / `report-fidelity-new.R` (the 42 report figures drawn with WJPr arguments only; excluded from the build)
 - `vignettes/articles/` - pkgdown articles: `gallery`, `data-preparation`, `dataviz` (usage) and `add-function`, `development-guide` (development)
 
-### Chart Functions (12)
+### Chart Functions (19)
 | Function | File | Description |
 |----------|------|-------------|
-| `wjp_bars()` | barsChart.R | Vertical/horizontal (and stacked) bar charts |
+| `wjp_bars()` | barsChart.R | Vertical/horizontal bars: stacked or side by side (`position = "dodge"`), tracks, centered bars, value positions, reference lines, `layout` |
 | `wjp_divbars()` | divbarsChart.R | Diverging bar charts |
 | `wjp_dots()` | dotsChart.R | Dot plots, with optional CIs and collision-free value labels (`show_labels`, via `spread_labels_x()`) |
 | `wjp_lines()` | lineChart.R | Line charts with points |
 | `wjp_slope()` | slopeChart.R | Slope charts for two time points |
-| `wjp_dumbbells()` | dumbbellsChart.R | Dumbbell plots |
+| `wjp_dumbbells()` | dumbbellsChart.R | Dumbbell plots, with group headers, single-value rows, highlighted rows, `layout` |
 | `wjp_radar()` | radarChart.R | Radar/spider charts |
 | `wjp_rose()` | roseChart.R | Rose/polar bar charts |
 | `wjp_gauge()` | gaugeChart.R | Gauge/speedometer charts |
 | `wjp_lollipops()` | lollipopChart.R | Lollipop charts |
-| `wjp_edgebars()` | edgebarsChart.R | Edge-aligned horizontal bars |
-| `wjp_groupbars()` | groupbarsChart.R | Faceted stacked bars by demographic groups, with optional CI and national line/bar |
+| `wjp_edgebars()` | edgebarsChart.R | Edge-aligned horizontal bars (labels above or at the left) |
+| `wjp_groupbars()` | groupbarsChart.R | Stacked bars by demographic groups: facets (`group_header = "strip"`) or a single panel with header rows (`"row"`, report layout), named averages, N/A cells, CI, `layout` |
+| `wjp_funnel()` | funnelChart.R | Centered funnel bars with connectors |
+| `wjp_cards()` | cardsChart.R | Rounded cards on a sequential scale with values and differences |
+| `wjp_heatmap()` | heatmapChart.R | Tile matrix with bands or continuous fill |
+| `wjp_scatter()` | scatterChart.R | Faceted scatter with highlighted/hollow points, trend, repelled labels |
+| `wjp_network()` | networkChart.R | Network of nodes and weighted edges on fixed coordinates |
+| `wjp_upset()` | upsetChart.R | UpSet diagram as a single ggplot |
+| `wjp_sankey()` | sankeyChart.R | Three-column sankey with label boxes |
 
-Other exported functions: `diffmeans()`, `wjp_check_data()`, `wjp_check_deps()`, `spread_labels_x()`, `wjp_fonts()`, `wjp_font_family()`, `wjp_palette()`, `WJP_theme()`, and the re-exported `%>%`.
+Other exported functions: `diffmeans()`, `wjp_check_data()`, `wjp_check_deps()`, `spread_labels_x()`, `wjp_fonts()`, `wjp_font_family()`, `wjp_palette()`, `wjp_colors()`, `scale_fill_wjp_seq()`, `scale_colour_wjp_seq()`, `scale_color_wjp_seq()`, `wjp_layout()`, `wjp_save()`, `wjp_drawn()`, `WJP_theme()`, and the re-exported `%>%`.
 
 ### Styling Conventions
-- Font: Lato (loaded via Google Fonts using sysfonts/showtext); always use `wjp_font_family()` (never a hard-coded `"Lato Full"`) for text layers so `options(wjpr.family = )` switches every chart
-- WJP color palette uses hex codes such as `#482d8b`, `#2894aa`, `#f26b21`, and `#555659` (full ordered palette available via `wjp_palette()`)
+- Font: Lato (loaded via Google Fonts using sysfonts/showtext, or as static files with `wjp_fonts(engine = "systemfonts")`); always use `wjp_font_family()` (never a hard-coded `"Lato Full"`) for text layers so `options(wjpr.family = )` switches every chart, and `wjp_face()` for font faces so weight faces (`"semibold.italic"`) work
+- WJP color palette uses hex codes such as `#482d8b`, `#2894aa`, `#f26b21`, and `#555659` (full ordered palette available via `wjp_palette()`); report colors via `wjp_colors()` (`main` `#575796`, `eu` `#A8A8C8`, `eu_text` `#7D7DA8`, `track` `#E5E8E8`, `text` `#1A1A1A`, ...)
 - Colors are passed via named vectors (`cvec`) where names match grouping variable values; when `cvec` is NULL, functions fall back to `wjp_palette()` (via `wjp_default_cvec()`)
 - Always call `wjp_fonts()` before plotting to ensure fonts are available
-- Value labels: bold, `size = 3.514598` (10 pt), ink color `#4a4a49`
-- Grid lines: `WJP_theme()` draws dashed `#5e5c5a` lines (kept by dots/dumbbells over their row strips); bar, line, and lollipop charts override the value-axis grid with solid `#d1cfd1`
+- Argument vocabulary: `value_*` for printed values, `label_*` for category labels, `header_*` for group titles; sizes, gaps and margins in points (1/72 in); `point_size`, `segment_width`, `line_size` keep ggplot2 units
+- Value labels: bold, `size = 3.514598` (10 pt), ink color `#4a4a49`; printed as given by a labels column (no reformatting)
+- Grid lines: `WJP_theme()` draws dashed `#5e5c5a` lines (kept by dots/dumbbells over their row strips); bar, line, and lollipop charts override the value-axis grid with `#d1cfd1`
 - Category axis text: `#524F4C`, `hjust = 0`
-- Horizontal charts display the first data row at the top
+- Horizontal charts display the first data row at the top (with `order`; `wjp_bars()` sorts categories alphabetically otherwise)
 - Legends: horizontal, top-left, via `wjp_legend_theme(show_legend)`
+- Theme order in chart functions: `ptheme` first (base), chart-specific `theme()` next, legend theme, and `wjp_apply_ptheme(plt, ptheme)` last; default outputs must stay pixel-identical (compare renders of the Rd examples before/after a change)
+- Geometry in points: with a `layout`, charts set `panel.widths`/`panel.heights` in bigpts and draw category labels as a text layer in the label column (clip off), so `wjp_save()` gets a definite size
 
 ### Documentation
 - Uses Roxygen2 for inline documentation (roxygen2 8.0.0, recorded as `Config/roxygen2/version` in DESCRIPTION)
@@ -140,8 +160,10 @@ wjp_newchart <- function(data, target, grouping, colors = NULL, cvec = NULL,
   plt <- ggplot(data, aes(...)) + geom_*(show.legend = show_legend) +
     scale_fill_manual(values = cvec, breaks = wjp_legend_breaks(data$colors_var), name = NULL)
 
-  # 5. Apply theme, chart-specific tweaks, and the shared legend
+  # 5. Apply theme, chart-specific tweaks, and the shared legend; then the
+  #    user's ptheme overrides, always last
   plt <- plt + ptheme + theme(...) + wjp_legend_theme(show_legend)
+  plt <- wjp_apply_ptheme(plt, ptheme)
 
   return(plt)
 }
@@ -151,7 +173,7 @@ wjp_newchart <- function(data, target, grouping, colors = NULL, cvec = NULL,
 
 - [ ] Roxygen2 docs with `@export`, `@param`, `@return`, `@examples`
 - [ ] Include `lifecycle::badge("experimental")`
-- [ ] Add tests in `tests/testthat/`
+- [ ] Add tests in `tests/testthat/` and a case in `test-visual-snapshots.R` (accept the new snapshot)
 - [ ] Add to `data-raw/generate-examples.R` and `vignettes/articles/gallery.Rmd`
 - [ ] Register the function in `_pkgdown.yml` (navbar menu and reference index)
 - [ ] Add an entry to `NEWS.md` and update this CLAUDE.md file

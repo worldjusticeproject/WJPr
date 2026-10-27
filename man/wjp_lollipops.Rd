@@ -14,7 +14,13 @@ wjp_lollipops(
   point_size = 4,
   line_color = "#d9dde3",
   point_color = "#482d8b",
-  ptheme = WJP_theme()
+  ptheme = WJP_theme(),
+  label_gap = NULL,
+  label_hjust = 0.5,
+  points = TRUE,
+  label_size = 10,
+  label_fontface = "bold",
+  label_color = "#4a4a49"
 )
 }
 \arguments{
@@ -41,6 +47,22 @@ categories. Default is \code{NULL} (data order).}
 \item{point_color}{String. Hex code for the points. Default is \code{"#482d8b"}.}
 
 \item{ptheme}{ggplot theme to apply. Default is \code{\link[=WJP_theme]{WJP_theme()}}.}
+
+\item{label_gap}{Numeric. Distance, in points, between the edge of the point
+(or the end of the line) and the value label, which is then anchored by
+\code{label_hjust}. Default is \code{NULL} (labels centered 7 percentage points
+after the value, as in earlier versions).}
+
+\item{label_hjust}{Numeric. Horizontal justification of the value labels
+when \code{label_gap} is \code{NULL}. Default is \code{0.5}.}
+
+\item{points}{Logical. Draw the points. Default is \code{TRUE}.}
+
+\item{label_size}{Numeric. Size of the value labels, in points. Default is \code{10}.}
+
+\item{label_fontface}{String. Font face of the value labels. Default is \code{"bold"}.}
+
+\item{label_color}{String. Color of the value labels. Default is \code{"#4a4a49"}.}
 }
 \value{
 A ggplot object representing the lollipop chart.

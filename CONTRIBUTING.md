@@ -224,6 +224,9 @@ wjp_newfunction <- function(
     ) +
     wjp_legend_theme(show_legend)
 
+  # Always last: user overrides passed through `ptheme`
+  plt <- wjp_apply_ptheme(plt, ptheme)
+
   return(plt)
 }
 ```

@@ -2,42 +2,68 @@
 % Please edit documentation in R/utils.R
 \name{wjp_palette}
 \alias{wjp_palette}
-\title{WJP Color Palette}
+\alias{wjp_colors}
+\title{WJP Color Palettes}
 \usage{
-wjp_palette(n = NULL)
+wjp_palette(n = NULL, palette = c("categorical", "report"))
+
+wjp_colors(palette = c("report", "categorical"))
 }
 \arguments{
 \item{n}{Integer. Number of colors to return. If \code{NULL} (default), the full
-nine-color palette is returned.}
+palette is returned. For convenience, a palette name can be passed as the
+first argument, e.g. \code{wjp_palette("report")}.}
+
+\item{palette}{String. \code{"categorical"} (default) or \code{"report"}.}
 }
 \value{
-A character vector of hex color codes.
+A character vector of hex color codes. \code{wjp_colors()} and the
+report palette return named vectors.
 }
 \description{
-\code{wjp_palette()} returns the categorical color palette used across World
-Justice Project visualizations. All WJPr chart functions fall back to this
-palette when no color vector (\code{cvec}) is supplied, so charts stay on-brand
-by default.
+\code{wjp_palette()} returns the color palettes used across World Justice
+Project visualizations, and \code{wjp_colors()} returns them as named vectors.
+All WJPr chart functions fall back to the categorical palette when no color
+vector (\code{cvec}) is supplied, so charts stay on-brand by default.
 }
 \details{
-The palette contains nine colors, ordered so that the first three
-(violet, teal-blue, orange) provide maximum contrast for small categorical
-sets, followed by the Rule of Law Index factor colors:\tabular{lll}{
-   Order \tab Hex code \tab Usage \cr
-   1 \tab \verb{#482d8b} \tab Violet (primary) \cr
-   2 \tab \verb{#2894aa} \tab Teal-blue (secondary) \cr
-   3 \tab \verb{#f26b21} \tab Orange (contrast) \cr
-   4 \tab \verb{#137b3f} \tab Green \cr
-   5 \tab \verb{#869d3b} \tab Olive \cr
-   6 \tab \verb{#0f9581} \tab Teal-green \cr
-   7 \tab \verb{#1a74b6} \tab Blue \cr
-   8 \tab \verb{#8f2e8c} \tab Magenta \cr
-   9 \tab \verb{#555659} \tab Cool gray (neutral) \cr
+The \strong{categorical} palette contains nine colors, ordered so that the
+first three (violet, teal-blue, orange) provide maximum contrast for small
+categorical sets, followed by the Rule of Law Index factor colors:\tabular{lll}{
+   Order \tab Hex code \tab Name \cr
+   1 \tab \verb{#482d8b} \tab \code{violet} (primary) \cr
+   2 \tab \verb{#2894aa} \tab \code{teal} (secondary) \cr
+   3 \tab \verb{#f26b21} \tab \code{orange} (contrast) \cr
+   4 \tab \verb{#137b3f} \tab \code{green} \cr
+   5 \tab \verb{#869d3b} \tab \code{olive} \cr
+   6 \tab \verb{#0f9581} \tab \code{teal_green} \cr
+   7 \tab \verb{#1a74b6} \tab \code{blue} \cr
+   8 \tab \verb{#8f2e8c} \tab \code{magenta} \cr
+   9 \tab \verb{#555659} \tab \code{gray} (neutral) \cr
 }
 
 
-When more than nine colors are requested, the palette is interpolated with
-\code{\link[grDevices:colorRampPalette]{grDevices::colorRampPalette()}}.
+The \strong{report} palette holds the colors of the WJP country reports
+(e.g., \emph{Paths to Justice}), named by role:\tabular{lll}{
+   Name \tab Hex code \tab Usage \cr
+   \code{main} \tab \verb{#575796} \tab Country series, headers, averages \cr
+   \code{eu} \tab \verb{#A8A8C8} \tab Comparison series (EU Average) \cr
+   \code{eu_text} \tab \verb{#7D7DA8} \tab Text of the comparison series \cr
+   \code{track} \tab \verb{#E5E8E8} \tab 100\% background track \cr
+   \code{text} \tab \verb{#1A1A1A} \tab Body text \cr
+   \code{highlight} \tab \verb{#B200AA} \tab Second series of perception/experience charts \cr
+   \code{grid} \tab \verb{#D0D1D3} \tab Grid lines \cr
+   \code{node} \tab \verb{#8E9393} \tab Neutral nodes (sankey) \cr
+   \code{excluded} \tab \verb{#C4C8C8} \tab Excluded flows (sankey) \cr
+   \code{box} \tab \verb{#F2F3F3} \tab Note boxes \cr
+   \code{note} \tab \verb{#7D7DA8} \tab Notes \cr
+   \code{delta} \tab \verb{#4B4B7A} \tab Differences between cards \cr
+   \code{card_low} \tab \verb{#ECECF4} \tab Low end of the sequential scale \cr
+}
+
+
+When more categorical colors are requested than the palette holds, the
+palette is interpolated with \code{\link[grDevices:colorRampPalette]{grDevices::colorRampPalette()}}.
 }
 \examples{
 # Full palette
@@ -46,4 +72,11 @@ wjp_palette()
 # First three colors for a small categorical set
 wjp_palette(3)
 
+# Report colors, by role
+wjp_palette("report")
+wjp_colors()[["main"]]
+
+}
+\seealso{
+\code{\link[=scale_fill_wjp_seq]{scale_fill_wjp_seq()}} for the sequential report scale.
 }

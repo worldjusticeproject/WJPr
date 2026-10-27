@@ -4,12 +4,38 @@
 \alias{WJP_theme}
 \title{WJP ggplot2 Theme}
 \usage{
-WJP_theme(family = wjp_font_family())
+WJP_theme(
+  family = wjp_font_family(),
+  base_size = 10,
+  text_colour = "#524F4C",
+  grid = c("major", "x", "y", "none"),
+  grid_colour = "#5e5c5a",
+  grid_linetype = "dashed",
+  base_theme = NULL
+)
 }
 \arguments{
 \item{family}{String. Font family for all text elements. Default is the
 active WJP font family (see \code{\link[=wjp_font_family]{wjp_font_family()}}), which is \code{"Lato Full"}
 unless changed via \code{options(wjpr.family = )}.}
+
+\item{base_size}{Numeric. Size of the axis text and titles, in points.
+Default is \code{10}.}
+
+\item{text_colour}{String. Color of the axis text and titles. Default is
+\code{"#524F4C"}. WJP country reports use \code{"#1A1A1A"}.}
+
+\item{grid}{String. Major grid lines to draw: \code{"major"} (both directions,
+default), \code{"x"} (lines at the breaks of the x scale), \code{"y"} (lines at the
+breaks of the y scale), or \code{"none"}.}
+
+\item{grid_colour}{String. Color of the grid lines. Default is \code{"#5e5c5a"}.}
+
+\item{grid_linetype}{Line type of the grid lines. Default is \code{"dashed"}.}
+
+\item{base_theme}{A complete ggplot2 theme to start from (e.g.,
+\code{ggplot2::theme_minimal(base_size = 11)}). Default is \code{NULL} (a partial
+theme).}
 }
 \value{
 A ggplot2 theme object that can be added to any ggplot.
@@ -24,11 +50,24 @@ The theme includes the following style specifications:
 \item Transparent panel and plot backgrounds
 \item Dashed grey grid lines (\code{#5e5c5a})
 \item WJP font family for all text elements (Lato Full by default; see
-\code{\link[=wjp_font_family]{wjp_font_family()}})
-\item Text color \code{#524F4C}
+\code{\link[=wjp_font_family]{wjp_font_family()}}). The family is also set on the root \code{text}
+element, so titles, legends, and strips inherit it.
+\item Axis text and titles of \code{base_size} points in \code{#524F4C}
 \item No axis ticks
 \item Zero plot margins
 }
+
+\code{WJP_theme()} is a partial theme: it is added on top of the active
+complete theme (ggplot2's \code{\link[ggplot2:theme_grey]{ggplot2::theme_grey()}} unless you set another one).
+Use \code{base_theme} to start from a different complete theme, such as
+\code{\link[ggplot2:theme_minimal]{ggplot2::theme_minimal()}}.
+
+When passed as the \code{ptheme} argument of a WJPr chart function, the
+elements that differ from the default \code{WJP_theme()} are applied after the
+chart's own styling, so they take precedence (for example,
+\code{WJP_theme(base_size = 9)} resizes the axis labels of every chart). Complete
+themes (including those built with \code{base_theme}) are used as the starting
+point of the chart instead.
 }
 \examples{
 library(ggplot2)
@@ -45,5 +84,11 @@ ggplot(mtcars, aes(x = mpg, y = wt)) +
 ggplot(mtcars, aes(x = mpg, y = wt)) +
   geom_point() +
   WJP_theme(family = "Inter Tight")
+
+# Report style: dark text, horizontal grid only, minimal base theme
+ggplot(mtcars, aes(x = mpg, y = wt)) +
+  geom_point() +
+  WJP_theme(text_colour = "#1A1A1A", grid = "y",
+            base_theme = theme_minimal(base_size = 11))
 
 }

@@ -210,5 +210,7 @@ wjp_gauge <- function(
     ) +
     wjp_legend_theme(show_legend)
 
+  plt <- wjp_apply_ptheme(plt, ptheme)
+
   return(plt)
 }

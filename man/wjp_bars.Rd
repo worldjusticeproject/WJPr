@@ -18,7 +18,42 @@ wjp_bars(
   order = NULL,
   width = 0.9,
   ptheme = WJP_theme(),
-  show_legend = FALSE
+  show_legend = FALSE,
+  position = c("stack", "dodge"),
+  dodge_width = NULL,
+  series_reverse = FALSE,
+  align = c("start", "center"),
+  track = FALSE,
+  track_color = "#E5E8E8",
+  value_position = c("end", "outside", "center", "column"),
+  value_offset = 5,
+  value_size = 10,
+  value_fontface = "bold",
+  value_colors = NULL,
+  limits = NULL,
+  breaks = NULL,
+  axis_labels = NULL,
+  expand_mult = NULL,
+  expand_discrete = NULL,
+  value_axis = TRUE,
+  grid = TRUE,
+  grid_color = "#d1cfd1",
+  ylab = "\% of respondents",
+  baseline = FALSE,
+  baseline_color = "#1A1A1A",
+  label_align = NULL,
+  label_size = NULL,
+  label_colour = NULL,
+  label_wrap = NULL,
+  label_lineheight = NULL,
+  ref_lines = NULL,
+  clip = "on",
+  layout = NULL,
+  legend_position = "top",
+  legend_text_size = 11,
+  legend_key_size = NULL,
+  legend_fontface = "bold",
+  legend_justification = "left"
 )
 }
 \arguments{
@@ -32,7 +67,8 @@ wjp_bars(
 \item{labels}{String. Column name of the variable containing the value labels to
 display. Default is \code{NULL} (no labels).}
 
-\item{colors}{String. Column name of the variable that contains the color grouping.
+\item{colors}{String. Column name of the variable that contains the color grouping
+(the series of stacked or side-by-side bars).
 Default is \code{NULL} (colors follow \code{grouping}).}
 
 \item{cvec}{Named vector of colors. Names should match the values of the \code{colors}
@@ -42,11 +78,10 @@ variable. Default is \code{NULL} (the WJP palette, see \code{\link[=wjp_palette]
 
 \item{stacked}{Logical. Set to \code{TRUE} for stacked bars (several rows per
 category, one per segment) so value labels are drawn in white inside each
-segment. Rows that share a category are always stacked; this flag only
-switches the label styling. Default is \code{FALSE}.}
+segment. Default is \code{FALSE}.}
 
-\item{lab_pos}{String. Column name of the variable that contains the Y coordinates
-for the value labels. Default is \code{NULL} (labels are placed at the bar value).}
+\item{lab_pos}{String. Column name of the variable that contains the coordinates
+for the value labels. Default is \code{NULL} (labels follow \code{value_position}).}
 
 \item{expand}{Logical. If \code{TRUE}, the axis is expanded to give extra space for value
 labels above 100\%. Default is \code{FALSE}.}
@@ -55,13 +90,121 @@ labels above 100\%. Default is \code{FALSE}.}
 categories. Default is \code{NULL} (data order).}
 
 \item{width}{Numeric value between 0 and 1. Width of bars as a fraction of the space
-available for each bar. Default is \code{0.9}.}
+available for each category. Default is \code{0.9}.}
 
 \item{ptheme}{ggplot theme to apply. Default is \code{\link[=WJP_theme]{WJP_theme()}}.}
 
 \item{show_legend}{Logical. If \code{TRUE}, displays a horizontal legend above the
 chart using the \code{colors} values. This is most useful when \code{colors} differs
-from \code{grouping}, such as in stacked bars. Default is \code{FALSE}.}
+from \code{grouping}, such as in stacked or side-by-side bars. Default is \code{FALSE}.}
+
+\item{position}{String. \code{"stack"} (default) stacks the rows of a category;
+\code{"dodge"} draws them side by side.}
+
+\item{dodge_width}{Numeric. Distance between the centers of side-by-side
+groups, as a fraction of the category space. Default is \code{NULL} (\code{width}).}
+
+\item{series_reverse}{Logical. Reverse the order of side-by-side series.
+Default is \code{FALSE}.}
+
+\item{align}{String. \code{"start"} (default, bars start at 0) or \code{"center"}
+(bars centered on the middle of the value axis).}
+
+\item{track}{Logical. Draw a 100\% background track behind each bar.
+Default is \code{FALSE}.}
+
+\item{track_color}{String. Color of the track. Default is \code{"#E5E8E8"}.}
+
+\item{value_position}{String. Position of the value labels: \code{"end"}
+(default), \code{"outside"}, \code{"center"}, or \code{"column"}. See Details.}
+
+\item{value_offset}{Numeric. Distance, in points, between the end of a bar
+and its label when \code{value_position = "outside"}. Default is \code{5}.}
+
+\item{value_size}{Numeric. Size of the value labels, in points. Default is \code{10}.}
+
+\item{value_fontface}{String. Font face of the value labels: \code{"plain"},
+\code{"bold"} (default), \code{"italic"}, \code{"bold.italic"}, or a weight face such as
+\code{"semibold.italic"} (see \code{\link[=wjp_fonts]{wjp_fonts()}}).}
+
+\item{value_colors}{Color of the value labels: one color, or a vector named
+by the \code{colors} values (one color per series). Default is \code{NULL}
+(\code{"#4a4a49"}, white for stacked bars).}
+
+\item{limits}{Numeric vector of length 2 with the limits of the value axis.
+Use \code{NA} for a limit computed from the data (e.g., \code{c(0, NA)} scales the
+axis to the largest value). Default is \code{NULL} (\code{c(0, 110)}, or larger with
+\code{expand = TRUE}).}
+
+\item{breaks}{Numeric vector with the breaks of the value axis. Default is
+\code{NULL} (every 20 points from 0 to 100).}
+
+\item{axis_labels}{Labels of the value-axis breaks: a character vector or a
+function. Default is \code{NULL} (percentages).}
+
+\item{expand_mult}{Numeric vector of length 1 or 2. Multiplicative expansion
+of the value axis. Default is \code{NULL} (ggplot2's default; none with a
+\code{layout}).}
+
+\item{expand_discrete}{Numeric of length 1 or 2. Space added before the
+first and after the last category (in reading order: top then bottom for
+horizontal charts, left then right for vertical ones), in categories.
+Default is \code{NULL} (0.6, or 0.5 with a \code{layout}).}
+
+\item{value_axis}{Logical. Show the labels of the value axis. Default is \code{TRUE}.}
+
+\item{grid}{Logical. Draw grid lines across the value axis. Default is \code{TRUE}.}
+
+\item{grid_color}{String. Color of the grid lines. Default is \code{"#d1cfd1"}.}
+
+\item{ylab}{String. Title of the value axis (shown on vertical charts).
+Default is \code{"\% of respondents"}; \code{NULL} removes it.}
+
+\item{baseline}{Logical. Draw a line at the start of the value axis.
+Default is \code{FALSE}.}
+
+\item{baseline_color}{String. Color of the baseline. Default is \code{"#1A1A1A"}.}
+
+\item{label_align}{String. Alignment of the category labels: \code{"left"},
+\code{"right"}, or \code{"center"}. Default is \code{NULL} (left for horizontal charts,
+centered for vertical ones).}
+
+\item{label_size}{Numeric. Size of the category labels, in points. Default
+is \code{NULL} (the size of \code{ptheme}).}
+
+\item{label_colour}{String. Color of the category labels. Default is \code{NULL}
+(the color of \code{ptheme}).}
+
+\item{label_wrap}{Numeric. Maximum number of characters per line of the
+category labels. Default is \code{NULL} (no wrapping; existing line breaks are kept).}
+
+\item{label_lineheight}{Numeric. Line height of multi-line category labels.
+Default is \code{NULL}.}
+
+\item{ref_lines}{Reference lines: a numeric vector with positions on the
+category axis (in category units, e.g. \code{3.5} between the third and fourth
+categories), or a data frame with columns \code{axis} (\code{"category"} or
+\code{"value"}), \code{position} and, optionally, \code{colour}, \code{linetype}, and
+\code{linewidth} (points). Default is \code{NULL}.}
+
+\item{clip}{String. Whether to clip drawing to the panel: \code{"on"} (default)
+or \code{"off"} (keeps labels next to 100\% visible).}
+
+\item{layout}{A \code{\link[=wjp_layout]{wjp_layout()}} with the geometry of the chart in points.
+Default is \code{NULL}.}
+
+\item{legend_position}{Legend position: \code{"top"} (default), \code{"bottom"},
+\code{"left"}, \code{"right"}, or \code{c(x, y)} inside the panel.}
+
+\item{legend_text_size}{Numeric. Size of the legend text, in points. Default is \code{11}.}
+
+\item{legend_key_size}{Numeric. Size of the legend keys, in points.
+Default is \code{NULL}.}
+
+\item{legend_fontface}{String. Font face of the legend text. Default is \code{"bold"}.}
+
+\item{legend_justification}{String. Horizontal justification of a legend
+above or below the chart: \code{"left"} (default), \code{"center"}, or \code{"right"}.}
 }
 \value{
 A ggplot object.
@@ -77,8 +220,34 @@ Values are expected on a 0-100 percentage scale.
 The function expects one row per bar: a category in \code{grouping} and its value
 in \code{target}. For stacked bars (\code{stacked = TRUE}), supply one row per segment
 (each \code{grouping} and \code{colors} combination) and precompute the label
-coordinates (\code{lab_pos}) at the center of each segment; segment labels are
-drawn in white.
+coordinates (\code{lab_pos}) at the center of each segment, or use
+\code{value_position = "center"}; segment labels are drawn in white.
+
+\strong{Side-by-side series.} With \code{position = "dodge"}, rows that share a
+category are drawn next to each other (e.g., a country and the EU average),
+in the order of the \code{colors} values (factor levels or first appearance):
+the first series at the top of horizontal charts and at the left of
+vertical ones (\code{series_reverse = TRUE} swaps them). Value labels and the
+optional 100\% \code{track} follow their bars.
+
+\strong{Value labels.} \code{value_position = "end"} (default) centers each label
+on the end of its bar, as in earlier versions, or on \code{lab_pos} when given.
+\code{"outside"} anchors it \code{value_offset} points after the end of the bar, and
+\code{"center"} puts it in the middle of the bar (or of its stacked segment), and
+\code{"column"} aligns the labels \code{value_offset} points after the 100\% mark.
+Rows with a missing value draw their label at the start of the axis.
+
+\strong{Centered bars.} \code{align = "center"} centers every bar on the middle of
+the value axis (funnel-like layouts); see also \code{\link[=wjp_funnel]{wjp_funnel()}}.
+
+\strong{Geometry in points.} With a \code{\link[=wjp_layout]{wjp_layout()}}, horizontal charts keep a
+fixed label column (\code{label_width}, \code{label_gap}), a 100\% track of
+\code{track_width} points followed by the value column (\code{value_gap},
+\code{value_width}), a fixed row pitch (\code{row_height}) and bar height
+(\code{bar_height}), and \code{margins}. Vertical charts use \code{row_height} as the column
+pitch, \code{bar_height} as the column width, and \code{track_width} as the height of
+100\%. The category labels of horizontal charts are then drawn as a text
+layer in the label column.
 
 Like all WJPr chart functions, the returned object is a regular ggplot, so
 further customizations can be layered with \code{+}.
@@ -155,6 +324,37 @@ wjp_bars(
   stacked  = TRUE,
   show_legend = TRUE,
   cvec     = c("Trust" = "#482d8b", "No trust" = "#f26b21")
+)
+
+# Country and EU average side by side, with a 100\% track and values after
+# each bar (fictional data)
+paired <- data.frame(
+  category = rep(c("Consumer", "Housing", "Employment"), 2),
+  series   = rep(c("Atlantis", "EU Average"), each = 3),
+  value    = c(40, 10, 19, 21, 7, 10)
+)
+paired$text <- paste0(paired$value, "\%")
+
+wjp_bars(
+  paired,
+  target         = "value",
+  grouping       = "category",
+  labels         = "text",
+  colors         = "series",
+  cvec           = c("Atlantis" = "#575796", "EU Average" = "#A8A8C8"),
+  direction      = "horizontal",
+  position       = "dodge",
+  track          = TRUE,
+  value_position = "outside",
+  value_colors   = c("Atlantis" = "#575796", "EU Average" = "#7D7DA8"),
+  value_axis     = FALSE,
+  grid           = FALSE,
+  label_align    = "right",
+  show_legend    = TRUE,
+  layout         = wjp_layout(label_width = 90, label_gap = 6,
+                              track_width = 250, value_gap = 5,
+                              value_width = 30, row_height = 21,
+                              bar_height = 8)
 )
 
 }

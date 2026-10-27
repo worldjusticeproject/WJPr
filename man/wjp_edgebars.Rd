@@ -38,7 +38,12 @@ wjp_edgebars(
   show_legend = TRUE,
   ci_lower = NULL,
   ci_upper = NULL,
-  ci_color = "#333333"
+  ci_color = "#333333",
+  label_position = c("above", "left"),
+  value_labels = NULL,
+  axis = FALSE,
+  grid = FALSE,
+  margins = NULL
 )
 }
 \arguments{
@@ -126,6 +131,23 @@ on the same 0-100 scale. Supply both; bounds must enclose the estimate.
 The function does not estimate intervals or assume a survey design.}
 
 \item{ci_color}{Color of confidence interval lines and end caps.}
+
+\item{label_position}{\code{"above"} (default) draws each category label above its
+bar; \code{"left"} draws it right-aligned in a column at the left of the bars,
+\code{nudge_lab} millimeters before them.}
+
+\item{value_labels}{Optional column with the printed value of each row, used
+as given (overrides \code{accuracy} and \code{label_format}). Missing values print
+nothing.}
+
+\item{axis}{Logical. Show the percentage axis (every 20 points) above the
+bars. Default is \code{FALSE}.}
+
+\item{grid}{Logical. Draw vertical grid lines every 20 points. Default is \code{FALSE}.}
+
+\item{margins}{Optional plot margins in points: one value, or top, right,
+bottom, left. Default is \code{NULL} (\code{margin_top}, 20, 15, 10, plus room for
+the label column when \code{label_position = "left"}).}
 }
 \value{
 A ggplot object representing the edgebars plot.

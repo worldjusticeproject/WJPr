@@ -70,6 +70,18 @@
 #'   on the same 0-100 scale. Supply both; bounds must enclose the estimate.
 #'   The function does not estimate intervals or assume a survey design.
 #' @param ci_color Color of confidence interval lines and end caps.
+#' @param label_position `"above"` (default) draws each category label above its
+#'   bar; `"left"` draws it right-aligned in a column at the left of the bars,
+#'   `nudge_lab` millimeters before them.
+#' @param value_labels Optional column with the printed value of each row, used
+#'   as given (overrides `accuracy` and `label_format`). Missing values print
+#'   nothing.
+#' @param axis Logical. Show the percentage axis (every 20 points) above the
+#'   bars. Default is `FALSE`.
+#' @param grid Logical. Draw vertical grid lines every 20 points. Default is `FALSE`.
+#' @param margins Optional plot margins in points: one value, or top, right,
+#'   bottom, left. Default is `NULL` (`margin_top`, 20, 15, 10, plus room for
+#'   the label column when `label_position = "left"`).
 #'
 #' @details
 #' Categories must be unique unless `series` is supplied. Custom labels and
@@ -161,9 +173,12 @@ wjp_edgebars <- function(
     background_track = FALSE, track_color = "#ecebed",
     highlight = NULL, neutral_color = "#b9b7bf", series = NULL,
     show_legend = TRUE, ci_lower = NULL, ci_upper = NULL,
-    ci_color = "#333333"
+    ci_color = "#333333",
+    label_position = c("above", "left"), value_labels = NULL,
+    axis = FALSE, grid = FALSE, margins = NULL
 ) {
   sort <- match.arg(sort)
+  label_position <- match.arg(label_position)
   scale <- match.arg(scale)
   na_action <- match.arg(na_action)
   label_style <- match.arg(label_style)
@@ -175,7 +190,7 @@ wjp_edgebars <- function(
       fail(paste0("`", name, "` must be a finite number between ", lower, " and ", upper, "."))
     }
   }
-  for (name in c("show_values", "background_track", "show_legend")) {
+  for (name in c("show_values", "background_track", "show_legend", "axis", "grid")) {
     x <- get(name)
     if (!is.logical(x) || length(x) != 1L || is.na(x))
       fail(paste0("`", name, "` must be TRUE or FALSE."))
@@ -221,6 +236,8 @@ wjp_edgebars <- function(
   d$series <- as.character(source_series)
   d$lower <- if (has_ci) column(ci_lower, "ci_lower") else d$value
   d$upper <- if (has_ci) column(ci_upper, "ci_upper") else d$value
+  given_values <- if (is.null(value_labels)) NULL else as.character(column(value_labels, "value_labels"))
+  d$row_id <- seq_len(nrow(d))
   for (name in c("value", "lower", "upper", "order")) {
     if (!is.numeric(d[[name]])) fail(paste0("The ", name, " column must be numeric."))
     if (any(is.infinite(d[[name]]))) fail(paste0("The ", name, " column must contain finite values."))
@@ -284,10 +301,16 @@ wjp_edgebars <- function(
   d$fill <- unname(cvec[as.character(d$series)])
   if (!is.null(highlight)) d$fill[!d$category %in% highlight] <- neutral_color
   if (!is.null(label_format) && !is.function(label_format)) fail("`label_format` must be a function.")
-  value_labels <- if (is.null(label_format)) scales::number(d$value, accuracy = accuracy, suffix = "%") else label_format(d$value)
-  if (!is.character(value_labels) || length(value_labels) != nrow(d) || anyNA(value_labels))
+  value_text <- if (!is.null(given_values)) {
+    ifelse(is.na(given_values[d$row_id]), "", given_values[d$row_id])
+  } else if (is.null(label_format)) {
+    scales::number(d$value, accuracy = accuracy, suffix = "%")
+  } else {
+    label_format(d$value)
+  }
+  if (!is.character(value_text) || length(value_text) != nrow(d) || anyNA(value_text))
     fail("`label_format` must return one non-missing character label per value.")
-  d$value_label <- value_labels
+  d$value_label <- value_text
   if (label_style == "rich" && !requireNamespace("ggtext", quietly = TRUE))
     fail("`label_style = \"rich\"` requires the ggtext package.")
   label_data <- d[match(categories, d$category), c("category", "label"), drop = FALSE]
@@ -304,12 +327,21 @@ wjp_edgebars <- function(
   # The heading baseline clears the top edge even when bar_width changes.
   heading_gap <- 0.18 + nudge_lab / 10
   line_height <- 0.38 * label_size / 3.514598
-  block_height <- (if (paired) 1.65 else 0.9) + heading_gap + pmax(1, nlines) * line_height
-  block_height <- block_height * row_spacing
-  top <- -c(0, head(cumsum(block_height), -1))
-  label_data$x <- label_start
-  first_center <- top - (pmax(1, nlines) - 1) * line_height - heading_gap - bar_width / 2
-  label_data$y <- first_center + bar_width / 2
+  if (label_position == "above") {
+    block_height <- (if (paired) 1.65 else 0.9) + heading_gap + pmax(1, nlines) * line_height
+    block_height <- block_height * row_spacing
+    top <- -c(0, head(cumsum(block_height), -1))
+    label_data$x <- label_start
+    first_center <- top - (pmax(1, nlines) - 1) * line_height - heading_gap - bar_width / 2
+    label_data$y <- first_center + bar_width / 2
+  } else {
+    # Labels in a column at the left of the bars, centered on their rows
+    block_height <- pmax((if (paired) 1.65 else 0.9), pmax(1, nlines) * line_height + 0.2) * row_spacing
+    top <- -c(0, head(cumsum(block_height), -1))
+    first_center <- top - 0.2 - bar_width / 2
+    label_data$x <- 0
+    label_data$y <- first_center - (if (paired) (bar_width + 0.28) / 2 else 0)
+  }
   d$y <- first_center[match(d$category, categories)] -
     (as.integer(d$series) - 1) * (bar_width + 0.28)
   d$ymin <- d$y - bar_width / 2
@@ -345,7 +377,15 @@ wjp_edgebars <- function(
       colour = ci_color, linewidth = 0.5
     )
   }
-  if (label_style == "rich") {
+  if (label_position == "left") {
+    # Right-aligned labels a fixed distance (nudge_lab, mm) before the bars
+    label_layer <- wjp_offset_text(
+      data = label_data, mapping = ggplot2::aes(x = x, y = y, label = label),
+      offset = nudge_lab * 72 / 25.4, side = "left", family = wjp_font_family(),
+      fontface = "plain", size = label_size, inherit.aes = FALSE, lineheight = 1
+    )
+    plt <- plt + label_layer
+  } else if (label_style == "rich") {
     plt <- plt + ggtext::geom_richtext(
       data = label_data, ggplot2::aes(x = x, y = y, label = label),
       inherit.aes = FALSE, hjust = 0, vjust = 0, size = label_size,
@@ -376,7 +416,32 @@ wjp_edgebars <- function(
     hjust = 0, size = value_size, family = wjp_font_family(),
     fontface = "bold", colour = "#4a4a49"
   )
-  plt + ggplot2::scale_x_continuous(limits = c(if (paired) -max(10, max(nchar(series_levels)) * value_size * 0.7) else 0, xmax + right_room), expand = c(0, 0)) +
+  # Outer margins (points); a left label column needs room for the labels
+  if (is.null(margins)) {
+    left <- 10
+    if (label_position == "left") {
+      left <- 10 + nudge_lab * 72 / 25.4 + wjp_text_width_pt(
+        unlist(strsplit(label_data$label, "\n", fixed = TRUE)), size_pt = label_size * ggplot2::.pt
+      )
+    }
+    plot_margin <- if (label_position == "left") {
+      wjp_margin_bp(margin_top, 20, 15, left)
+    } else {
+      ggplot2::margin(margin_top, 20, 15, 10)
+    }
+  } else {
+    if (!is.numeric(margins) || !length(margins) %in% c(1, 4) || any(!is.finite(margins)))
+      fail("`margins` must be one or four numbers (points).")
+    margins <- rep_len(margins, 4)
+    plot_margin <- wjp_margin_bp(margins[1], margins[2], margins[3], margins[4])
+  }
+  plt <- plt + ggplot2::scale_x_continuous(
+    limits = c(if (paired) -max(10, max(nchar(series_levels)) * value_size * 0.7) else 0, xmax + right_room),
+    expand = c(0, 0),
+    breaks = if (axis || grid) seq(0, 100, 20) else NULL,
+    labels = function(x) paste0(x, "%"),
+    position = if (axis) "top" else "bottom"
+  ) +
     ggplot2::scale_y_continuous(limits = c(min(d$ymin) - 0.3, 0.25), expand = c(0, 0)) +
     ggplot2::coord_cartesian(clip = "off") + ptheme +
     ggplot2::labs(x = NULL, y = NULL) +
@@ -386,7 +451,16 @@ wjp_edgebars <- function(
       panel.grid.minor.x = ggplot2::element_blank(), panel.grid.minor.y = ggplot2::element_blank(),
       axis.text.x = ggplot2::element_blank(), axis.text.y = ggplot2::element_blank(),
       axis.ticks = ggplot2::element_blank(),
-      plot.margin = ggplot2::margin(margin_top, 20, 15, 10),
+      plot.margin = plot_margin,
       plot.background = ggplot2::element_blank()
     ) + wjp_legend_theme(paired && show_legend)
+  if (axis) {
+    plt <- plt + ggplot2::theme(axis.text.x.top = ggplot2::element_text(
+      family = wjp_font_family(), size = 10, colour = "#524F4C", margin = ggplot2::margin(b = 4)))
+  }
+  if (grid) {
+    plt <- plt + ggplot2::theme(panel.grid.major.x = ggplot2::element_line(
+      colour = "#d1cfd1", linewidth = 0.25, linetype = "dashed"))
+  }
+  wjp_apply_ptheme(plt, ptheme)
 }

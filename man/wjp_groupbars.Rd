@@ -35,7 +35,26 @@ wjp_groupbars(
   show_axis = FALSE,
   strip_position = "left",
   national_var = NULL,
-  national_level = NULL
+  national_level = NULL,
+  national_value_label = NULL,
+  scale_max = NULL,
+  show_complement = TRUE,
+  na_label = NULL,
+  value_gap = 5,
+  value_size = NULL,
+  value_fontface = "bold",
+  value_colour = NULL,
+  label_size = NULL,
+  label_colour = NULL,
+  highlight_levels = NULL,
+  highlight_fontface = "bold",
+  highlight_colour = NULL,
+  group_header = NULL,
+  header_fontface = "bold",
+  header_colour = NULL,
+  header_size = NULL,
+  xlim = NULL,
+  layout = NULL
 )
 }
 \arguments{
@@ -51,8 +70,8 @@ can be proportions (0-1) or percentages (0-100).}
 \item{colors}{Character vector of length 2 with hex colors for primary and secondary bars.
 Default is c("#482d8b", "#e5e8e8").}
 
-\item{labels}{String. Column name containing custom labels. If NULL, percentages are auto-generated.
-Default is NULL.}
+\item{labels}{String. Column name containing custom labels, printed as given.
+If NULL, percentages are auto-generated. Default is NULL.}
 
 \item{group_order}{Character vector specifying the order of all facet groups.
 Default is NULL (uses data order).}
@@ -66,7 +85,9 @@ Custom vectors are also interpreted from top to bottom.}
 and a rich text annotation by default, or a national average bar when
 \code{national_style = "bar"}. Default is FALSE.}
 
-\item{national_value}{Numeric. The national average value to display when show_national is TRUE.}
+\item{national_value}{Numeric. The national average value to display when
+show_national is TRUE. With \code{national_style = "bar"}, a named vector
+draws one reference row per value, labeled with its name.}
 
 \item{draw_ci}{Logical. If TRUE, draws a per-category confidence interval on each
 primary bar. Default is FALSE.}
@@ -107,8 +128,8 @@ the national bar. Uses the same 0-1 or 0-100 scale detection as \code{target}.}
 \item{national_group_label}{String. Facet label used for the national bar.
 Default is " " to create a blank facet strip.}
 
-\item{label_position}{String. Position for value labels: "end", "inside", or
-"none". Default is "end".}
+\item{label_position}{String. Position for value labels: "end", "inside",
+"column", or "none". Default is "end".}
 
 \item{label_after_ci}{Logical. If TRUE and confidence intervals are drawn,
 value labels are placed at the end of the full bar (after the gray
@@ -138,6 +159,64 @@ is in \code{group_order} and \code{level_order}. Default is NULL.}
 \item{national_level}{String. Value in the \code{levels} column corresponding to
 the national average label (e.g., "National Average"). Required when
 \code{national_var} is specified. Default is NULL.}
+
+\item{national_value_label}{Character vector with the printed text of each
+national value (e.g., \code{"4.9"} or \code{"68\%"}). Default is NULL
+(rounded percentages).}
+
+\item{scale_max}{Numeric. Maximum of the scale of \code{target},
+\code{national_value} and the confidence bounds (e.g., \code{10} for a 0-10
+mean). Default is NULL (proportions or percentages, detected from the data).}
+
+\item{show_complement}{Logical. Draw the secondary (complement) bar up to
+100\%. Default is TRUE.}
+
+\item{na_label}{String. Text printed for rows with a missing value when
+\code{labels} gives none (e.g., \code{"N/A"}). Default is NULL (nothing).}
+
+\item{value_gap}{Numeric. Distance, in points, between the end of the track
+(or of the bar) and the value labels in row mode. Default is 5.}
+
+\item{value_size}{Numeric. Size of the value labels, in points. Default is
+NULL (14.2 in strip mode, 10 in row mode).}
+
+\item{value_fontface}{String. Font face of the value labels. Default is
+"bold". Weight faces such as "semibold.italic" are accepted (see \code{\link[=wjp_fonts]{wjp_fonts()}}).}
+
+\item{value_colour}{String. Color of the value labels. Default is NULL
+(the primary color).}
+
+\item{label_size}{Numeric. Size of the category labels, in points. Default
+is NULL (13 in strip mode, 10 in row mode).}
+
+\item{label_colour}{String. Color of the category labels. Default is NULL.}
+
+\item{highlight_levels}{Character vector of levels whose labels are
+highlighted (averages are always highlighted). Default is NULL.}
+
+\item{highlight_fontface}{String. Font face of highlighted labels and
+averages. Default is "bold".}
+
+\item{highlight_colour}{String. Color of highlighted labels and averages.
+Default is NULL (the primary color).}
+
+\item{group_header}{String. "strip" or "row". Default is NULL ("row" when a
+\code{layout} is supplied, "strip" otherwise). See Details.}
+
+\item{header_fontface}{String. Font face of the group titles. Default is "bold".}
+
+\item{header_colour}{String. Color of the group titles. Default is NULL (the
+primary color).}
+
+\item{header_size}{Numeric. Size of the group titles, in points. Default is
+NULL (12 or 13 in strip mode, the label size in row mode).}
+
+\item{xlim}{Numeric vector of length 2 with the limits of the value axis,
+in percentage units. Default is NULL (0-115, or 0-100 with
+\code{show_axis = TRUE}).}
+
+\item{layout}{A \code{\link[=wjp_layout]{wjp_layout()}} with the geometry of the chart in points.
+Default is NULL.}
 }
 \value{
 A ggplot object representing the grouped stacked bar chart.
@@ -151,14 +230,40 @@ its complement. Useful for displaying survey results broken down by demographic
 groups like gender, age, income, etc.
 
 Values supplied to \code{target}, \code{national_value}, \code{ci_lower}, and
-\code{ci_upper} can be provided as proportions (0-1) or percentages (0-100).
-Internally they are plotted on a 0-100 percentage scale. Confidence intervals
-can be supplied directly with \code{ci_lower} and \code{ci_upper}, or computed
-from \code{sd} and \code{sample_size}. When \code{show_national = TRUE}, use
-\code{national_style = "line"} to draw \code{national_value} as a vertical
-reference line, or \code{national_style = "bar"} to add it as a full bar row
-using the same geometry, confidence interval, and label logic as the other
-rows.
+\code{ci_upper} can be provided as proportions (0-1) or percentages (0-100),
+or on any other scale with \code{scale_max} (e.g., \code{scale_max = 10} for
+a 0-10 mean). Internally they are plotted on a 0-100 percentage scale.
+Confidence intervals can be supplied directly with \code{ci_lower} and
+\code{ci_upper}, or computed from \code{sd} and \code{sample_size}. When
+\code{show_national = TRUE}, use \code{national_style = "line"} to draw
+\code{national_value} as a vertical reference line, or
+\code{national_style = "bar"} to add it as a full bar row using the same
+geometry, confidence interval, and label logic as the other rows. With
+\code{national_style = "bar"}, \code{national_value} can hold several named
+values (e.g., \code{c("National Average" = 68, "EU Average" = 49)}): each
+becomes a reference row with the same style.
+}
+\details{
+\strong{Group headers.} With \code{group_header = "strip"} (default) each
+group is a facet with its title in a strip, as in earlier versions. With
+\code{group_header = "row"} the chart is drawn in a single panel: each group
+title is a header row in the label column, right-aligned with the
+categories, and averages and highlighted levels are styled by
+\code{highlight_fontface} and \code{highlight_colour}. This mode is the
+layout of WJP country reports and accepts a \code{layout}.
+
+\strong{Value labels.} \code{label_position = "column"} aligns the values in
+a column after the 100\% track (\code{value_gap} points after it with a
+\code{layout}); \code{"end"} places each value after its bar. Rows with a
+missing value draw their text from \code{labels}, or \code{na_label} (e.g.,
+\code{"N/A"}), in the value position.
+
+\strong{Geometry in points.} A \code{\link[=wjp_layout]{wjp_layout()}} fixes the label column
+(\code{label_width}, \code{label_gap}), the track (\code{track_width}), the
+value column (\code{value_gap}, \code{value_width}), the row pitch and bar
+height (\code{row_height}, \code{bar_height}), the header rows
+(\code{header_height}, \code{header_baseline}), and the \code{margins}.
+Supplying a \code{layout} selects \code{group_header = "row"}.
 }
 \examples{
 library(dplyr)
@@ -300,6 +405,44 @@ wjp_groupbars(
   group_order    = c("general", "Age Group", "Gender"),
   national_var   = "general",
   national_level = "National Average"
+)
+
+# Report layout: headers as rows, national and EU averages, a suppressed
+# cell printed as "N/A", values in a column, geometry in points
+# (fictional data)
+report <- data.frame(
+  group    = c("Gender", "Gender", "Age Group", "Age Group", "Age Group"),
+  category = c("Male", "Female", "55+", "35-54", "18-34"),
+  value    = c(65, 71, 61, NA, 70)
+)
+report$text <- ifelse(is.na(report$value), "N/A", paste0(report$value, "\%"))
+
+wjp_groupbars(
+  report,
+  target               = "value",
+  grouping             = "group",
+  levels               = "category",
+  labels               = "text",
+  colors               = c("#575796", "#E5E8E8"),
+  group_order          = c("Gender", "Age Group"),
+  level_order          = list(Gender = c("Male", "Female"),
+                              `Age Group` = c("55+", "35-54", "18-34")),
+  show_national        = TRUE,
+  national_style       = "bar",
+  national_value       = c("National Average" = 68, "EU Average" = 49),
+  national_value_label = c("68\%", "49\%"),
+  label_position       = "column",
+  value_size           = 9,
+  value_fontface       = "bold.italic",
+  highlight_fontface   = "bold.italic",
+  header_fontface      = "bold.italic",
+  label_colour         = "#1A1A1A",
+  layout               = wjp_layout(
+    label_width = 149, label_gap = 6, track_width = 250,
+    value_gap = 5, value_width = 27, row_height = 15.5,
+    bar_height = 13.5, header_height = 22, header_baseline = 17,
+    margins = c(2, 0, 4, 0)
+  )
 )
 
 }

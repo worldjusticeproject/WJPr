@@ -67,7 +67,34 @@ if (getRversion() >= "2.15.1") {
     "y_id",
     "y_value",
     "ymax",
-    "ymin"
+    "ymin",
+    # columns mapped by the chart functions added in WJPr 1.2.0
+    "colour",
+    "delta",
+    "delta_col",
+    "face",
+    "fill_value",
+    "hj",
+    "label_colour",
+    "label_y",
+    "labp",
+    "mid",
+    "on",
+    "pos",
+    "size",
+    "text",
+    "top",
+    "value_col",
+    "value_colour",
+    "xc",
+    "xend",
+    "xf",
+    "y0",
+    "y1",
+    "y_delta",
+    "y_out",
+    "yend",
+    "yf"
   ))
 }
 

@@ -11,9 +11,11 @@ WJPr is an R package from the World Justice Project Data Analytics Unit for prod
 
 WJPr provides:
 
-- Chart functions for bars, diverging bars, grouped bars, edge bars, dots, lines, slopes, dumbbells, lollipops, radar, rose, and gauge visualizations.
+- Chart functions for bars (stacked or side by side), diverging bars, grouped bars, edge bars, funnels, dots, lines, slopes, dumbbells, lollipops, scatter plots, radar, rose, gauge, cards, heat maps, networks, UpSet diagrams, and sankey diagrams.
+- Report-grade geometry: `wjp_layout()` fixes label columns, tracks, rows, headers, and margins in points, and `wjp_save()` exports charts at their exact size, with SVG text converted to outlines and PNG at 300 dpi.
 - Built-in sample datasets for Rule of Law Index and General Population Poll workflows.
-- A shared WJP theme (`WJP_theme()`), fonts (`wjp_fonts()`, `wjp_font_family()`), and color palette (`wjp_palette()`) for consistent report graphics.
+- A shared WJP theme (`WJP_theme()`), fonts (`wjp_fonts()`, `wjp_font_family()`), color palettes (`wjp_palette()`, `wjp_colors()`), and sequential scales (`scale_fill_wjp_seq()`) for consistent report graphics.
+- `wjp_drawn()` to check the texts and marks a chart draws without rasterizing it.
 - `spread_labels_x()`, a deterministic helper that keeps value labels in row-based point charts from overlapping.
 - Validation helpers for checking chart-ready data (`wjp_check_data()`) and dependencies (`wjp_check_deps()`), plus `diffmeans()` for difference-in-means tests.
 
@@ -101,6 +103,22 @@ options(wjpr.family = NULL)
 
 See `wjp_font_family()` for per-chart and theme-only alternatives.
 
+### Example: Exporting a Report Figure
+
+Register the static font files with systemfonts and save the chart at its exact size, with the text of the SVG converted to outlines:
+
+```R
+wjp_fonts(engine = "systemfonts")
+options(wjpr.family = "Inter Tight")
+
+p <- wjp_bars(
+  data4bars, target = "trust", grouping = "country", direction = "horizontal",
+  layout = wjp_layout(label_width = 120, track_width = 300, row_height = 22, bar_height = 18)
+)
+wjp_save(p, "trust.svg")                  # size of the layout, text as outlines
+wjp_save(p, "trust.png", png_dpi = 300)
+```
+
 ## Chart Gallery
 
 WJPr includes focused chart functions for common WJP reporting patterns:
@@ -165,6 +183,41 @@ WJPr includes focused chart functions for common WJP reporting patterns:
     <img src="man/figures/example-groupbars.png" alt="Example grouped bar chart with confidence intervals">
     <strong>Grouped Bars</strong>
     <code>wjp_groupbars()</code>
+  </a>
+  <a class="wjp-gallery-card" href="reference/wjp_funnel.html">
+    <img src="man/figures/example-funnel.png" alt="Example funnel chart">
+    <strong>Funnel</strong>
+    <code>wjp_funnel()</code>
+  </a>
+  <a class="wjp-gallery-card" href="reference/wjp_cards.html">
+    <img src="man/figures/example-cards.png" alt="Example cards">
+    <strong>Cards</strong>
+    <code>wjp_cards()</code>
+  </a>
+  <a class="wjp-gallery-card" href="reference/wjp_heatmap.html">
+    <img src="man/figures/example-heatmap.png" alt="Example heat map">
+    <strong>Heat Map</strong>
+    <code>wjp_heatmap()</code>
+  </a>
+  <a class="wjp-gallery-card" href="reference/wjp_scatter.html">
+    <img src="man/figures/example-scatter.png" alt="Example scatter plot">
+    <strong>Scatter Plot</strong>
+    <code>wjp_scatter()</code>
+  </a>
+  <a class="wjp-gallery-card" href="reference/wjp_network.html">
+    <img src="man/figures/example-network.png" alt="Example network">
+    <strong>Network</strong>
+    <code>wjp_network()</code>
+  </a>
+  <a class="wjp-gallery-card" href="reference/wjp_upset.html">
+    <img src="man/figures/example-upset.png" alt="Example UpSet diagram">
+    <strong>UpSet Diagram</strong>
+    <code>wjp_upset()</code>
+  </a>
+  <a class="wjp-gallery-card" href="reference/wjp_sankey.html">
+    <img src="man/figures/example-sankey.png" alt="Example sankey diagram">
+    <strong>Sankey Diagram</strong>
+    <code>wjp_sankey()</code>
   </a>
 </div>
 

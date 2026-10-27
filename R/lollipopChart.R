@@ -29,6 +29,16 @@
 #' @param line_color String. Hex code for the lines. Default is `"#d9dde3"`.
 #' @param point_color String. Hex code for the points. Default is `"#482d8b"`.
 #' @param ptheme ggplot theme to apply. Default is [WJP_theme()].
+#' @param label_gap Numeric. Distance, in points, between the edge of the point
+#'   (or the end of the line) and the value label, which is then anchored by
+#'   `label_hjust`. Default is `NULL` (labels centered 7 percentage points
+#'   after the value, as in earlier versions).
+#' @param label_hjust Numeric. Horizontal justification of the value labels
+#'   when `label_gap` is `NULL`. Default is `0.5`.
+#' @param points Logical. Draw the points. Default is `TRUE`.
+#' @param label_size Numeric. Size of the value labels, in points. Default is `10`.
+#' @param label_fontface String. Font face of the value labels. Default is `"bold"`.
+#' @param label_color String. Color of the value labels. Default is `"#4a4a49"`.
 #'
 #' @return A ggplot object representing the lollipop chart.
 #' @export
@@ -88,8 +98,20 @@ wjp_lollipops <- function(
     point_size    = 4,
     line_color    = "#d9dde3",
     point_color   = "#482d8b",
-    ptheme        = WJP_theme()
+    ptheme        = WJP_theme(),
+    label_gap     = NULL,
+    label_hjust   = 0.5,
+    points        = TRUE,
+    label_size    = 10,
+    label_fontface = "bold",
+    label_color   = "#4a4a49"
 ) {
+  if (length(points) != 1 || !is.logical(points) || is.na(points)) {
+    stop("`points` must be TRUE or FALSE.", call. = FALSE)
+  }
+  if (!is.null(label_gap)) wjp_check_number(label_gap, "label_gap", 0)
+  wjp_check_number(label_hjust, "label_hjust", 0, 1)
+  wjp_check_number(label_size, "label_size", 0, lower_open = TRUE)
 
   # Renaming variables in the data frame to match the function naming
   data <- data %>%
@@ -121,23 +143,44 @@ wjp_lollipops <- function(
           ymax = target_var),
       linewidth = line_size,
       color     = line_color
-    ) +
-    geom_point(
-      aes(y = target_var,
-          x = reorder(grouping_var, -order_var)),
-      size  = point_size,
-      shape = 16,
-      color = point_color
-    ) +
-    geom_text(
-      aes(y     = target_var + 7,
-          x     = reorder(grouping_var, -order_var),
-          label = labels_var),
-      size     = 3.514598,
-      color    = "#4a4a49",
-      family   = wjp_font_family(),
-      fontface = "bold"
-    ) +
+    )
+  if (points) {
+    plt <- plt +
+      geom_point(
+        aes(y = target_var,
+            x = reorder(grouping_var, -order_var)),
+        size  = point_size,
+        shape = 16,
+        color = point_color
+      )
+  }
+  lface <- wjp_face(label_fontface)
+  if (is.null(label_gap)) {
+    plt <- plt +
+      geom_text(
+        aes(y     = target_var + 7,
+            x     = reorder(grouping_var, -order_var),
+            label = labels_var),
+        size     = wjp_pt_text(label_size),
+        color    = label_color,
+        family   = lface$family,
+        fontface = lface$fontface,
+        hjust    = label_hjust
+      )
+  } else {
+    # Anchored after the point (radius of shape 16) or after the line end
+    edge <- if (points) 0.375 * point_size * ggplot2::.pt else 0
+    plt <- plt +
+      wjp_offset_text(
+        data = data,
+        mapping = aes(y = target_var, x = reorder(grouping_var, -order_var),
+                      label = labels_var),
+        offset = edge + label_gap, side = "right",
+        family = lface$family, fontface = lface$fontface,
+        size = wjp_pt_text(label_size), colour = label_color
+      )
+  }
+  plt <- plt +
     scale_y_continuous(breaks   = seq(0, 100, by = 20),
                        limits   = c(0, 105),
                        labels   = paste0(seq(0, 100, by = 20), "%"),
@@ -152,6 +195,7 @@ wjp_lollipops <- function(
       axis.text.y        = element_text(color = "#524F4C",
                                         hjust = 0)
     )
+  plt <- wjp_apply_ptheme(plt, ptheme)
 
   return(plt)
 }

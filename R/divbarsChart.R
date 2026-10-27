@@ -220,6 +220,7 @@ wjp_divbars <- function(
                                           color     = "#262424"))
 
   chart <- chart + wjp_legend_theme(show_legend)
+  chart <- wjp_apply_ptheme(chart, ptheme)
 
   return(chart)
 

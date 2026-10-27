@@ -364,10 +364,11 @@ test_that("wjp_dumbbells supports colored outside labels and an endpoint legend"
   expect_equal(fill_scale$guide, "none")
   expect_true(plot$layers[[4]]$show.legend)
   expect_true(plot$layers[[5]]$show.legend)
-  expect_equal(plot$layers[[6]]$data$labp0, c(64, 42))
-  expect_equal(plot$layers[[7]]$data$labp1, c(83, 33))
-  expect_equal(rlang::as_label(plot$layers[[6]]$mapping$colour), "start_group")
-  expect_equal(rlang::as_label(plot$layers[[7]]$mapping$colour), "end_group")
+  labs <- plot$layers[[6]]$data
+  expect_equal(labs$labp[labs$series == "Category 1"], c(64, 42))
+  expect_equal(labs$labp[labs$series == "Category 2"], c(83, 33))
+  expect_equal(unique(labs$colour[labs$series == "Category 1"]), "#2894aa")
+  expect_equal(unique(labs$colour[labs$series == "Category 2"]), "#482d8b")
 
   plot_without_legend <- wjp_dumbbells(
     dumb,

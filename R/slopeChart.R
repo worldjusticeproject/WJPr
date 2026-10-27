@@ -245,5 +245,7 @@ wjp_slope <- function(
     ) +
     legend_theme
 
+  plt <- wjp_apply_ptheme(plt, ptheme)
+
   return(plt)
 }

@@ -82,6 +82,8 @@ navbar:
         href: reference/wjp_groupbars.html
       - text: wjp_edgebars()
         href: reference/wjp_edgebars.html
+      - text: wjp_funnel()
+        href: reference/wjp_funnel.html
       - text: --------
       - text: Dots and Lines
       - text: wjp_dots()
@@ -94,6 +96,8 @@ navbar:
         href: reference/wjp_dumbbells.html
       - text: wjp_lollipops()
         href: reference/wjp_lollipops.html
+      - text: wjp_scatter()
+        href: reference/wjp_scatter.html
       - text: --------
       - text: Radial and Special
       - text: wjp_radar()
@@ -103,6 +107,18 @@ navbar:
       - text: wjp_gauge()
         href: reference/wjp_gauge.html
       - text: --------
+      - text: Tables, Matrices and Flows
+      - text: wjp_cards()
+        href: reference/wjp_cards.html
+      - text: wjp_heatmap()
+        href: reference/wjp_heatmap.html
+      - text: wjp_network()
+        href: reference/wjp_network.html
+      - text: wjp_upset()
+        href: reference/wjp_upset.html
+      - text: wjp_sankey()
+        href: reference/wjp_sankey.html
+      - text: --------
       - text: Validation and Analysis
       - text: wjp_check_data()
         href: reference/wjp_check_data.html
@@ -111,6 +127,14 @@ navbar:
       - text: diffmeans()
         href: reference/diffmeans.html
       - text: --------
+      - text: Layout and Export
+      - text: wjp_layout()
+        href: reference/wjp_layout.html
+      - text: wjp_save()
+        href: reference/wjp_save.html
+      - text: wjp_drawn()
+        href: reference/wjp_drawn.html
+      - text: --------
       - text: Styling
       - text: wjp_fonts()
         href: reference/wjp_fonts.html
@@ -118,6 +142,8 @@ navbar:
         href: reference/wjp_font_family.html
       - text: wjp_palette()
         href: reference/wjp_palette.html
+      - text: scale_fill_wjp_seq()
+        href: reference/scale_fill_wjp_seq.html
       - text: spread_labels_x()
         href: reference/spread_labels_x.html
       - text: WJP_theme()
@@ -141,26 +167,42 @@ navbar:
 
 reference:
 - title: Bars
-  desc: Functions for vertical, horizontal, diverging, grouped, and edge bar charts.
+  desc: Functions for vertical, horizontal, diverging, grouped, edge, and funnel bar charts.
   contents:
   - wjp_bars
   - wjp_divbars
   - wjp_groupbars
   - wjp_edgebars
+  - wjp_funnel
 - title: Dots and Lines
-  desc: Functions for comparing points, trends, slopes, changes, and lollipops.
+  desc: Functions for comparing points, trends, slopes, changes, lollipops, and scatter plots.
   contents:
   - wjp_dots
   - wjp_lines
   - wjp_slope
   - wjp_dumbbells
   - wjp_lollipops
+  - wjp_scatter
 - title: Radial and Special
   desc: Functions for radial charts, rose charts, and gauges.
   contents:
   - wjp_radar
   - wjp_rose
   - wjp_gauge
+- title: Tables, Matrices, and Flows
+  desc: Functions for cards, heat maps, networks, set intersections (UpSet), and sankey diagrams.
+  contents:
+  - wjp_cards
+  - wjp_heatmap
+  - wjp_network
+  - wjp_upset
+  - wjp_sankey
+- title: Layout and Export
+  desc: Geometry in points, export at an exact size with text outlines, and verification of what a chart draws.
+  contents:
+  - wjp_layout
+  - wjp_save
+  - wjp_drawn
 - title: Validation, Analysis, and Styling
   desc: Support tools for validating data, checking dependencies, analyzing differences, spreading overlapping labels, and applying WJP styling.
   contents:
@@ -170,6 +212,7 @@ reference:
   - wjp_fonts
   - wjp_font_family
   - wjp_palette
+  - scale_fill_wjp_seq
   - spread_labels_x
   - WJP_theme
 - title: Data

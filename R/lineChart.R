@@ -317,6 +317,7 @@ wjp_lines <- function(
   }
 
   plt <- plt + legend_theme
+  plt <- wjp_apply_ptheme(plt, ptheme)
 
   return(plt)
 }

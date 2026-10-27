@@ -497,6 +497,143 @@ plot_groupbars <- wjp_groupbars(
 save_example(plot_groupbars, "groupbars", width = 6, height = 5)
 
 # =============================================================================
+# 14. FUNNEL CHART
+# =============================================================================
+message("14. Generating funnel chart example...")
+
+data_funnel <- data.frame(
+  stage = c("Had access to information and advice",
+            "Obtained appropriate assistance\nwhen they needed it",
+            "Turned to a dispute resolution\nmechanism when they needed it"),
+  value = c(61, 32, 28)
+)
+data_funnel$text <- paste0(data_funnel$value, "%")
+
+plot_funnel <- wjp_funnel(data_funnel, target = "value", grouping = "stage",
+                          labels = "text", width = 6 * 72)
+
+save_example(plot_funnel, "funnel", width = 6, height = 2.6)
+
+# =============================================================================
+# 15. CARDS
+# =============================================================================
+message("15. Generating cards example...")
+
+data_cards <- data.frame(
+  hardship = rep(c("At least one hardship", "Health issues", "Economic issues",
+                   "Relationship breakdown"), each = 2),
+  outcome  = rep(c("Fully resolved", "Not resolved"), 4),
+  value    = c(46, 62, 30, 40, 26, 36, 18, 32)
+)
+
+plot_cards <- wjp_cards(data_cards, rows = "hardship", cols = "outcome",
+                        target = "value", ref = "col", width = 6 * 72)
+
+save_example(plot_cards, "cards", width = 6, height = 3.4)
+
+# =============================================================================
+# 16. HEAT MAP
+# =============================================================================
+message("16. Generating heat map example...")
+
+problems <- c("Consumer", "Housing", "Employment", "Family")
+data_heatmap <- expand.grid(column = problems, row = problems, stringsAsFactors = FALSE)
+data_heatmap$value <- c(NA, 45, 62, 30, 30, NA, 55, 41, 18, 27, NA, 52, 25, 44, 38, NA)
+data_heatmap$band <- cut(data_heatmap$value, c(-Inf, 25, 50, Inf), right = FALSE,
+                         labels = c("Less than 25%", "25% to 50%", "50% or more"))
+data_heatmap$text <- ifelse(is.na(data_heatmap$value), "-", paste0(data_heatmap$value, "%"))
+
+plot_heatmap <- wjp_heatmap(data_heatmap, x = "column", y = "row", fill = "band",
+                            labels = "text")
+
+save_example(plot_heatmap, "heatmap")
+
+# =============================================================================
+# 17. SCATTER PLOT
+# =============================================================================
+message("17. Generating scatter plot example...")
+
+data_scatter <- data.frame(
+  area        = rep(c("Rural", "Urban"), each = 6),
+  category    = rep(c("Consumer", "Housing", "Family", "Employment", "Land", "Education"), 2),
+  prevalence  = c(41, 9, 21, 18, 20, 9, 39, 10, 17, 19, 18, 9),
+  seriousness = c(4.6, 4.3, 5.5, 6.0, 4.5, 5.6, 4.8, 4.9, 5.6, 6.4, 5.2, 5.9)
+)
+
+plot_scatter <- wjp_scatter(data_scatter, x = "prevalence", y = "seriousness",
+                            labels = "category", facet = "area",
+                            highlight = c("Consumer", "Housing", "Family"),
+                            trend = "lm", xlim = c(0, 50), ylim = c(4, 8),
+                            x_labels = function(x) paste0(x, "%"))
+
+save_example(plot_scatter, "scatter")
+
+# =============================================================================
+# 18. NETWORK
+# =============================================================================
+message("18. Generating network example...")
+
+data_nodes <- data.frame(
+  problem = c("Consumer", "Housing", "Family", "Money & Debt", "Employment"),
+  share   = c("(40%)", "(10%)", "(18%)", "(22%)", "(19%)"),
+  x       = c(1.0, 0.3, 0.9, 0.3, 0.1),
+  y       = c(0.2, 0.6, 0.5, 0.9, 0.3)
+)
+data_nodes$name <- c("Consumer", "Housing", "Family", "Money &\nDebt", "Employment")
+data_edges <- data.frame(
+  from = c("Consumer", "Consumer", "Housing", "Family", "Money & Debt", "Housing"),
+  to   = c("Family", "Money & Debt", "Money & Debt", "Employment", "Employment", "Family"),
+  lift = c(1.7, 2.1, 2.8, 1.9, 2.4, 2.2)
+)
+
+plot_network <- wjp_network(data_nodes, data_edges, labels = "name", ids = "problem",
+                            value_labels = "share", weight = "lift")
+
+save_example(plot_network, "network", width = 6, height = 5)
+
+# =============================================================================
+# 19. UPSET DIAGRAM
+# =============================================================================
+message("19. Generating UpSet example...")
+
+data_upset <- data.frame(
+  combination = c("Assistance + Information", "Assistance", "Information",
+                  "Assistance + Information + Resolution", "Resolution"),
+  value       = c(18.2, 14.5, 9.1, 7.4, 2.2)
+)
+data_upset$text <- paste0(format(data_upset$value, nsmall = 1), "%")
+
+plot_upset <- wjp_upset(data_upset, intersections = "combination", target = "value",
+                        labels = "text", width = 6 * 72, height = 5 * 72)
+
+save_example(plot_upset, "upset", width = 6, height = 5)
+
+# =============================================================================
+# 20. SANKEY DIAGRAM
+# =============================================================================
+message("20. Generating sankey example...")
+
+data_sankey <- data.frame(
+  column  = c(1, 1, 2, 2, 2, 2, 3, 3, 3),
+  node    = c("contacted", "not_contacted", "appropriate", "non_appropriate",
+              "needed_no", "no_need", "access", "no_access", "excluded"),
+  value   = c(30, 70, 22, 8, 40, 30, 31, 69, 30),
+  parent  = c(NA, NA, "contacted", "contacted", "not_contacted", "not_contacted", NA, NA, NA),
+  outcome = c(NA, NA, "access", "no_access", "no_access", "excluded", NA, NA, NA),
+  label   = c("Contacted:", "Did not contact:", "Appropriate:", "Non-appropriate:",
+              "Needed, no access:", "Did not need:", "Had access:", "Had no access:",
+              "Did not need:")
+)
+data_sankey$text <- paste0(data_sankey$value, "%")
+
+plot_sankey <- wjp_sankey(data_sankey, column = "column", node = "node", target = "value",
+                          value_labels = "text", parent = "parent", outcome = "outcome",
+                          labels = "label", headers = c("Contacted", "Type or reason", "Access"),
+                          width = 6 * 72)
+
+save_example(plot_sankey, "sankey", width = 6, height = 5.2)
+
+# =============================================================================
 # SPREAD LABELS HELPER
 # =============================================================================
 message("Generating spread_labels_x() example...")

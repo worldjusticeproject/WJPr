@@ -167,6 +167,8 @@ wjp_rose <- function(
           panel.grid.major.x = element_blank(),
           panel.grid.major.y = element_blank())
 
+  plt <- wjp_apply_ptheme(plt, ptheme)
+
   return(plt)
 
 }
