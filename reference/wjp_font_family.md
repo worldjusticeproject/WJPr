@@ -22,9 +22,11 @@ A single string with the active font family.
 Families registered by
 [`wjp_fonts()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_fonts.md):
 `"Lato Full"` (default), `"Lato Light"`, `"Lato Black"`, and
-`"Inter Tight"`. Any other family already registered in your session
+`"Inter Tight"` (plus one family per weight of Inter Tight with the
+systemfonts engine). Any other family already registered in your session
 (via
-[`sysfonts::font_add_google()`](https://rdrr.io/pkg/sysfonts/man/font_add_google.html)
+[`sysfonts::font_add_google()`](https://rdrr.io/pkg/sysfonts/man/font_add_google.html),
+[`systemfonts::register_font()`](https://systemfonts.r-lib.org/reference/register_font.html)
 or similar) can also be used.
 
 There are three ways to control the font of a WJPr chart:

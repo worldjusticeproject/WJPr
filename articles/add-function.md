@@ -135,12 +135,21 @@ plt <- ggplot2::ggplot(data, ggplot2::aes(grouping_var, target_var, fill = color
 
 plt <- plt + ptheme + wjp_legend_theme(show_legend)
 
+# Always last: the elements of `ptheme` that differ from the default
+# WJP_theme() take precedence over the chart's own styling
+plt <- wjp_apply_ptheme(plt, ptheme)
+
 return(plt)
 ```
 
 Do not call
 [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md)
 directly inside the function when a `ptheme` argument already exists.
+Text layers use
+[`wjp_font_family()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_font_family.md)
+and, for font faces, the internal `wjp_face()` so weight faces such as
+`"semibold.italic"` work; sizes are given in points and converted with
+`wjp_pt_text()`.
 
 ## 6. Add tests
 

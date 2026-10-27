@@ -46,11 +46,28 @@ devtools::test()                    # Run all tests
 testthat::test_file("tests/testthat/test-charts.R")  # Run single test file
 ```
 
-Test files: `test-charts.R` (chart functions), `test-spread_labels.R`
-(label solver), `test-analysis.R`
+Test files: `test-charts.R` (chart functions), `test-report-arguments.R`
+(1.2.0 arguments of existing charts), `test-<chart>.R` for `edgebars`,
+`funnel`, `cards`, `heatmap`, `scatter`, `network`, `upset`, `sankey`,
+`test-infrastructure.R` (theme, palettes, layout, `ptheme` overrides,
+[`wjp_drawn()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_drawn.md),
+[`wjp_save()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_save.md)),
+`test-visual-snapshots.R` (snapshots of the texts every chart draws, in
+order: `tests/testthat/_snaps/visual-snapshots.md`; review changes with
+[`testthat::snapshot_review()`](https://testthat.r-lib.org/reference/snapshot_accept.html)),
+`test-report-fidelity.R` (runs only when `SRC_REPORTS_ROOT` points to
+the report pipeline), `test-spread_labels.R` (label solver),
+`test-analysis.R`
 ([`diffmeans()`](https://worldjusticeproject.github.io/WJPr/reference/diffmeans.md),
 [`wjp_check_data()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_check_data.md),
 [`wjp_check_deps()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_check_deps.md)).
+
+Report fidelity (42 figures of *Paths to Justice*, drawn with WJPr
+arguments only and compared with the published PNGs):
+
+``` bash
+SRC_REPORTS_ROOT=<path to src_reports> Rscript dev/report-fidelity.R [--figs 1,9,13] [--out <dir>]
+```
 
 ### Documentation
 
@@ -84,18 +101,55 @@ takes `order` as a named vector instead of a column name
 ### Key Files
 
 - `R/utils.R` -
-  [`wjp_fonts()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_fonts.md)
-  loads Lato and Inter Tight fonts;
   [`wjp_font_family()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_font_family.md)
   returns the active family (`options(wjpr.family = )`);
   [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md)
-  provides the base ggplot2 theme;
+  provides the base ggplot2 theme (`base_size`, `text_colour`, `grid`,
+  `grid_colour`, `grid_linetype`, `base_theme`);
   [`wjp_palette()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md)
-  exposes the WJP categorical palette; internal helpers
+  /
+  [`wjp_colors()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md)
+  expose the categorical and report palettes;
+  [`scale_fill_wjp_seq()`](https://worldjusticeproject.github.io/WJPr/reference/scale_fill_wjp_seq.md)
+  /
+  [`scale_colour_wjp_seq()`](https://worldjusticeproject.github.io/WJPr/reference/scale_fill_wjp_seq.md)
+  sequential scales (RGB mixing, `wjp_mix_rgb()`); internal helpers
   `wjp_default_cvec()` (palette fallback when `cvec` is NULL),
-  `wjp_legend_breaks()` and `wjp_legend_theme()` (shared top legend)
+  `wjp_legend_breaks()` and `wjp_legend_theme()` (shared legend:
+  position, direction, text size/face, key size, justification)
+- `R/fonts.R` -
+  [`wjp_fonts()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_fonts.md)
+  with two engines: `"showtext"` (default, sysfonts + showtext) and
+  `"systemfonts"` (static Inter Tight and Lato files added with
+  [`systemfonts::add_fonts()`](https://systemfonts.r-lib.org/reference/add_fonts.html)
+  and registered as `Lato Full`, `Lato Light`, `Lato Black`,
+  `Inter Tight Medium/SemiBold/Bold`); internal `wjp_face()` resolves
+  role faces such as `"semibold.italic"` to a family + fontface (falls
+  back to bold)
+- `R/layout.R` -
+  [`wjp_layout()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_layout.md)
+  (geometry in points) and its resolver `wjp_layout_resolve()`; point
+  conversions `wjp_pt_text()`, `wjp_pt_line()`, `wjp_pt_point()`,
+  `wjp_bp()`, `wjp_margin_bp()`; `wjp_apply_ptheme()` (applies the
+  elements of `ptheme` that differ from the default
+  [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md)
+  after the chart’s styling; must be the last step of every chart
+  function); `wjp_text_width_pt()`
+- `R/save.R` -
+  [`wjp_save()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_save.md)
+  (SVG with text outlines, PNG laid out like the SVG, PDF; exact size),
+  `wjp_plot_size()`, `wjp_outline_svg()`, `wjp_frozen_gtable()`
+- `R/drawn.R` -
+  [`wjp_drawn()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_drawn.md)
+  returns the texts (layers, axes, strips) or marks a chart draws
+- `R/geometry.R` - shared polygons (`wjp_round_rect_df()`,
+  `wjp_circle_df()`, `wjp_bezier_band()`), `wjp_contrast_text()`,
+  `wjp_wrap()`
 - `R/*Chart.R` - Each chart type has its own file (barsChart.R,
-  lineChart.R, radarChart.R, etc.)
+  lineChart.R, radarChart.R, etc.); `barsChart.R` also holds
+  `wjp_check_number()`, `wjp_offset_text()` (text a fixed number of
+  points from its anchor, via a transparent `geom_label()`) and
+  `wjp_ref_line_layers()`
 - `R/spread_labels.R` -
   [`spread_labels_x()`](https://worldjusticeproject.github.io/WJPr/reference/spread_labels_x.md)
   deterministic horizontal collision solver that spreads overlapping
@@ -118,27 +172,36 @@ takes `order` as a named vector instead of a column name
   (`data/*.rda`, built by `data-raw/gpp.R` and `data-raw/roli.R`)
 - `data-raw/generate-examples.R` - Regenerates the gallery/README images
   in `man/figures/`
-- `dev/` - Ad-hoc visual preview scripts (excluded from the build)
+- `dev/` - Ad-hoc visual preview scripts and `report-fidelity.R` /
+  `report-fidelity-new.R` (the 42 report figures drawn with WJPr
+  arguments only; excluded from the build)
 - `vignettes/articles/` - pkgdown articles: `gallery`,
   `data-preparation`, `dataviz` (usage) and `add-function`,
   `development-guide` (development)
 
-### Chart Functions (12)
+### Chart Functions (19)
 
 | Function | File | Description |
 |----|----|----|
-| [`wjp_bars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_bars.md) | barsChart.R | Vertical/horizontal (and stacked) bar charts |
+| [`wjp_bars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_bars.md) | barsChart.R | Vertical/horizontal bars: stacked or side by side (`position = "dodge"`), tracks, centered bars, value positions, reference lines, `layout` |
 | [`wjp_divbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_divbars.md) | divbarsChart.R | Diverging bar charts |
 | [`wjp_dots()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dots.md) | dotsChart.R | Dot plots, with optional CIs and collision-free value labels (`show_labels`, via [`spread_labels_x()`](https://worldjusticeproject.github.io/WJPr/reference/spread_labels_x.md)) |
 | [`wjp_lines()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_lines.md) | lineChart.R | Line charts with points |
 | [`wjp_slope()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_slope.md) | slopeChart.R | Slope charts for two time points |
-| [`wjp_dumbbells()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dumbbells.md) | dumbbellsChart.R | Dumbbell plots |
+| [`wjp_dumbbells()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dumbbells.md) | dumbbellsChart.R | Dumbbell plots, with group headers, single-value rows, highlighted rows, `layout` |
 | [`wjp_radar()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_radar.md) | radarChart.R | Radar/spider charts |
 | [`wjp_rose()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_rose.md) | roseChart.R | Rose/polar bar charts |
 | [`wjp_gauge()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_gauge.md) | gaugeChart.R | Gauge/speedometer charts |
 | [`wjp_lollipops()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_lollipops.md) | lollipopChart.R | Lollipop charts |
-| [`wjp_edgebars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_edgebars.md) | edgebarsChart.R | Edge-aligned horizontal bars |
-| [`wjp_groupbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_groupbars.md) | groupbarsChart.R | Faceted stacked bars by demographic groups, with optional CI and national line/bar |
+| [`wjp_edgebars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_edgebars.md) | edgebarsChart.R | Edge-aligned horizontal bars (labels above or at the left) |
+| [`wjp_groupbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_groupbars.md) | groupbarsChart.R | Stacked bars by demographic groups: facets (`group_header = "strip"`) or a single panel with header rows (`"row"`, report layout), named averages, N/A cells, CI, `layout` |
+| [`wjp_funnel()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_funnel.md) | funnelChart.R | Centered funnel bars with connectors |
+| [`wjp_cards()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_cards.md) | cardsChart.R | Rounded cards on a sequential scale with values and differences |
+| [`wjp_heatmap()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_heatmap.md) | heatmapChart.R | Tile matrix with bands or continuous fill |
+| [`wjp_scatter()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_scatter.md) | scatterChart.R | Faceted scatter with highlighted/hollow points, trend, repelled labels |
+| [`wjp_network()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_network.md) | networkChart.R | Network of nodes and weighted edges on fixed coordinates |
+| [`wjp_upset()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_upset.md) | upsetChart.R | UpSet diagram as a single ggplot |
+| [`wjp_sankey()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_sankey.md) | sankeyChart.R | Three-column sankey with label boxes |
 
 Other exported functions:
 [`diffmeans()`](https://worldjusticeproject.github.io/WJPr/reference/diffmeans.md),
@@ -148,19 +211,31 @@ Other exported functions:
 [`wjp_fonts()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_fonts.md),
 [`wjp_font_family()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_font_family.md),
 [`wjp_palette()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md),
+[`wjp_colors()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md),
+[`scale_fill_wjp_seq()`](https://worldjusticeproject.github.io/WJPr/reference/scale_fill_wjp_seq.md),
+[`scale_colour_wjp_seq()`](https://worldjusticeproject.github.io/WJPr/reference/scale_fill_wjp_seq.md),
+[`scale_color_wjp_seq()`](https://worldjusticeproject.github.io/WJPr/reference/scale_fill_wjp_seq.md),
+[`wjp_layout()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_layout.md),
+[`wjp_save()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_save.md),
+[`wjp_drawn()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_drawn.md),
 [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md),
 and the re-exported `%>%`.
 
 ### Styling Conventions
 
-- Font: Lato (loaded via Google Fonts using sysfonts/showtext); always
-  use
+- Font: Lato (loaded via Google Fonts using sysfonts/showtext, or as
+  static files with `wjp_fonts(engine = "systemfonts")`); always use
   [`wjp_font_family()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_font_family.md)
   (never a hard-coded `"Lato Full"`) for text layers so
-  `options(wjpr.family = )` switches every chart
+  `options(wjpr.family = )` switches every chart, and `wjp_face()` for
+  font faces so weight faces (`"semibold.italic"`) work
 - WJP color palette uses hex codes such as `#482d8b`, `#2894aa`,
   `#f26b21`, and `#555659` (full ordered palette available via
-  [`wjp_palette()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md))
+  [`wjp_palette()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md));
+  report colors via
+  [`wjp_colors()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md)
+  (`main` `#575796`, `eu` `#A8A8C8`, `eu_text` `#7D7DA8`, `track`
+  `#E5E8E8`, `text` `#1A1A1A`, …)
 - Colors are passed via named vectors (`cvec`) where names match
   grouping variable values; when `cvec` is NULL, functions fall back to
   [`wjp_palette()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md)
@@ -168,15 +243,31 @@ and the re-exported `%>%`.
 - Always call
   [`wjp_fonts()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_fonts.md)
   before plotting to ensure fonts are available
-- Value labels: bold, `size = 3.514598` (10 pt), ink color `#4a4a49`
+- Argument vocabulary: `value_*` for printed values, `label_*` for
+  category labels, `header_*` for group titles; sizes, gaps and margins
+  in points (1/72 in); `point_size`, `segment_width`, `line_size` keep
+  ggplot2 units
+- Value labels: bold, `size = 3.514598` (10 pt), ink color `#4a4a49`;
+  printed as given by a labels column (no reformatting)
 - Grid lines:
   [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md)
   draws dashed `#5e5c5a` lines (kept by dots/dumbbells over their row
   strips); bar, line, and lollipop charts override the value-axis grid
-  with solid `#d1cfd1`
+  with `#d1cfd1`
 - Category axis text: `#524F4C`, `hjust = 0`
-- Horizontal charts display the first data row at the top
+- Horizontal charts display the first data row at the top (with `order`;
+  [`wjp_bars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_bars.md)
+  sorts categories alphabetically otherwise)
 - Legends: horizontal, top-left, via `wjp_legend_theme(show_legend)`
+- Theme order in chart functions: `ptheme` first (base), chart-specific
+  `theme()` next, legend theme, and `wjp_apply_ptheme(plt, ptheme)`
+  last; default outputs must stay pixel-identical (compare renders of
+  the Rd examples before/after a change)
+- Geometry in points: with a `layout`, charts set
+  `panel.widths`/`panel.heights` in bigpts and draw category labels as a
+  text layer in the label column (clip off), so
+  [`wjp_save()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_save.md)
+  gets a definite size
 
 ### Documentation
 
@@ -236,8 +327,10 @@ wjp_newchart <- function(data, target, grouping, colors = NULL, cvec = NULL,
   plt <- ggplot(data, aes(...)) + geom_*(show.legend = show_legend) +
     scale_fill_manual(values = cvec, breaks = wjp_legend_breaks(data$colors_var), name = NULL)
 
-  # 5. Apply theme, chart-specific tweaks, and the shared legend
+  # 5. Apply theme, chart-specific tweaks, and the shared legend; then the
+  #    user's ptheme overrides, always last
   plt <- plt + ptheme + theme(...) + wjp_legend_theme(show_legend)
+  plt <- wjp_apply_ptheme(plt, ptheme)
 
   return(plt)
 }
@@ -249,7 +342,8 @@ Roxygen2 docs with `@export`, `@param`, `@return`, `@examples`
 
 Include `lifecycle::badge("experimental")`
 
-Add tests in `tests/testthat/`
+Add tests in `tests/testthat/` and a case in `test-visual-snapshots.R`
+(accept the new snapshot)
 
 Add to `data-raw/generate-examples.R` and
 `vignettes/articles/gallery.Rmd`

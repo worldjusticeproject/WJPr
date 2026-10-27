@@ -1,6 +1,186 @@
 # Changelog
 
-## WJPr (development version)
+## WJPr 1.2.0
+
+This release closes the gaps found when drawing the 42 figures of the
+*Paths to Justice* country report with WJPr. Every figure of that report
+can now be drawn with WJPr arguments alone (ink similarity with the
+published figures between 0.992 and 1.000; see `dev/report-fidelity.R`),
+where WJPr 1.1.0 needed 5 to 13 code workarounds per figure.
+
+### New chart functions
+
+- [`wjp_funnel()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_funnel.md):
+  centered funnel bars with connectors between stages.
+- [`wjp_cards()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_cards.md):
+  grid of rounded cards colored on a sequential scale, with a value and
+  a difference (“+16 points”) per card; differences can be computed
+  against the first card of each row or column (`ref`).
+- [`wjp_heatmap()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_heatmap.md):
+  tile matrix with categorical bands or a continuous fill, text colored
+  by contrast, rotated top axis and axis titles.
+- [`wjp_scatter()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_scatter.md):
+  faceted scatter plot with highlighted and hollow points, an optional
+  linear trend, and repelled labels (ggrepel, with a seed).
+- [`wjp_network()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_network.md):
+  network of nodes (filled by centrality or value) and weighted edges on
+  fixed coordinates, with labels colored by contrast.
+- [`wjp_upset()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_upset.md):
+  UpSet diagram returned as a single ggplot (intersection bars,
+  membership matrix, and set sizes).
+- [`wjp_sankey()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_sankey.md):
+  three-column sankey (first-level nodes, second-level nodes with a
+  parent and an outcome, outcomes with notes) with rounded label boxes.
+
+### Geometry, theme, fonts, colors, and export
+
+- New
+  [`wjp_layout()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_layout.md):
+  the geometry of a chart in points (label column, 100% track, value
+  column, row, bar, and header heights, inset, and margins).
+  [`wjp_groupbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_groupbars.md),
+  [`wjp_bars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_bars.md),
+  and
+  [`wjp_dumbbells()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dumbbells.md)
+  accept it in a new `layout` argument; the chart then has fixed panel
+  sizes and a definite size.
+- [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md)
+  gains `base_size`, `text_colour`, `grid` (`"major"`, `"x"`, `"y"`,
+  `"none"`), `grid_colour`, `grid_linetype`, and `base_theme`. The font
+  family is also set on the root `text` element, so titles, legends, and
+  strips inherit it.
+- `ptheme` now takes precedence over the chart’s own styling: the
+  elements of `ptheme` that differ from the default
+  [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md)
+  are applied last in every chart function (for example,
+  `ptheme = WJP_theme(base_size = 9)` resizes the axis labels). The
+  default output is unchanged. Complete themes (including
+  `WJP_theme(base_theme = )`) are used as the starting point instead.
+- `wjp_fonts(engine = "systemfonts")` registers the static font files of
+  Inter Tight and Lato with systemfonts instead of showtext, so devices
+  write real text that can be converted to outlines, and every weight is
+  available. Files are downloaded once from Google Fonts or read from
+  `path`; they take precedence over fonts with the same name installed
+  on the system. Text arguments accept the weight faces `"medium"`,
+  `"semibold"` (and their `.italic` variants),
+  e.g. `value_fontface = "semibold.italic"`.
+- New
+  [`wjp_save()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_save.md):
+  writes SVG (with text converted to outlines), PNG (at `png_dpi`, with
+  the same layout as the SVG), or PDF at an exact size; the size
+  defaults to the definite size of charts drawn with a layout.
+- New
+  [`wjp_colors()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md)
+  and `wjp_palette("report")`: the named colors of WJP country reports
+  (`main`, `eu`, `eu_text`, `track`, `text`, …).
+- New
+  [`scale_fill_wjp_seq()`](https://worldjusticeproject.github.io/WJPr/reference/scale_fill_wjp_seq.md)
+  and
+  [`scale_colour_wjp_seq()`](https://worldjusticeproject.github.io/WJPr/reference/scale_fill_wjp_seq.md):
+  sequential scales between two colors mixed in RGB space.
+- New
+  [`wjp_drawn()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_drawn.md):
+  the texts (with position, size, font, and color) and marks that a
+  chart draws, to verify a chart without rasterizing it.
+- Shared legends gain position, direction, text size and face, key size,
+  and justification arguments in
+  [`wjp_bars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_bars.md)
+  and
+  [`wjp_dumbbells()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dumbbells.md).
+
+### Changes to existing functions
+
+- [`wjp_groupbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_groupbars.md):
+  - `group_header = "row"` draws the chart in one panel with group
+    titles as header rows in the label column (selected automatically
+    with a `layout`).
+  - `national_value` accepts several named values (e.g. National and EU
+    averages), each drawn as a reference row; `national_value_label`
+    sets their printed text.
+  - `na_label` prints a text (e.g. “N/A”) for suppressed cells;
+    `label_position = "column"` aligns the values after the track, with
+    `value_gap` in points.
+  - `scale_max` plots other scales (e.g. a 0-10 mean);
+    `show_complement = FALSE` removes the gray track; `xlim` sets the
+    value axis.
+  - Text roles: `value_size`, `value_fontface`, `value_colour`,
+    `label_size`, `label_colour`, `highlight_levels`,
+    `highlight_fontface`, `highlight_colour`, `header_fontface`,
+    `header_colour`, `header_size`.
+  - Rich text is used only for highlighted labels, and plain theme
+    overrides of `axis.text.y` now work with ggplot2 \>= 4.0.
+- [`wjp_bars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_bars.md):
+  - `position = "dodge"` draws series side by side (`dodge_width`,
+    `series_reverse`); value labels and the new 100% `track` follow the
+    bars.
+  - `value_position` (`"end"`, `"outside"`, `"center"`, `"column"`) with
+    `value_offset` in points, `value_size`, `value_fontface`, and
+    `value_colors` per series.
+  - `align = "center"` centers the bars; `limits` (use `NA` to scale to
+    the data), `breaks`, `axis_labels`, `expand_mult`,
+    `expand_discrete`.
+  - `value_axis`, `grid`, `grid_color`, `ylab`, `baseline`, `ref_lines`,
+    `clip`, `label_align`, `label_size`, `label_colour`, `label_wrap`,
+    and `label_lineheight`.
+  - Without `lab_pos`, labels of stacked segments now follow their
+    segments
+    ([`position_stack()`](https://ggplot2.tidyverse.org/reference/position_stack.html));
+    previously they were placed at the segment value.
+- [`wjp_dumbbells()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_dumbbells.md):
+  - Categories may have a single value (the point and its label are
+    drawn).
+  - `headers` draws a header row above each group; `highlight_levels`
+    styles rows such as a national average.
+  - `legend_labels`, `legend_position`, `legend_direction`, `breaks`,
+    `expand_mult`, `axis_line`, `value_axis`, `strips`, `strip_color`,
+    `grid`, `grid_ontop`, `value_position = "outside"` with `value_gap`,
+    `value_size`, `value_fontface`, `point_size`, `point_stroke`,
+    `segment_color`, `segment_width`, `clip`, `label_align`,
+    `label_size`, and `label_colour`.
+- [`wjp_lollipops()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_lollipops.md)
+  gains `label_gap` (points), `label_hjust`, `points`, `label_size`,
+  `label_fontface`, and `label_color`.
+- [`wjp_edgebars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_edgebars.md)
+  gains `label_position = "left"`, `value_labels` (printed as given),
+  `axis`, `grid`, and `margins`.
+
+### Testing
+
+- Visual regression tests: a snapshot of the texts every chart function
+  draws, in order (`tests/testthat/_snaps/visual-snapshots.md`).
+- `dev/report-fidelity.R` draws the 42 figures of the report with WJPr
+  arguments only and measures their similarity with the published
+  figures; `tests/testthat/test-report-fidelity.R` runs it when
+  `SRC_REPORTS_ROOT` points to the report pipeline.
+
+### Other changes
+
+- WJPr now requires ggplot2 \>= 3.5.0 (fixed panel sizes and dodge
+  order).
+- svglite, xml2, textshaping, ragg, and png are suggested for
+  [`wjp_save()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_save.md).
+
+### Names that differ from the gap analysis
+
+The gap analysis proposed names per function; the implementation uses
+one vocabulary for every chart: `value_*` for printed values, `label_*`
+for category labels, and `header_*` for group titles. Where a proposal
+differed:
+
+| Proposed | Implemented |
+|----|----|
+| `wjp_groupbars(label_size, label_fontface)` for values | `value_size`, `value_fontface` |
+| `wjp_groupbars(label_gap)` | `value_gap` |
+| `wjp_groupbars(reference_rows)` | named `national_value` |
+| `row_height`, `header_height`, `label_width`, `track_width` arguments | fields of [`wjp_layout()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_layout.md) |
+| `wjp_bars(label_colors, label_face, label_size, label_position, label_offset)` | `value_colors`, `value_fontface`, `value_size`, `value_position`, `value_offset` |
+| `wjp_bars(labels)` for axis labels, `scale_max = "data"` | `axis_labels`, `limits = c(0, NA)` |
+| `wjp_dumbbells(label_face, label_size, label_side, label_gap)` | `value_fontface`, `value_size`, `value_position`, `value_gap` |
+| `wjp_dumbbells(header_style, expand)` | `header_fontface`/`header_colour`/`header_size`, `expand_mult` |
+| `attr(p, "wjp_drawn")` | `wjp_drawn(p)` |
+| [`wjp_fonts()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_fonts.md) weights per role | weight faces such as `"semibold.italic"` |
+
+### Edgebars
 
 - [`wjp_edgebars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_edgebars.md)
   now supports 100% background tracks, highlighted categories, complete

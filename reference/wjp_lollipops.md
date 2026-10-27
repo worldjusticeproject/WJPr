@@ -20,7 +20,13 @@ wjp_lollipops(
   point_size = 4,
   line_color = "#d9dde3",
   point_color = "#482d8b",
-  ptheme = WJP_theme()
+  ptheme = WJP_theme(),
+  label_gap = NULL,
+  label_hjust = 0.5,
+  points = TRUE,
+  label_size = 10,
+  label_fontface = "bold",
+  label_color = "#4a4a49"
 )
 ```
 
@@ -70,6 +76,34 @@ wjp_lollipops(
 
   ggplot theme to apply. Default is
   [`WJP_theme()`](https://worldjusticeproject.github.io/WJPr/reference/WJP_theme.md).
+
+- label_gap:
+
+  Numeric. Distance, in points, between the edge of the point (or the
+  end of the line) and the value label, which is then anchored by
+  `label_hjust`. Default is `NULL` (labels centered 7 percentage points
+  after the value, as in earlier versions).
+
+- label_hjust:
+
+  Numeric. Horizontal justification of the value labels when `label_gap`
+  is `NULL`. Default is `0.5`.
+
+- points:
+
+  Logical. Draw the points. Default is `TRUE`.
+
+- label_size:
+
+  Numeric. Size of the value labels, in points. Default is `10`.
+
+- label_fontface:
+
+  String. Font face of the value labels. Default is `"bold"`.
+
+- label_color:
+
+  String. Color of the value labels. Default is `"#4a4a49"`.
 
 ## Value
 

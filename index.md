@@ -10,9 +10,16 @@ country-report and research workflows.
 
 WJPr provides:
 
-- Chart functions for bars, diverging bars, grouped bars, edge bars,
-  dots, lines, slopes, dumbbells, lollipops, radar, rose, and gauge
-  visualizations.
+- Chart functions for bars (stacked or side by side), diverging bars,
+  grouped bars, edge bars, funnels, dots, lines, slopes, dumbbells,
+  lollipops, scatter plots, radar, rose, gauge, cards, heat maps,
+  networks, UpSet diagrams, and sankey diagrams.
+- Report-grade geometry:
+  [`wjp_layout()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_layout.md)
+  fixes label columns, tracks, rows, headers, and margins in points, and
+  [`wjp_save()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_save.md)
+  exports charts at their exact size, with SVG text converted to
+  outlines and PNG at 300 dpi.
 - Built-in sample datasets for Rule of Law Index and General Population
   Poll workflows.
 - A shared WJP theme
@@ -20,9 +27,14 @@ WJPr provides:
   fonts
   ([`wjp_fonts()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_fonts.md),
   [`wjp_font_family()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_font_family.md)),
-  and color palette
-  ([`wjp_palette()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md))
+  color palettes
+  ([`wjp_palette()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md),
+  [`wjp_colors()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_palette.md)),
+  and sequential scales
+  ([`scale_fill_wjp_seq()`](https://worldjusticeproject.github.io/WJPr/reference/scale_fill_wjp_seq.md))
   for consistent report graphics.
+- [`wjp_drawn()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_drawn.md)
+  to check the texts and marks a chart draws without rasterizing it.
 - [`spread_labels_x()`](https://worldjusticeproject.github.io/WJPr/reference/spread_labels_x.md),
   a deterministic helper that keeps value labels in row-based point
   charts from overlapping.
@@ -129,6 +141,24 @@ See
 [`wjp_font_family()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_font_family.md)
 for per-chart and theme-only alternatives.
 
+### Example: Exporting a Report Figure
+
+Register the static font files with systemfonts and save the chart at
+its exact size, with the text of the SVG converted to outlines:
+
+``` r
+
+wjp_fonts(engine = "systemfonts")
+options(wjpr.family = "Inter Tight")
+
+p <- wjp_bars(
+  data4bars, target = "trust", grouping = "country", direction = "horizontal",
+  layout = wjp_layout(label_width = 120, track_width = 300, row_height = 22, bar_height = 18)
+)
+wjp_save(p, "trust.svg")                  # size of the layout, text as outlines
+wjp_save(p, "trust.png", png_dpi = 300)
+```
+
 ## Chart Gallery
 
 WJPr includes focused chart functions for common WJP reporting patterns:
@@ -168,6 +198,23 @@ chart](reference/figures/example-edgebars.png)**Edgebars**
 [![Example grouped bar chart with confidence
 intervals](reference/figures/example-groupbars.png)**Grouped Bars**
 `wjp_groupbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_groupbars.md)
+[![Example funnel chart](reference/figures/example-funnel.png)**Funnel**
+`wjp_funnel()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_funnel.md)
+[![Example cards](reference/figures/example-cards.png)**Cards**
+`wjp_cards()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_cards.md)
+[![Example heat map](reference/figures/example-heatmap.png)**Heat Map**
+`wjp_heatmap()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_heatmap.md)
+[![Example scatter plot](reference/figures/example-scatter.png)**Scatter
+Plot**
+`wjp_scatter()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_scatter.md)
+[![Example network](reference/figures/example-network.png)**Network**
+`wjp_network()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_network.md)
+[![Example UpSet diagram](reference/figures/example-upset.png)**UpSet
+Diagram**
+`wjp_upset()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_upset.md)
+[![Example sankey diagram](reference/figures/example-sankey.png)**Sankey
+Diagram**
+`wjp_sankey()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_sankey.md)
 
 For a complete interactive gallery with code examples, see the [Chart
 Gallery

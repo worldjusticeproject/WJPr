@@ -690,6 +690,285 @@ Input data for wjp_groupbars(): target = value, grouping = group, levels
 
 ------------------------------------------------------------------------
 
+## Report Layout: Grouped Bars in Points
+
+`wjp_groupbars(group_header = "row")` draws the layout of WJP country
+reports in a single panel: group titles are header rows in the label
+column, national and EU averages are named reference rows, suppressed
+cells print “N/A”, and values are aligned in a column after the 100%
+track. A
+[`wjp_layout()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_layout.md)
+fixes every measure in points, so the chart keeps its size on any device
+and
+[`wjp_save()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_save.md)
+can export it at its exact size, with text converted to outlines.
+
+``` r
+
+report <- data.frame(
+  group    = c("Gender", "Gender", "Age Group", "Age Group", "Age Group"),
+  category = c("Male", "Female", "55+", "35-54", "18-34"),
+  value    = c(65, 71, 61, NA, 70)
+)
+report$text <- ifelse(is.na(report$value), "N/A", paste0(report$value, "%"))
+
+wjp_groupbars(
+  report,
+  target               = "value",
+  grouping             = "group",
+  levels               = "category",
+  labels               = "text",
+  colors               = c("#575796", "#E5E8E8"),
+  group_order          = c("Gender", "Age Group"),
+  level_order          = list(Gender = c("Male", "Female"),
+                              `Age Group` = c("55+", "35-54", "18-34")),
+  show_national        = TRUE,
+  national_style       = "bar",
+  national_value       = c("National Average" = 68, "EU Average" = 49),
+  national_value_label = c("68%", "49%"),
+  label_position       = "column",
+  value_size           = 9,
+  value_fontface       = "bold.italic",
+  highlight_fontface   = "bold.italic",
+  header_fontface      = "bold.italic",
+  label_colour         = "#1A1A1A",
+  layout = wjp_layout(label_width = 149, label_gap = 6, track_width = 250,
+                      value_gap = 5, value_width = 27, row_height = 15.5,
+                      bar_height = 13.5, header_height = 22, header_baseline = 17,
+                      margins = c(2, 0, 4, 0))
+)
+```
+
+![](gallery_files/figure-html/groupbars-report-1.png)
+
+To export it: `wjp_fonts(engine = "systemfonts")` registers the static
+font files without showtext, and `wjp_save(plot, "figure.svg")` writes
+the SVG at the chart’s size with its text as outlines (`.png` files are
+rendered at `png_dpi`, 300 by default).
+
+------------------------------------------------------------------------
+
+## Side-by-Side Bars
+
+`wjp_bars(position = "dodge")` draws two or more series per category,
+with an optional 100% `track` and value labels that follow their bars.
+
+``` r
+
+paired <- data.frame(
+  category = rep(c("Public Services", "Consumer", "Community", "Money & Debt"), 2),
+  series   = rep(c("Atlantis", "EU Average"), each = 4),
+  value    = c(40, 40, 28, 22, 19, 21, 17, 16),
+  ord      = rep(1:4, 2)
+)
+paired$text <- paste0(paired$value, "%")
+
+wjp_bars(
+  paired,
+  target         = "value",
+  grouping       = "category",
+  labels         = "text",
+  colors         = "series",
+  order          = "ord",
+  cvec           = c("Atlantis" = "#575796", "EU Average" = "#A8A8C8"),
+  direction      = "horizontal",
+  position       = "dodge",
+  track          = TRUE,
+  value_position = "column",
+  value_colors   = c("Atlantis" = "#575796", "EU Average" = "#7D7DA8"),
+  value_axis     = FALSE,
+  grid           = FALSE,
+  label_align    = "right",
+  show_legend    = TRUE
+)
+```
+
+![](gallery_files/figure-html/bars-dodge-1.png)
+
+------------------------------------------------------------------------
+
+## Funnel Chart
+
+[`wjp_funnel()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_funnel.md) -
+Stages of a process as centered bars, connected from one stage to the
+next.
+
+``` r
+
+journey <- data.frame(
+  stage = c("Had access to information and advice",
+            "Obtained appropriate assistance\nwhen they needed it",
+            "Turned to a dispute resolution\nmechanism when they needed it"),
+  value = c(61, 32, 28)
+)
+journey$text <- paste0(journey$value, "%")
+
+wjp_funnel(journey, target = "value", grouping = "stage", labels = "text", width = 468)
+```
+
+![](gallery_files/figure-html/funnel-1.png)
+
+------------------------------------------------------------------------
+
+## Cards
+
+[`wjp_cards()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_cards.md) -
+A grid of cards colored on a sequential scale, with a value and its
+difference from a reference card.
+
+``` r
+
+cards <- data.frame(
+  hardship = rep(c("At least one hardship", "Health issues", "Economic issues"), each = 2),
+  outcome  = rep(c("Fully resolved", "Not resolved"), 3),
+  value    = c(46, 62, 30, 40, 26, 36)
+)
+
+wjp_cards(cards, rows = "hardship", cols = "outcome", target = "value",
+          ref = "col", width = 468)
+```
+
+![](gallery_files/figure-html/cards-1.png)
+
+------------------------------------------------------------------------
+
+## Heat Map
+
+[`wjp_heatmap()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_heatmap.md) -
+A matrix of tiles filled by bands (or a continuous value), with labels
+that contrast with each fill.
+
+``` r
+
+problems <- c("Consumer", "Housing", "Employment")
+cooc <- expand.grid(column = problems, row = problems, stringsAsFactors = FALSE)
+cooc$value <- c(NA, 45, 62, 30, NA, 55, 18, 27, NA)
+cooc$band <- cut(cooc$value, c(-Inf, 25, 50, Inf), right = FALSE,
+                 labels = c("Less than 25%", "25% to 50%", "50% or more"))
+cooc$text <- ifelse(is.na(cooc$value), "-", paste0(cooc$value, "%"))
+
+wjp_heatmap(cooc, x = "column", y = "row", fill = "band", labels = "text",
+            x_title = "Among people who experienced problems with:",
+            y_title = "People who also experienced:")
+```
+
+![](gallery_files/figure-html/heatmap-1.png)
+
+------------------------------------------------------------------------
+
+## Scatter Plot
+
+[`wjp_scatter()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_scatter.md) -
+Two measures per category, with highlighted categories, hollow points
+for small samples, and a trend line.
+
+``` r
+
+problems <- data.frame(
+  area        = rep(c("Rural", "Urban"), each = 6),
+  category    = rep(c("Consumer", "Housing", "Family", "Employment", "Land", "Education"), 2),
+  prevalence  = c(41, 9, 21, 18, 20, 9, 39, 10, 17, 19, 18, 9),
+  seriousness = c(4.6, 4.3, 5.5, 6.0, 4.5, 5.6, 4.8, 4.9, 5.6, 6.4, 5.2, 5.9),
+  n           = c(215, 49, 99, 96, 105, 25, 480, 126, 210, 230, 211, 104)
+)
+problems$small <- problems$n < 30
+
+wjp_scatter(problems, x = "prevalence", y = "seriousness", labels = "category",
+            facet = "area", highlight = c("Consumer", "Housing", "Family"),
+            hollow = "small", trend = "lm", xlim = c(0, 50), ylim = c(4, 8),
+            x_labels = function(x) paste0(x, "%"),
+            x_title = "Prevalence", y_title = "Mean seriousness (0-10)")
+```
+
+![](gallery_files/figure-html/scatter-1.png)
+
+------------------------------------------------------------------------
+
+## Network
+
+[`wjp_network()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_network.md) -
+Nodes on fixed coordinates, filled by their centrality, joined by edges
+whose width and opacity follow their weight.
+
+``` r
+
+nodes <- data.frame(
+  problem = c("Consumer", "Housing", "Family", "Money & Debt", "Employment"),
+  share   = c("(40%)", "(10%)", "(18%)", "(22%)", "(19%)"),
+  x       = c(1.0, 0.3, 0.9, 0.3, 0.1),
+  y       = c(0.2, 0.6, 0.5, 0.9, 0.3)
+)
+nodes$name <- c("Consumer", "Housing", "Family", "Money &\nDebt", "Employment")
+edges <- data.frame(
+  from = c("Consumer", "Consumer", "Housing", "Family", "Money & Debt", "Housing"),
+  to   = c("Family", "Money & Debt", "Money & Debt", "Employment", "Employment", "Family"),
+  lift = c(1.7, 2.1, 2.8, 1.9, 2.4, 2.2)
+)
+
+wjp_network(nodes, edges, labels = "name", ids = "problem",
+            value_labels = "share", weight = "lift")
+```
+
+![](gallery_files/figure-html/network-1.png)
+
+------------------------------------------------------------------------
+
+## UpSet Diagram
+
+[`wjp_upset()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_upset.md) -
+Sizes of the intersections of several sets, with the membership matrix
+and the size of each set, in a single ggplot.
+
+``` r
+
+needs <- data.frame(
+  combination = c("Assistance + Information", "Assistance", "Information",
+                  "Assistance + Information + Resolution", "Resolution"),
+  value       = c(18.2, 14.5, 9.1, 7.4, 2.2)
+)
+needs$text <- paste0(format(needs$value, nsmall = 1), "%")
+
+wjp_upset(needs, intersections = "combination", target = "value", labels = "text",
+          bar_color = "#575796", y_title = "% of people within\nthe justice gap")
+```
+
+![](gallery_files/figure-html/upset-1.png)
+
+------------------------------------------------------------------------
+
+## Sankey Diagram
+
+[`wjp_sankey()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_sankey.md) -
+Flows from first-level nodes to second-level nodes and their outcomes,
+with a label box on every node.
+
+``` r
+
+pathways <- data.frame(
+  column  = c(1, 1, 2, 2, 2, 2, 3, 3, 3),
+  node    = c("contacted", "not_contacted", "appropriate", "non_appropriate",
+              "needed_no", "no_need", "access", "no_access", "excluded"),
+  value   = c(30, 70, 22, 8, 40, 30, 31, 69, 30),
+  parent  = c(NA, NA, "contacted", "contacted", "not_contacted", "not_contacted", NA, NA, NA),
+  outcome = c(NA, NA, "access", "no_access", "no_access", "excluded", NA, NA, NA),
+  label   = c("Contacted:", "Did not contact:", "Appropriate:", "Non-appropriate:",
+              "Needed, no access:", "Did not need:", "Had access:", "Had no access:",
+              "Did not need:")
+)
+pathways$text <- paste0(pathways$value, "%")
+
+wjp_sankey(pathways, column = "column", node = "node", target = "value",
+           value_labels = "text", parent = "parent", outcome = "outcome",
+           labels = "label",
+           headers = c("Contacted", "Type or reason", "Access"),
+           colors = c(access = "#575796", no_access = "#A8A8C8", excluded = "#C4C8C8"),
+           width = 468)
+```
+
+![](gallery_files/figure-html/sankey-1.png)
+
+------------------------------------------------------------------------
+
 ## Quick Reference
 
 | Chart | Function | Best For |
@@ -707,3 +986,12 @@ Input data for wjp_groupbars(): target = value, grouping = group, levels
 | Rose | [`wjp_rose()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_rose.md) | Multi-dimensional single unit |
 | Gauge | [`wjp_gauge()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_gauge.md) | Composition, progress |
 | Grouped Bars | [`wjp_groupbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_groupbars.md) | Compare a value across demographic groups |
+| Report grouped bars | `wjp_groupbars(group_header = "row", layout = wjp_layout(...))` | Report figures with exact measures |
+| Side-by-side bars | `wjp_bars(position = "dodge")` | A country next to a comparison series |
+| Funnel | [`wjp_funnel()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_funnel.md) | Stages of a process |
+| Cards | [`wjp_cards()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_cards.md) | Values and differences across two dimensions |
+| Heat Map | [`wjp_heatmap()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_heatmap.md) | Matrices of shares or bands |
+| Scatter | [`wjp_scatter()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_scatter.md) | Two measures per category |
+| Network | [`wjp_network()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_network.md) | Co-occurrence between categories |
+| UpSet | [`wjp_upset()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_upset.md) | Intersections of several sets |
+| Sankey | [`wjp_sankey()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_sankey.md) | Flows through stages |
