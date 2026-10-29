@@ -265,6 +265,19 @@ height (\code{row_height}, \code{bar_height}), the header rows
 (\code{header_height}, \code{header_baseline}), and the \code{margins}.
 Supplying a \code{layout} selects \code{group_header = "row"}.
 }
+\section{Example charts}{
+These examples use the WJP font family (Lato) and WJP colors. Values are
+illustrative.
+
+Basic grouped bars:
+\figure{wjp_groupbars_basic.svg}{options: width='100%' alt='Grouped horizontal bars show fictional support percentages by gender and age group, with a light remainder track and section separators.'}
+
+Confidence intervals and national average:
+\figure{wjp_groupbars_ci_national.svg}{options: width='100%' alt='Grouped horizontal bars show fictional support percentages with 95 percent confidence intervals and a national-average reference line.'}
+
+Report-style layout with benchmark rows:
+\figure{wjp_groupbars_report.svg}{options: width='100%' alt='Report-style grouped bars show fictional national and EU benchmarks, gender and age-group results, and a missing value marked N/A.'}
+}
 \examples{
 library(dplyr)
 library(ggplot2)
