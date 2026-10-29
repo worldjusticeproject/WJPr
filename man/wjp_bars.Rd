@@ -252,6 +252,22 @@ layer in the label column.
 Like all WJPr chart functions, the returned object is a regular ggplot, so
 further customizations can be layered with \code{+}.
 }
+\section{Example charts}{
+These examples use the WJP font family (Lato) and WJP colors. Country names
+and values are fictional.
+
+Horizontal bars:
+\figure{wjp_bars_example.svg}{options: width='100%' alt='Horizontal WJP-style bars with trust percentages for five fictional countries.'}
+
+Vertical bars:
+\figure{wjp_bars_vertical.svg}{options: width='100%' alt='Vertical WJP-style bars with trust percentages for five fictional countries.'}
+
+Stacked bars:
+\figure{wjp_bars_stacked.svg}{options: width='100%' alt='Horizontal 100 percent stacked bars showing trust and no trust for five fictional countries.'}
+
+Side-by-side bars:
+\figure{wjp_bars_dodged.svg}{options: width='100%' alt='Side-by-side WJP-style bars comparing a fictional country with the EU average, with 100 percent tracks.'}
+}
 \examples{
 library(dplyr)
 

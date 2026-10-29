@@ -22,3 +22,4 @@
 ^dev$
 ^Rplots\.pdf$
 ^examples$
+^exampleCharts$
