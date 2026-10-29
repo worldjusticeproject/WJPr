@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760" role="img" aria-labelledby="title desc">
+  <title id="title">Diverging bars: Trust and no trust</title>
+  <desc id="desc">Diverging horizontal bars compare trust and no trust in five fictional countries. No trust extends left of zero in orange and trust extends right in purple.</desc>
+  <rect width="1280" height="760" fill="#ffffff"/>
+  <g font-family="Lato, Arial, sans-serif" fill="#1A1A1A">
+    <text x="112" y="91" font-size="34" font-weight="700">Trust and no trust in public institutions</text>
+    <text x="112" y="130" font-size="18" fill="#555659">Illustrative data · Share of respondents · No Trust ← 0 → Trust</text>
+    <rect x="430" y="158" width="18" height="18" rx="2" fill="#f26b21"/><text x="458" y="173" font-size="16">No Trust</text>
+    <rect x="560" y="158" width="18" height="18" rx="2" fill="#482d8b"/><text x="588" y="173" font-size="16">Trust</text>
+    <g stroke="#ECEDEF" stroke-width="1">
+      <line x1="286" y1="204" x2="286" y2="602"/><line x1="432" y1="204" x2="432" y2="602"/>
+      <line x1="578" y1="204" x2="578" y2="602" stroke="#262424" stroke-width="2"/>
+      <line x1="724" y1="204" x2="724" y2="602"/><line x1="870" y1="204" x2="870" y2="602"/>
+    </g>
+    <g font-size="16" fill="#262424" text-anchor="middle">
+      <text x="286" y="628">−100%</text><text x="432" y="628">−50%</text><text x="578" y="628">0%</text><text x="724" y="628">+50%</text><text x="870" y="628">+100%</text>
+    </g>
+    <g font-size="18" font-weight="700" fill="#262424" text-anchor="end">
+      <text x="250" y="259">Atlantis</text><text x="250" y="339">Narnia</text><text x="250" y="419">Neverland</text><text x="250" y="499">Oz</text><text x="250" y="579">Wakanda</text>
+    </g>
+    <!-- Each row sums to 100%; orange extends left and purple right from zero. -->
+    <g>
+      <rect x="496.2" y="226" width="81.8" height="42" fill="#f26b21"/><rect x="578" y="226" width="210.2" height="42" fill="#482d8b"/>
+      <rect x="473" y="306" width="105" height="42" fill="#f26b21"/><rect x="578" y="306" width="187" height="42" fill="#482d8b"/>
+      <rect x="455.5" y="386" width="122.5" height="42" fill="#f26b21"/><rect x="578" y="386" width="169.5" height="42" fill="#482d8b"/>
+      <rect x="423.8" y="466" width="154.2" height="42" fill="#f26b21"/><rect x="578" y="466" width="136.8" height="42" fill="#482d8b"/>
+      <rect x="400.5" y="546" width="177.5" height="42" fill="#f26b21"/><rect x="578" y="546" width="113.5" height="42" fill="#482d8b"/>
+    </g>
+    <g font-size="16" font-weight="700" text-anchor="middle">
+      <g fill="#262424"><text x="537" y="253">28%</text><text x="525.5" y="333">36%</text><text x="516.75" y="413">42%</text><text x="501" y="493">53%</text><text x="489.25" y="573">61%</text></g>
+      <g fill="#ffffff"><text x="683" y="253">72%</text><text x="671.5" y="333">64%</text><text x="662.75" y="413">58%</text><text x="646.4" y="493">47%</text><text x="634.75" y="573">39%</text></g>
+    </g>
+    <line x1="286" y1="204" x2="870" y2="204" stroke="#D1CFD1"/>
+    <text x="112" y="700" font-size="16" fill="#777777">Illustrative values. Negative direction is a visual convention; bars show response shares.</text>
+  </g>
+</svg>
