@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="900" viewBox="0 0 1280 900" role="img" aria-labelledby="title desc">
+  <title id="title">Justice pathway funnel with cohort and drop-offs, without connectors</title>
+  <desc id="desc">A 1,000-person starting cohort is followed by three centered bars for first contact, referral, and issue resolution. The bars show 72, 51, and 34 percent of the original cohort. Connectors are omitted, while orange labels show each step's drop-off from the previous stage.</desc>
+  <rect width="1280" height="900" fill="#ffffff"/>
+  <g font-family="Lato, Arial, sans-serif" fill="#262424">
+    <text x="104" y="68" font-size="34" font-weight="700">Justice pathway without connectors</text>
+    <text x="104" y="106" font-size="18" fill="#555659">Share of an initial cohort of 1,000 respondents · Illustrative data</text>
+    <g fill="#575796">
+      <rect x="515" y="176" width="650" height="58"/>
+      <rect x="606" y="316" width="468" height="58"/>
+      <rect x="674.25" y="456" width="331.5" height="58"/>
+      <rect x="729.5" y="596" width="221" height="58"/>
+    </g>
+    <g font-size="17" fill="#524F4C" text-anchor="end">
+      <text x="495" y="211">Starting cohort</text>
+      <text x="495" y="351">Made first contact</text>
+      <text x="495" y="491">Received a referral</text>
+      <text x="495" y="631">Resolved the issue</text>
+    </g>
+    <g font-size="19" font-weight="700" fill="#ffffff" text-anchor="middle">
+      <text x="840" y="212">100% · n=1,000</text>
+      <text x="840" y="352">72% · n=720</text>
+      <text x="840" y="492">51% · n=510</text>
+      <text x="840" y="632">34% · n=340</text>
+    </g>
+    <g font-size="15" font-weight="700" fill="#d85d1d">
+      <text x="1086" y="275">↓ 28% lost</text>
+      <text x="1018" y="415">↓ 29% lost</text>
+      <text x="962" y="555">↓ 33% lost</text>
+    </g>
+    <text x="104" y="850" font-size="16" fill="#777777">Widths show share of the original cohort; “lost” is the percent of the preceding stage.</text>
+  </g>
+</svg>

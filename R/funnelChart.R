@@ -29,6 +29,19 @@
 #' The label column is measured with \pkg{systemfonts} when it knows the font
 #' family (see [wjp_fonts()]), and estimated otherwise.
 #'
+#' @section Example charts:
+#' These examples use the WJP Lato font and color palette. Values are
+#' illustrative.
+#'
+#' Justice journey with a starting cohort and step-to-step drop-offs:
+#' \figure{wjp_funnel_journey.svg}{options: width='100%' alt='Justice journey funnel showing the original cohort and stage drop-offs.'}
+#'
+#' Public service pathway with a starting cohort and step-to-step drop-offs:
+#' \figure{wjp_funnel_service_path.svg}{options: width='100%' alt='Public service pathway funnel showing the original cohort and stage drop-offs.'}
+#'
+#' Pathway stages without connectors:
+#' \figure{wjp_funnel_order_no_connectors.svg}{options: width='100%' alt='Funnel chart with ordered stages and no connectors.'}
+#'
 #' @param data Data frame containing the data to plot.
 #' @param target String. Column name of the variable with the value of each
 #'   stage (it sets the width of the bars).
