@@ -78,6 +78,23 @@ test_that("wjp_funnel validates its inputs", {
   expect_error(wjp_funnel(funnel_data(), "value", "stage", width = 20), "no room")
 })
 
+test_that("wjp_funnel keeps a fixed gap and connector opacity", {
+  default <- wjp_funnel(funnel_data(), "value", "stage")
+  conn <- wjp_drawn(default, "marks")
+  expect_equal(unique(conn$alpha[conn$geom == "GeomPolygon"]), 0.45)
+
+  # the deprecated arguments signal their deprecation and are ignored
+  lifecycle::expect_deprecated(
+    p <- wjp_funnel(funnel_data(), "value", "stage", gap = 0)
+  )
+  expect_equal(p$theme$panel.heights, wjp_bp(3 * 40 + 2 * 18))
+  lifecycle::expect_deprecated(
+    p <- wjp_funnel(funnel_data(), "value", "stage", connector_alpha = 1)
+  )
+  conn <- wjp_drawn(p, "marks")
+  expect_equal(unique(conn$alpha[conn$geom == "GeomPolygon"]), 0.45)
+})
+
 test_that("wjp_funnel saves to SVG", {
   skip_if_not_installed("svglite")
   p <- wjp_funnel(funnel_data(), "value", "stage", labels = "text", width = 468)

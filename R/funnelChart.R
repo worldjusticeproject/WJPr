@@ -21,8 +21,13 @@
 #' right-aligned `label_gap` points before the bar area, and centered on
 #' their bar.
 #'
+#' Every funnel keeps the same spacing and connectors: bars are always 18
+#' points apart and joined by connectors in `connector_color` at a fixed
+#' opacity of 0.45, so the bars never touch and the connectors stay lighter
+#' than the bars.
+#'
 #' Geometry is set in points: each bar is `bar_height` points high, bars are
-#' `gap` points apart, and `margins` surround the chart. The bar area is
+#' 18 points apart, and `margins` surround the chart. The bar area is
 #' `panel_width` points wide, or fills a figure of `width` points (the label
 #' column is measured with the active font family). With either of them, the
 #' chart has a definite size and [wjp_save()] needs no `width` or `height`.
@@ -51,11 +56,14 @@
 #' @param order String. Column name of the variable with the display order of
 #'   the stages (top to bottom). Default is `NULL` (data order).
 #' @param bar_height Numeric. Height of each bar, in points. Default is `40`.
-#' @param gap Numeric. Vertical gap between bars, in points. Default is `18`.
+#' @param gap `r lifecycle::badge("deprecated")` Ignored: bars are always 18
+#'   points apart.
 #' @param connectors Logical. Draw connectors between consecutive bars.
 #'   Default is `TRUE`.
-#' @param connector_color String. Color of the connectors. Default is `"#A8A8C8"`.
-#' @param connector_alpha Numeric. Opacity of the connectors. Default is `0.45`.
+#' @param connector_color String. Color of the connectors, drawn at an opacity
+#'   of 0.45. Default is `"#A8A8C8"`.
+#' @param connector_alpha `r lifecycle::badge("deprecated")` Ignored: connectors
+#'   always have an opacity of 0.45.
 #' @param color String. Color of the bars. Default is `"#575796"`.
 #' @param value_face String. Font face of the values: `"plain"`, `"bold"`,
 #'   `"italic"`, `"bold.italic"`, or a weight face such as `"semibold.italic"`
@@ -109,10 +117,10 @@ wjp_funnel <- function(data,
                        labels           = NULL,
                        order            = NULL,
                        bar_height       = 40,
-                       gap              = 18,
+                       gap              = deprecated(),
                        connectors       = TRUE,
                        connector_color  = "#A8A8C8",
-                       connector_alpha  = 0.45,
+                       connector_alpha  = deprecated(),
                        color            = "#575796",
                        value_face       = "bold",
                        value_size       = 11,
@@ -126,6 +134,22 @@ wjp_funnel <- function(data,
                        width            = NULL,
                        margins          = c(4, 4, 4, 2),
                        ptheme           = WJP_theme()) {
+
+  # Fixed proportions: every funnel looks like the default one
+  if (lifecycle::is_present(gap)) {
+    lifecycle::deprecate_soft(
+      "1.2.1", "wjp_funnel(gap)",
+      details = "Bars are always 18 points apart; the value is ignored."
+    )
+  }
+  if (lifecycle::is_present(connector_alpha)) {
+    lifecycle::deprecate_soft(
+      "1.2.1", "wjp_funnel(connector_alpha)",
+      details = "Connectors always have an opacity of 0.45; the value is ignored."
+    )
+  }
+  gap <- 18
+  connector_alpha <- 0.45
 
   # ---------------------------------------------------------------------------
   # Validation
@@ -153,8 +177,6 @@ wjp_funnel <- function(data,
     stop("`connectors` must be TRUE or FALSE.", call. = FALSE)
   }
   wjp_check_number(bar_height, "bar_height", 0, lower_open = TRUE)
-  wjp_check_number(gap, "gap", 0)
-  wjp_check_number(connector_alpha, "connector_alpha", 0, 1)
   wjp_check_number(value_size, "value_size", 0, lower_open = TRUE)
   wjp_check_number(label_size, "label_size", 0, lower_open = TRUE)
   wjp_check_number(label_gap, "label_gap", 0)

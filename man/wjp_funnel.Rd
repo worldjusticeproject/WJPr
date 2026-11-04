@@ -11,10 +11,10 @@ wjp_funnel(
   labels = NULL,
   order = NULL,
   bar_height = 40,
-  gap = 18,
+  gap = deprecated(),
   connectors = TRUE,
   connector_color = "#A8A8C8",
-  connector_alpha = 0.45,
+  connector_alpha = deprecated(),
   color = "#575796",
   value_face = "bold",
   value_size = 11,
@@ -46,14 +46,17 @@ the stages (top to bottom). Default is \code{NULL} (data order).}
 
 \item{bar_height}{Numeric. Height of each bar, in points. Default is \code{40}.}
 
-\item{gap}{Numeric. Vertical gap between bars, in points. Default is \code{18}.}
+\item{gap}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Ignored: bars are always 18
+points apart.}
 
 \item{connectors}{Logical. Draw connectors between consecutive bars.
 Default is \code{TRUE}.}
 
-\item{connector_color}{String. Color of the connectors. Default is \code{"#A8A8C8"}.}
+\item{connector_color}{String. Color of the connectors, drawn at an opacity
+of 0.45. Default is \code{"#A8A8C8"}.}
 
-\item{connector_alpha}{Numeric. Opacity of the connectors. Default is \code{0.45}.}
+\item{connector_alpha}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Ignored: connectors
+always have an opacity of 0.45.}
 
 \item{color}{String. Color of the bars. Default is \code{"#575796"}.}
 
@@ -114,8 +117,13 @@ are wrapped to \code{label_width} points when it is supplied. They are
 right-aligned \code{label_gap} points before the bar area, and centered on
 their bar.
 
+Every funnel keeps the same spacing and connectors: bars are always 18
+points apart and joined by connectors in \code{connector_color} at a fixed
+opacity of 0.45, so the bars never touch and the connectors stay lighter
+than the bars.
+
 Geometry is set in points: each bar is \code{bar_height} points high, bars are
-\code{gap} points apart, and \code{margins} surround the chart. The bar area is
+18 points apart, and \code{margins} surround the chart. The bar area is
 \code{panel_width} points wide, or fills a figure of \code{width} points (the label
 column is measured with the active font family). With either of them, the
 chart has a definite size and \code{\link[=wjp_save]{wjp_save()}} needs no \code{width} or \code{height}.

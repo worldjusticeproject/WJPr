@@ -7,7 +7,7 @@ fid_funnel <- function(d, spec, country) {
   col <- FID_ST$col
   d <- d[d$kind == "stage", ]
   wjp_funnel(d, target = "value", grouping = "label", labels = "text", order = "order",
-             color = col[["main"]], connector_color = col[["eu"]], connector_alpha = 0.45,
+             color = col[["main"]], connector_color = col[["eu"]],
              value_face = "semibold.italic", value_size = 11, label_size = 10,
              label_colour = col[["text"]], label_width = 190, width = spec$w_in * 72)
 }
