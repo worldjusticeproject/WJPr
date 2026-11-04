@@ -357,6 +357,24 @@ charts are then drawn as a text layer in the label column.
 Like all WJPr chart functions, the returned object is a regular ggplot,
 so further customizations can be layered with `+`.
 
+## Example charts
+
+These examples use the WJP font family (Lato) and WJP colors. Country
+names and values are fictional.
+
+Horizontal bars: ![Horizontal WJP-style bars with trust percentages for
+five fictional countries.](figures/wjp_bars_example.svg)
+
+Vertical bars: ![Vertical WJP-style bars with trust percentages for five
+fictional countries.](figures/wjp_bars_vertical.svg)
+
+Stacked bars: ![Horizontal 100 percent stacked bars showing trust and no
+trust for five fictional countries.](figures/wjp_bars_stacked.svg)
+
+Side-by-side bars: ![Side-by-side WJP-style bars comparing a fictional
+country with the EU average, with 100 percent
+tracks.](figures/wjp_bars_dodged.svg)
+
 ## Examples
 
 ``` r

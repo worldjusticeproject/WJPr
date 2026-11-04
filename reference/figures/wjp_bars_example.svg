@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760" role="img" aria-labelledby="title desc">
+  <title id="title">Trust in public institutions</title>
+  <desc id="desc">A horizontal bar chart with fictional trust percentages for five fictional countries. Atlantis 72 percent, Narnia 64 percent, Neverland 58 percent, Oz 47 percent, and Wakanda 39 percent.</desc>
+  <rect width="1280" height="760" fill="#ffffff"/>
+
+  <g font-family="Lato, Arial, sans-serif" fill="#1A1A1A">
+    <text x="112" y="91" font-size="34" font-weight="700">Trust in public institutions</text>
+    <text x="112" y="130" font-size="18" fill="#555659">Share of respondents who say they trust institutions | Fictional example</text>
+
+    <!-- Value-axis grid: 0 to 100 percent -->
+    <g stroke="#d1cfd1" stroke-width="1">
+      <line x1="350" y1="190" x2="350" y2="590" stroke="#1A1A1A" stroke-width="1.5"/>
+      <line x1="490" y1="190" x2="490" y2="590" stroke="#ECEDEF"/>
+      <line x1="630" y1="190" x2="630" y2="590" stroke="#ECEDEF"/>
+      <line x1="770" y1="190" x2="770" y2="590" stroke="#ECEDEF"/>
+      <line x1="910" y1="190" x2="910" y2="590" stroke="#ECEDEF"/>
+      <line x1="1050" y1="190" x2="1050" y2="590" stroke="#D1CFD1" stroke-width="1.5"/>
+    </g>
+
+    <!-- Category labels -->
+    <g font-size="20" font-weight="600" text-anchor="end">
+      <text x="322" y="249">Atlantis</text>
+      <text x="322" y="329">Narnia</text>
+      <text x="322" y="409">Neverland</text>
+      <text x="322" y="489">Oz</text>
+      <text x="322" y="569">Wakanda</text>
+    </g>
+
+    <!-- Bars; values are on a 0–100 scale -->
+  <rect x="350" y="218" width="504" height="38" rx="2" fill="#482d8b"/>
+  <rect x="350" y="298" width="448" height="38" rx="2" fill="#482d8b"/>
+  <rect x="350" y="378" width="406" height="38" rx="2" fill="#482d8b"/>
+  <rect x="350" y="458" width="329" height="38" rx="2" fill="#482d8b"/>
+  <rect x="350" y="538" width="273" height="38" rx="2" fill="#482d8b"/>
+
+    <!-- Value labels outside each bar -->
+    <g font-size="18" font-weight="700">
+      <text x="867" y="244">72%</text>
+      <text x="811" y="324">64%</text>
+      <text x="769" y="404">58%</text>
+      <text x="692" y="484">47%</text>
+      <text x="636" y="564">39%</text>
+    </g>
+
+    <!-- Axis labels -->
+    <g font-size="16" fill="#555659" text-anchor="middle">
+      <text x="350" y="624">0%</text>
+      <text x="490" y="624">20%</text>
+      <text x="630" y="624">40%</text>
+      <text x="770" y="624">60%</text>
+      <text x="910" y="624">80%</text>
+      <text x="1050" y="624">100%</text>
+    </g>
+    <text x="112" y="700" font-size="14" fill="#777777">Example chart created with WJPr::wjp_bars() | All country names and values are fictional</text>
+  </g>
+</svg>

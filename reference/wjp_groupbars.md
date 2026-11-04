@@ -374,6 +374,24 @@ pitch and bar height (`row_height`, `bar_height`), the header rows
 (`header_height`, `header_baseline`), and the `margins`. Supplying a
 `layout` selects `group_header = "row"`.
 
+## Example charts
+
+These examples use the WJP font family (Lato) and WJP colors. Values are
+illustrative.
+
+Basic grouped bars: ![Grouped horizontal bars show fictional support
+percentages by gender and age group, with a light remainder track and
+section separators.](figures/wjp_groupbars_basic.svg)
+
+Confidence intervals and national average: ![Grouped horizontal bars
+show fictional support percentages with 95 percent confidence intervals
+and a national-average reference
+line.](figures/wjp_groupbars_ci_national.svg)
+
+Report-style layout with benchmark rows: ![Report-style grouped bars
+show fictional national and EU benchmarks, gender and age-group results,
+and a missing value marked N/A.](figures/wjp_groupbars_report.svg)
+
 ## Examples
 
 ``` r

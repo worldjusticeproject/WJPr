@@ -175,6 +175,10 @@ takes `order` as a named vector instead of a column name
 - `dev/` - Ad-hoc visual preview scripts and `report-fidelity.R` /
   `report-fidelity-new.R` (the 42 report figures drawn with WJPr
   arguments only; excluded from the build)
+- `examples/` - `funnel.R` renders one PNG per
+  [`wjp_funnel()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_funnel.md)
+  argument (`Rscript examples/funnel.R`; gallery in
+  `examples/README.md`; excluded from the build)
 - `vignettes/articles/` - pkgdown articles: `gallery`,
   `data-preparation`, `dataviz` (usage) and `add-function`,
   `development-guide` (development)
@@ -195,7 +199,7 @@ takes `order` as a named vector instead of a column name
 | [`wjp_lollipops()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_lollipops.md) | lollipopChart.R | Lollipop charts |
 | [`wjp_edgebars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_edgebars.md) | edgebarsChart.R | Edge-aligned horizontal bars (labels above or at the left) |
 | [`wjp_groupbars()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_groupbars.md) | groupbarsChart.R | Stacked bars by demographic groups: facets (`group_header = "strip"`) or a single panel with header rows (`"row"`, report layout), named averages, N/A cells, CI, `layout` |
-| [`wjp_funnel()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_funnel.md) | funnelChart.R | Centered funnel bars with connectors |
+| [`wjp_funnel()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_funnel.md) | funnelChart.R | Centered funnel bars with connectors; the gap (18 pt) and connector opacity (0.45) are fixed (`gap`, `connector_alpha` deprecated) |
 | [`wjp_cards()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_cards.md) | cardsChart.R | Rounded cards on a sequential scale with values and differences |
 | [`wjp_heatmap()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_heatmap.md) | heatmapChart.R | Tile matrix with bands or continuous fill |
 | [`wjp_scatter()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_scatter.md) | scatterChart.R | Faceted scatter with highlighted/hollow points, trend, repelled labels |

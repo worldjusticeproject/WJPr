@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">WJPr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -182,6 +182,8 @@
 <li>
 <code>dev/</code> - Ad-hoc visual preview scripts and <code>report-fidelity.R</code> / <code>report-fidelity-new.R</code> (the 42 report figures drawn with WJPr arguments only; excluded from the build)</li>
 <li>
+<code>examples/</code> - <code>funnel.R</code> renders one PNG per <code><a href="reference/wjp_funnel.html">wjp_funnel()</a></code> argument (<code>Rscript examples/funnel.R</code>; gallery in <code>examples/README.md</code>; excluded from the build)</li>
+<li>
 <code>vignettes/articles/</code> - pkgdown articles: <code>gallery</code>, <code>data-preparation</code>, <code>dataviz</code> (usage) and <code>add-function</code>, <code>development-guide</code> (development)</li>
 </ul></div>
 <div class="section level3">
@@ -230,7 +232,7 @@
 </td>
 </tr><tr><td><code><a href="reference/wjp_funnel.html">wjp_funnel()</a></code></td>
 <td>funnelChart.R</td>
-<td>Centered funnel bars with connectors</td>
+<td>Centered funnel bars with connectors; the gap (18 pt) and connector opacity (0.45) are fixed (<code>gap</code>, <code>connector_alpha</code> deprecated)</td>
 </tr><tr><td><code><a href="reference/wjp_cards.html">wjp_cards()</a></code></td>
 <td>cardsChart.R</td>
 <td>Rounded cards on a sequential scale with values and differences</td>

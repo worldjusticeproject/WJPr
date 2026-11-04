@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="980" viewBox="0 0 1280 980" role="img" aria-labelledby="title desc">
+  <title id="title">Public service funnel with cohort and step drop-offs</title>
+  <desc id="desc">A 1,000-person starting cohort is followed by four centered bars for learning about a service, applying, completing requirements, and receiving a decision. The bars show 82, 57, 39, and 24 percent of the original cohort; orange labels show drop-offs between steps.</desc>
+  <rect width="1280" height="980" fill="#ffffff"/>
+  <g font-family="Lato, Arial, sans-serif" fill="#262424">
+    <text x="104" y="68" font-size="34" font-weight="700">Pathway through a public service</text>
+    <text x="104" y="106" font-size="18" fill="#555659">Share of an initial cohort of 1,000 respondents · Illustrative data</text>
+    <g fill="#A8A8C8" fill-opacity="0.25">
+      <polygon points="470,220 1150,220 1088.8,302 531.2,302"/>
+      <polygon points="531.2,352 1088.8,352 1004.6,434 615.4,434"/>
+      <polygon points="615.4,484 1004.6,484 942.6,566 677.4,566"/>
+      <polygon points="677.4,616 942.6,616 891.6,698 728.4,698"/>
+    </g>
+    <g fill="#575796">
+      <rect x="470" y="170" width="680" height="50"/>
+      <rect x="531.2" y="302" width="557.6" height="50"/>
+      <rect x="615.4" y="434" width="389.2" height="50"/>
+      <rect x="677.4" y="566" width="265.2" height="50"/>
+      <rect x="728.4" y="698" width="163.2" height="50"/>
+    </g>
+    <g font-size="16" fill="#524F4C" text-anchor="end">
+      <text x="450" y="201">Starting cohort</text>
+      <text x="450" y="333">Learned about the service</text>
+      <text x="450" y="465">Applied for the service</text>
+      <text x="450" y="597">Completed required steps</text>
+      <text x="450" y="729">Received a decision</text>
+    </g>
+    <g font-size="17" font-weight="700" fill="#ffffff" text-anchor="middle">
+      <text x="810" y="201">100% · n=1,000</text>
+      <text x="810" y="333">82% · n=820</text>
+      <text x="810" y="465">57% · n=570</text>
+      <text x="810" y="597">39% · n=390</text>
+      <text x="810" y="729">24% · n=240</text>
+    </g>
+    <g font-size="15" font-weight="700" fill="#d85d1d">
+      <text x="1130" y="261">↓ 18% lost</text>
+      <text x="1058" y="393">↓ 30% lost</text>
+      <text x="986" y="525">↓ 32% lost</text>
+      <text x="930" y="657">↓ 38% lost</text>
+    </g>
+    <text x="104" y="910" font-size="16" fill="#777777">Widths show share of the original cohort; “lost” is the percent of the preceding stage.</text>
+  </g>
+</svg>

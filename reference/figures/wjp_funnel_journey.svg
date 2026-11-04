@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="900" viewBox="0 0 1280 900" role="img" aria-labelledby="title desc">
+  <title id="title">Justice journey funnel with cohort and step drop-offs</title>
+  <desc id="desc">A 1,000-person starting cohort is followed by three centered bars for information or advice, assistance, and resolution. The bars show 61, 32, and 28 percent of the original cohort; orange labels show each step's drop-off from the previous stage.</desc>
+  <rect width="1280" height="900" fill="#ffffff"/>
+  <g font-family="Lato, Arial, sans-serif" fill="#262424">
+    <text x="104" y="68" font-size="34" font-weight="700">Justice journey: from seeking help to resolution</text>
+    <text x="104" y="106" font-size="18" fill="#555659">Share of an initial cohort of 1,000 respondents · Illustrative data</text>
+    <g fill="#A8A8C8" fill-opacity="0.25">
+      <polygon points="515,234 1165,234 1038.2,316 641.8,316"/>
+      <polygon points="641.8,374 1038.2,374 944,456 736,456"/>
+      <polygon points="736,514 944,514 931,596 749,596"/>
+    </g>
+    <g fill="#575796">
+      <rect x="515" y="176" width="650" height="58"/>
+      <rect x="641.8" y="316" width="396.4" height="58"/>
+      <rect x="736" y="456" width="208" height="58"/>
+      <rect x="749" y="596" width="182" height="58"/>
+    </g>
+    <g font-size="17" fill="#524F4C" text-anchor="end">
+      <text x="495" y="211">Starting cohort</text>
+      <text x="495" y="351">Found information or advice</text>
+      <text x="495" y="491">Received appropriate assistance</text>
+      <text x="495" y="631">Used a dispute resolution service</text>
+    </g>
+    <g font-size="19" font-weight="700" fill="#ffffff" text-anchor="middle">
+      <text x="840" y="212">100% · n=1,000</text>
+      <text x="840" y="352">61% · n=610</text>
+      <text x="840" y="492">32% · n=320</text>
+      <text x="840" y="632">28% · n=280</text>
+    </g>
+    <g font-size="15" font-weight="700" fill="#d85d1d">
+      <text x="1114" y="275">↓ 39% lost</text>
+      <text x="1004" y="415">↓ 48% lost</text>
+      <text x="950" y="555">↓ 13% lost</text>
+    </g>
+    <text x="104" y="850" font-size="16" fill="#777777">Widths show share of the original cohort; “lost” is the percent of the preceding stage.</text>
+  </g>
+</svg>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">WJPr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,6 +91,14 @@
       <small>Source: <a href="https://github.com/worldjusticeproject/WJPr/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="wjpr-development-version">WJPr (development version)<a class="anchor" aria-label="anchor" href="#wjpr-development-version"></a></h2>
+<div class="section level3">
+<h3 id="deprecations-development-version">Deprecations<a class="anchor" aria-label="anchor" href="#deprecations-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/wjp_funnel.html">wjp_funnel()</a></code>: <code>gap</code> and <code>connector_alpha</code> are deprecated and ignored, so every funnel keeps the spacing and connectors of the default chart: bars are always 18 points apart (they never touch) and connectors are always drawn at an opacity of 0.45 (lighter than the bars). Supplying either argument signals a soft deprecation. <code>connector_color</code> still sets the color of the connectors.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0" id="wjpr-120">WJPr 1.2.0<a class="anchor" aria-label="anchor" href="#wjpr-120"></a></h2>
 <p>This release closes the gaps found when drawing the 42 figures of the <em>Paths to Justice</em> country report with WJPr. Every figure of that report can now be drawn with WJPr arguments alone (ink similarity with the published figures between 0.992 and 1.000; see <code>dev/report-fidelity.R</code>), where WJPr 1.1.0 needed 5 to 13 code workarounds per figure.</p>

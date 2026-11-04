@@ -99,8 +99,23 @@ The function expects one row per `grouping` (row) and `diverging`
 (answer group) combination. All values can be supplied as positive
 percentages: name the group that should extend left through `negative`
 and the function flips it automatically. Alternatively, leave
-`negative = NULL` and supply pre-signed values. Value labels are drawn
-centered inside each segment.
+`negative = NULL` and supply pre-signed values. Negative values indicate
+direction only: the leftward direction is a visual convention, and bars
+represent response shares. Value labels are drawn centered inside each
+segment.
+
+## Example charts
+
+These examples use the WJP font family (Lato) and WJP colors. Countries
+and values are illustrative.
+
+Trust versus no trust: ![Diverging bars show fictional trust and
+no-trust shares by country, with no trust extending left and trust
+extending right from zero.](figures/wjp_divbars_trust.svg)
+
+Custom category order: ![Diverging bars show fictional trust shares,
+with countries ordered from highest to lowest no-trust
+share.](figures/wjp_divbars_custom_order.svg)
 
 ## Examples
 

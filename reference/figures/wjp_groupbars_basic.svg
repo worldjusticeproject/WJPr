@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760" role="img" aria-labelledby="title desc">
+  <title id="title">Grouped stacked bars by demographic group</title>
+  <desc id="desc">Horizontal bars show fictional support shares for gender and age categories. Purple shows the value and light gray fills the complement to 100 percent.</desc>
+  <rect width="1280" height="760" fill="#ffffff"/>
+  <g font-family="Lato, Arial, sans-serif" fill="#262424">
+    <text x="104" y="78" font-size="34" font-weight="700">Support by demographic group</text>
+    <text x="104" y="116" font-size="18" fill="#555659">Grouped stacked bars · Age groups ranked by support · Illustrative data</text>
+    <rect x="355" y="146" width="18" height="18" rx="2" fill="#482d8b"/><text x="383" y="161" font-size="16">Support</text>
+    <rect x="489" y="146" width="18" height="18" rx="2" fill="#f1f2f2"/><text x="517" y="161" font-size="16">Remaining share</text>
+    <g stroke="#e8e8e8" stroke-width="1">
+      <line x1="355" y1="190" x2="355" y2="608"/><line x1="510" y1="190" x2="510" y2="608"/>
+      <line x1="665" y1="190" x2="665" y2="608"/><line x1="820" y1="190" x2="820" y2="608"/>
+      <line x1="975" y1="190" x2="975" y2="608" stroke="#c9c9c9"/>
+    </g>
+    <g font-size="17" font-weight="700" fill="#482d8b" text-anchor="middle">
+      <text x="195" y="296">Gender</text><text x="195" y="508">Age group</text>
+    </g>
+    <text x="992" y="211" font-size="15" font-weight="700" fill="#555659">Share</text>
+    <g font-size="18" text-anchor="end" fill="#4a4a49">
+      <text x="330" y="263">Men</text><text x="330" y="328">Women</text>
+      <text x="330" y="443">25–54</text><text x="330" y="508">55+</text><text x="330" y="573">18–24</text>
+    </g>
+    <g>
+      <rect x="355" y="234" width="458" height="38" fill="#482d8b"/><rect x="813" y="234" width="162" height="38" fill="#f1f2f2"/>
+      <rect x="355" y="299" width="434" height="38" fill="#482d8b"/><rect x="789" y="299" width="186" height="38" fill="#f1f2f2"/>
+      <rect x="355" y="414" width="453" height="38" fill="#482d8b"/><rect x="808" y="414" width="167" height="38" fill="#f1f2f2"/>
+      <rect x="355" y="479" width="453" height="38" fill="#482d8b"/><rect x="808" y="479" width="167" height="38" fill="#f1f2f2"/>
+      <rect x="355" y="544" width="446.4" height="38" fill="#482d8b"/><rect x="801.4" y="544" width="173.6" height="38" fill="#f1f2f2"/>
+    </g>
+    <line x1="104" y1="375" x2="975" y2="375" stroke="#e1e3e4" stroke-width="1.5"/>
+    <g font-size="17" font-weight="700" fill="#482d8b">
+      <text x="992" y="260">74%</text><text x="992" y="325">70%</text><text x="992" y="440">73%</text><text x="992" y="505">73%</text><text x="992" y="570">72%</text>
+    </g>
+    <g font-size="15" fill="#555659" text-anchor="middle">
+      <text x="355" y="638">0%</text><text x="510" y="638">25%</text><text x="665" y="638">50%</text><text x="820" y="638">75%</text><text x="975" y="638">100%</text>
+    </g>
+    <text x="104" y="702" font-size="16" fill="#777777">WJP purple and Lato typography · Fictional example values</text>
+  </g>
+</svg>

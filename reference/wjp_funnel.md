@@ -17,10 +17,10 @@ wjp_funnel(
   labels = NULL,
   order = NULL,
   bar_height = 40,
-  gap = 18,
+  gap = deprecated(),
   connectors = TRUE,
   connector_color = "#A8A8C8",
-  connector_alpha = 0.45,
+  connector_alpha = deprecated(),
   color = "#575796",
   value_face = "bold",
   value_size = 11,
@@ -68,7 +68,7 @@ wjp_funnel(
 
 - gap:
 
-  Numeric. Vertical gap between bars, in points. Default is `18`.
+  **\[deprecated\]** Ignored: bars are always 18 points apart.
 
 - connectors:
 
@@ -76,11 +76,12 @@ wjp_funnel(
 
 - connector_color:
 
-  String. Color of the connectors. Default is `"#A8A8C8"`.
+  String. Color of the connectors, drawn at an opacity of 0.45. Default
+  is `"#A8A8C8"`.
 
 - connector_alpha:
 
-  Numeric. Opacity of the connectors. Default is `0.45`.
+  **\[deprecated\]** Ignored: connectors always have an opacity of 0.45.
 
 - color:
 
@@ -163,9 +164,14 @@ them are wrapped to `label_width` points when it is supplied. They are
 right-aligned `label_gap` points before the bar area, and centered on
 their bar.
 
+Every funnel keeps the same spacing and connectors: bars are always 18
+points apart and joined by connectors in `connector_color` at a fixed
+opacity of 0.45, so the bars never touch and the connectors stay lighter
+than the bars.
+
 Geometry is set in points: each bar is `bar_height` points high, bars
-are `gap` points apart, and `margins` surround the chart. The bar area
-is `panel_width` points wide, or fills a figure of `width` points (the
+are 18 points apart, and `margins` surround the chart. The bar area is
+`panel_width` points wide, or fills a figure of `width` points (the
 label column is measured with the active font family). With either of
 them, the chart has a definite size and
 [`wjp_save()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_save.md)
@@ -173,6 +179,22 @@ needs no `width` or `height`. The label column is measured with
 systemfonts when it knows the font family (see
 [`wjp_fonts()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_fonts.md)),
 and estimated otherwise.
+
+## Example charts
+
+These examples use the WJP Lato font and color palette. Values are
+illustrative.
+
+Justice journey with a starting cohort and step-to-step drop-offs:
+![Justice journey funnel showing the original cohort and stage
+drop-offs.](figures/wjp_funnel_journey.svg)
+
+Public service pathway with a starting cohort and step-to-step
+drop-offs: ![Public service pathway funnel showing the original cohort
+and stage drop-offs.](figures/wjp_funnel_service_path.svg)
+
+Pathway stages without connectors: ![Funnel chart with ordered stages
+and no connectors.](figures/wjp_funnel_order_no_connectors.svg)
 
 ## Examples
 

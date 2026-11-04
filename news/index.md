@@ -1,5 +1,17 @@
 # Changelog
 
+## WJPr (development version)
+
+### Deprecations
+
+- [`wjp_funnel()`](https://worldjusticeproject.github.io/WJPr/reference/wjp_funnel.md):
+  `gap` and `connector_alpha` are deprecated and ignored, so every
+  funnel keeps the spacing and connectors of the default chart: bars are
+  always 18 points apart (they never touch) and connectors are always
+  drawn at an opacity of 0.45 (lighter than the bars). Supplying either
+  argument signals a soft deprecation. `connector_color` still sets the
+  color of the connectors.
+
 ## WJPr 1.2.0
 
 This release closes the gaps found when drawing the 42 figures of the

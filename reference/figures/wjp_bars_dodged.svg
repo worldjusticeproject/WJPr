@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760" role="img" aria-labelledby="title desc">
+  <title id="title">Side-by-side bar chart: Country compared with EU average</title>
+  <desc id="desc">Horizontal side-by-side bars compare fictional values for Atlantis and an EU average across Consumer, Housing, and Employment categories. A light background track marks 100 percent.</desc>
+  <rect width="1280" height="760" fill="#ffffff"/>
+  <g font-family="Lato, Arial, sans-serif" fill="#1A1A1A">
+    <text x="112" y="91" font-size="34" font-weight="700">Country values and EU average</text>
+    <text x="112" y="130" font-size="18" fill="#555659">Side-by-side bars with 100% tracks | Fictional example</text>
+    <rect x="350" y="160" width="18" height="18" rx="2" fill="#575796"/><text x="378" y="175" font-size="16">Atlantis</text>
+    <rect x="490" y="160" width="18" height="18" rx="2" fill="#A8A8C8"/><text x="518" y="175" font-size="16">EU Average</text>
+    <g font-size="20" font-weight="600" text-anchor="end">
+      <text x="322" y="268">Consumer</text><text x="322" y="398">Housing</text><text x="322" y="528">Employment</text>
+    </g>
+    <!-- 100% background tracks -->
+    <g fill="#E5E8E8">
+      <rect x="350" y="228" width="700" height="28" rx="2"/><rect x="350" y="268" width="700" height="28" rx="2"/>
+      <rect x="350" y="358" width="700" height="28" rx="2"/><rect x="350" y="398" width="700" height="28" rx="2"/>
+      <rect x="350" y="488" width="700" height="28" rx="2"/><rect x="350" y="528" width="700" height="28" rx="2"/>
+    </g>
+    <!-- Draw gridlines over the tracks and behind the colored bars. -->
+    <g stroke-width="1">
+      <line x1="350" y1="200" x2="350" y2="570" stroke="#1A1A1A" stroke-width="1.5"/>
+      <line x1="490" y1="200" x2="490" y2="570" stroke="#ECEDEF"/>
+      <line x1="630" y1="200" x2="630" y2="570" stroke="#ECEDEF"/>
+      <line x1="770" y1="200" x2="770" y2="570" stroke="#ECEDEF"/>
+      <line x1="910" y1="200" x2="910" y2="570" stroke="#ECEDEF"/>
+      <line x1="1050" y1="200" x2="1050" y2="570" stroke="#D1CFD1" stroke-width="1.5"/>
+    </g>
+    <!-- Atlantis values: 40, 10, 19; EU average: 21, 7, 10 -->
+    <g>
+      <rect x="350" y="228" width="280" height="28" rx="2" fill="#575796"/><rect x="350" y="268" width="147" height="28" rx="2" fill="#A8A8C8"/>
+      <rect x="350" y="358" width="70" height="28" rx="2" fill="#575796"/><rect x="350" y="398" width="49" height="28" rx="2" fill="#A8A8C8"/>
+      <rect x="350" y="488" width="133" height="28" rx="2" fill="#575796"/><rect x="350" y="528" width="70" height="28" rx="2" fill="#A8A8C8"/>
+    </g>
+    <g font-size="16" font-weight="700">
+      <text x="639" y="249" fill="#575796">40%</text><text x="506" y="289" fill="#7D7DA8">21%</text>
+      <text x="429" y="379" fill="#575796">10%</text><text x="408" y="419" fill="#7D7DA8">7%</text>
+      <text x="492" y="509" fill="#575796">19%</text><text x="429" y="549" fill="#7D7DA8">10%</text>
+    </g>
+    <g font-size="15" fill="#555659" text-anchor="middle">
+      <text x="350" y="590">0%</text><text x="490" y="590">20%</text><text x="630" y="590">40%</text>
+      <text x="770" y="590">60%</text><text x="910" y="590">80%</text><text x="1050" y="590">100%</text>
+    </g>
+    <text x="112" y="700" font-size="14" fill="#777777">Example chart created with WJPr::wjp_bars() | All values are fictional</text>
+  </g>
+</svg>

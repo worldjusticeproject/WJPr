@@ -17,7 +17,7 @@ which makes the chart suitable for contrasting two opposing responses
 
     <a class="navbar-brand me-2" href="../index.html">WJPr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -200,7 +200,20 @@ chart using the <code>diverging</code> values. Default is <code>FALSE</code>.</p
 group) combination. All values can be supplied as positive percentages:
 name the group that should extend left through <code>negative</code> and the function
 flips it automatically. Alternatively, leave <code>negative = NULL</code> and supply
-pre-signed values. Value labels are drawn centered inside each segment.</p>
+pre-signed values. Negative values indicate direction only: the leftward
+direction is a visual convention, and bars represent response shares.
+Value labels are drawn centered inside each segment.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="example-charts">Example charts<a class="anchor" aria-label="anchor" href="#example-charts"></a></h2>
+
+
+<p>These examples use the WJP font family (Lato) and WJP colors. Countries and
+values are illustrative.</p>
+<p>Trust versus no trust:
+<img src="figures/wjp_divbars_trust.svg" style="width:100%" alt="Diverging bars show fictional trust and no-trust shares by country, with no trust extending left and trust extending right from zero."></p>
+<p>Custom category order:
+<img src="figures/wjp_divbars_custom_order.svg" style="width:100%" alt="Diverging bars show fictional trust shares, with countries ordered from highest to lowest no-trust share."></p>
     </div>
 
     <div class="section level2">
