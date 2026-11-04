@@ -48,16 +48,16 @@
 #' and values are fictional.
 #'
 #' Horizontal bars:
-#' \figure{wjp_bars_example.svg}{options: width='100%' alt='Horizontal WJP-style bars with trust percentages for five fictional countries.'}
+#' \figure{wjp_bars_example.svg}{options: style='width:100\%' alt='Horizontal WJP-style bars with trust percentages for five fictional countries.'}
 #'
 #' Vertical bars:
-#' \figure{wjp_bars_vertical.svg}{options: width='100%' alt='Vertical WJP-style bars with trust percentages for five fictional countries.'}
+#' \figure{wjp_bars_vertical.svg}{options: style='width:100\%' alt='Vertical WJP-style bars with trust percentages for five fictional countries.'}
 #'
 #' Stacked bars:
-#' \figure{wjp_bars_stacked.svg}{options: width='100%' alt='Horizontal 100 percent stacked bars showing trust and no trust for five fictional countries.'}
+#' \figure{wjp_bars_stacked.svg}{options: style='width:100\%' alt='Horizontal 100 percent stacked bars showing trust and no trust for five fictional countries.'}
 #'
 #' Side-by-side bars:
-#' \figure{wjp_bars_dodged.svg}{options: width='100%' alt='Side-by-side WJP-style bars comparing a fictional country with the EU average, with 100 percent tracks.'}
+#' \figure{wjp_bars_dodged.svg}{options: style='width:100\%' alt='Side-by-side WJP-style bars comparing a fictional country with the EU average, with 100 percent tracks.'}
 #'
 #' @param data Data frame containing the data to plot.
 #' @param target String. Column name of the variable that supplies the values to plot.

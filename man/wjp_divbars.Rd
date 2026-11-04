@@ -75,15 +75,17 @@ direction is a visual convention, and bars represent response shares.
 Value labels are drawn centered inside each segment.
 }
 \section{Example charts}{
+
 These examples use the WJP font family (Lato) and WJP colors. Countries and
 values are illustrative.
 
 Trust versus no trust:
-\figure{wjp_divbars_trust.svg}{options: width='100%' alt='Diverging bars show fictional trust and no-trust shares by country, with no trust extending left and trust extending right from zero.'}
+\figure{wjp_divbars_trust.svg}{options: style='width:100\%' alt='Diverging bars show fictional trust and no-trust shares by country, with no trust extending left and trust extending right from zero.'}
 
 Custom category order:
-\figure{wjp_divbars_custom_order.svg}{options: width='100%' alt='Diverging bars show fictional trust shares, with countries ordered from highest to lowest no-trust share.'}
+\figure{wjp_divbars_custom_order.svg}{options: style='width:100\%' alt='Diverging bars show fictional trust shares, with countries ordered from highest to lowest no-trust share.'}
 }
+
 \examples{
 library(dplyr)
 
