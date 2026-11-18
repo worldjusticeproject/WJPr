@@ -522,24 +522,22 @@ illustrative.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Basic grouped bars</span></span></span>
-<span class="r-in"><span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">data_groups</span>,</span></span>
 <span class="r-in"><span>  target   <span class="op">=</span> <span class="st">"value"</span>,</span></span>
 <span class="r-in"><span>  grouping <span class="op">=</span> <span class="st">"group"</span>,</span></span>
 <span class="r-in"><span>  levels   <span class="op">=</span> <span class="st">"category"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="wjp_groupbars-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># With custom colors and group order</span></span></span>
-<span class="r-in"><span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">data_groups</span>,</span></span>
 <span class="r-in"><span>  target      <span class="op">=</span> <span class="st">"value"</span>,</span></span>
 <span class="r-in"><span>  grouping    <span class="op">=</span> <span class="st">"group"</span>,</span></span>
 <span class="r-in"><span>  levels      <span class="op">=</span> <span class="st">"category"</span>,</span></span>
 <span class="r-in"><span>  colors      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#482d8b"</span>, <span class="st">"#e5e8e8"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  group_order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Gender"</span>, <span class="st">"Age"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="wjp_groupbars-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># With a per-category confidence interval (requires sd + sample_size columns)</span></span></span>
 <span class="r-in"><span><span class="va">data_ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
@@ -550,7 +548,7 @@ illustrative.</p>
 <span class="r-in"><span>  n        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">420</span>, <span class="fl">460</span>, <span class="fl">180</span>, <span class="fl">510</span>, <span class="fl">240</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">data_ci</span>,</span></span>
 <span class="r-in"><span>  target      <span class="op">=</span> <span class="st">"value"</span>,</span></span>
 <span class="r-in"><span>  grouping    <span class="op">=</span> <span class="st">"group"</span>,</span></span>
@@ -558,8 +556,7 @@ illustrative.</p>
 <span class="r-in"><span>  draw_ci     <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  sd          <span class="op">=</span> <span class="st">"sd"</span>,</span></span>
 <span class="r-in"><span>  sample_size <span class="op">=</span> <span class="st">"n"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="wjp_groupbars-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Percentage-scale input with precomputed confidence intervals and a general line</span></span></span>
 <span class="r-in"><span><span class="va">data_pct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
@@ -570,7 +567,7 @@ illustrative.</p>
 <span class="r-in"><span>  upper    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">76.4</span>, <span class="fl">72.1</span>, <span class="fl">74.5</span>, <span class="fl">75.2</span>, <span class="fl">75.2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">data_pct</span>,</span></span>
 <span class="r-in"><span>  target         <span class="op">=</span> <span class="st">"value"</span>,</span></span>
 <span class="r-in"><span>  grouping       <span class="op">=</span> <span class="st">"group"</span>,</span></span>
@@ -586,11 +583,10 @@ illustrative.</p>
 <span class="r-in"><span>  show_national  <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  national_value <span class="op">=</span> <span class="fl">72.3</span>,</span></span>
 <span class="r-in"><span>  national_label <span class="op">=</span> <span class="st">"General"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="wjp_groupbars-4.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># National average as its own bar with its own confidence interval</span></span></span>
-<span class="r-in"><span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">data_pct</span>,</span></span>
 <span class="r-in"><span>  target            <span class="op">=</span> <span class="st">"value"</span>,</span></span>
 <span class="r-in"><span>  grouping          <span class="op">=</span> <span class="st">"group"</span>,</span></span>
@@ -610,11 +606,10 @@ illustrative.</p>
 <span class="r-in"><span>  national_label    <span class="op">=</span> <span class="st">"National Average"</span>,</span></span>
 <span class="r-in"><span>  national_ci_lower <span class="op">=</span> <span class="fl">70.0</span>,</span></span>
 <span class="r-in"><span>  national_ci_upper <span class="op">=</span> <span class="fl">74.6</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="wjp_groupbars-5.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># With visible X axis (publication-style layout)</span></span></span>
-<span class="r-in"><span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">data_pct</span>,</span></span>
 <span class="r-in"><span>  target            <span class="op">=</span> <span class="st">"value"</span>,</span></span>
 <span class="r-in"><span>  grouping          <span class="op">=</span> <span class="st">"group"</span>,</span></span>
@@ -635,8 +630,7 @@ illustrative.</p>
 <span class="r-in"><span>  national_ci_lower <span class="op">=</span> <span class="fl">70.0</span>,</span></span>
 <span class="r-in"><span>  national_ci_upper <span class="op">=</span> <span class="fl">74.6</span>,</span></span>
 <span class="r-in"><span>  show_axis         <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="wjp_groupbars-6.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Using national_var and national_level for inline national average formatting</span></span></span>
 <span class="r-in"><span><span class="va">data_disagg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
@@ -645,7 +639,7 @@ illustrative.</p>
 <span class="r-in"><span>  pct_weighted   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.75</span>, <span class="fl">0.72</span>, <span class="fl">0.78</span>, <span class="fl">0.77</span>, <span class="fl">0.73</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">data_disagg</span>,</span></span>
 <span class="r-in"><span>  target         <span class="op">=</span> <span class="st">"pct_weighted"</span>,</span></span>
 <span class="r-in"><span>  grouping       <span class="op">=</span> <span class="st">"disaggregation"</span>,</span></span>
@@ -653,8 +647,7 @@ illustrative.</p>
 <span class="r-in"><span>  group_order    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"general"</span>, <span class="st">"Age Group"</span>, <span class="st">"Gender"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  national_var   <span class="op">=</span> <span class="st">"general"</span>,</span></span>
 <span class="r-in"><span>  national_level <span class="op">=</span> <span class="st">"National Average"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="wjp_groupbars-7.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Report layout: headers as rows, national and EU averages, a suppressed</span></span></span>
 <span class="r-in"><span><span class="co"># cell printed as "N/A", values in a column, geometry in points</span></span></span>
@@ -666,7 +659,7 @@ illustrative.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">report</span><span class="op">$</span><span class="va">text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">report</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>, <span class="st">"N/A"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">report</span><span class="op">$</span><span class="va">value</span>, <span class="st">"%"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">report</span>,</span></span>
 <span class="r-in"><span>  target               <span class="op">=</span> <span class="st">"value"</span>,</span></span>
 <span class="r-in"><span>  grouping             <span class="op">=</span> <span class="st">"group"</span>,</span></span>
@@ -692,8 +685,7 @@ illustrative.</p>
 <span class="r-in"><span>    bar_height <span class="op">=</span> <span class="fl">13.5</span>, header_height <span class="op">=</span> <span class="fl">22</span>, header_baseline <span class="op">=</span> <span class="fl">17</span>,</span></span>
 <span class="r-in"><span>    margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="wjp_groupbars-8.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

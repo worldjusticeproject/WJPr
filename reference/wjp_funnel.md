@@ -211,12 +211,11 @@ journey <- data.frame(
 )
 journey$text <- paste0(journey$value, "%")
 
-wjp_funnel(
+invisible(wjp_funnel(
   journey,
   target   = "value",
   grouping = "stage",
   labels   = "text",
   width    = 468
-)
-
+))
 ```

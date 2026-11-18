@@ -409,24 +409,22 @@ data_groups <- data.frame(
 )
 
 # Basic grouped bars
-wjp_groupbars(
+invisible(wjp_groupbars(
   data_groups,
   target   = "value",
   grouping = "group",
   levels   = "category"
-)
-
+))
 
 # With custom colors and group order
-wjp_groupbars(
+invisible(wjp_groupbars(
   data_groups,
   target      = "value",
   grouping    = "group",
   levels      = "category",
   colors      = c("#482d8b", "#e5e8e8"),
   group_order = c("Gender", "Age")
-)
-
+))
 
 # With a per-category confidence interval (requires sd + sample_size columns)
 data_ci <- data.frame(
@@ -437,7 +435,7 @@ data_ci <- data.frame(
   n        = c(420, 460, 180, 510, 240)
 )
 
-wjp_groupbars(
+invisible(wjp_groupbars(
   data_ci,
   target      = "value",
   grouping    = "group",
@@ -445,8 +443,7 @@ wjp_groupbars(
   draw_ci     = TRUE,
   sd          = "sd",
   sample_size = "n"
-)
-
+))
 
 # Percentage-scale input with precomputed confidence intervals and a general line
 data_pct <- data.frame(
@@ -457,7 +454,7 @@ data_pct <- data.frame(
   upper    = c(76.4, 72.1, 74.5, 75.2, 75.2)
 )
 
-wjp_groupbars(
+invisible(wjp_groupbars(
   data_pct,
   target         = "value",
   grouping       = "group",
@@ -473,11 +470,10 @@ wjp_groupbars(
   show_national  = TRUE,
   national_value = 72.3,
   national_label = "General"
-)
-
+))
 
 # National average as its own bar with its own confidence interval
-wjp_groupbars(
+invisible(wjp_groupbars(
   data_pct,
   target            = "value",
   grouping          = "group",
@@ -497,11 +493,10 @@ wjp_groupbars(
   national_label    = "National Average",
   national_ci_lower = 70.0,
   national_ci_upper = 74.6
-)
-
+))
 
 # With visible X axis (publication-style layout)
-wjp_groupbars(
+invisible(wjp_groupbars(
   data_pct,
   target            = "value",
   grouping          = "group",
@@ -522,8 +517,7 @@ wjp_groupbars(
   national_ci_lower = 70.0,
   national_ci_upper = 74.6,
   show_axis         = TRUE
-)
-
+))
 
 # Using national_var and national_level for inline national average formatting
 data_disagg <- data.frame(
@@ -532,7 +526,7 @@ data_disagg <- data.frame(
   pct_weighted   = c(0.75, 0.72, 0.78, 0.77, 0.73)
 )
 
-wjp_groupbars(
+invisible(wjp_groupbars(
   data_disagg,
   target         = "pct_weighted",
   grouping       = "disaggregation",
@@ -540,8 +534,7 @@ wjp_groupbars(
   group_order    = c("general", "Age Group", "Gender"),
   national_var   = "general",
   national_level = "National Average"
-)
-
+))
 
 # Report layout: headers as rows, national and EU averages, a suppressed
 # cell printed as "N/A", values in a column, geometry in points
@@ -553,7 +546,7 @@ report <- data.frame(
 )
 report$text <- ifelse(is.na(report$value), "N/A", paste0(report$value, "%"))
 
-wjp_groupbars(
+invisible(wjp_groupbars(
   report,
   target               = "value",
   grouping             = "group",
@@ -579,6 +572,5 @@ wjp_groupbars(
     bar_height = 13.5, header_height = 22, header_baseline = 17,
     margins = c(2, 0, 4, 0)
   )
-)
-
+))
 ```
