@@ -108,7 +108,7 @@ data4divbars <- WJPr::gpp \%>\%
     value_label = paste0(round(percentage, 0), "\%")
   )
 
-wjp_divbars(
+invisible(wjp_divbars(
   data4divbars,
   target    = "percentage",
   grouping  = "country",
@@ -117,7 +117,7 @@ wjp_divbars(
   labels    = "value_label",
   show_legend = TRUE,
   cvec      = c("Trust" = "#482d8b", "No Trust" = "#f26b21")
-)
+))
 
 # Custom row order via an order column
 data4divbars_ordered <- data4divbars \%>\%
@@ -129,7 +129,7 @@ data4divbars_ordered <- data4divbars \%>\%
     )
   )
 
-wjp_divbars(
+invisible(wjp_divbars(
   data4divbars_ordered,
   target    = "percentage",
   grouping  = "country",
@@ -137,6 +137,6 @@ wjp_divbars(
   negative  = "No Trust",
   labels    = "value_label",
   order     = "row_order"
-)
+))
 
 }
