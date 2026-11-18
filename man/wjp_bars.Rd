@@ -291,7 +291,7 @@ data4bars <- WJPr::gpp \%>\%
   )
 
 # Vertical bars (default)
-wjp_bars(
+invisible(wjp_bars(
   data4bars,
   target   = "trust",
   grouping = "country",
@@ -300,17 +300,17 @@ wjp_bars(
   cvec     = c("Atlantis"  = "#482d8b",
                "Narnia"    = "#2894aa",
                "Neverland" = "#f26b21")
-)
+))
 
 # Horizontal bars
-wjp_bars(
+invisible(wjp_bars(
   data4bars,
   target    = "trust",
   grouping  = "country",
   labels    = "value_label",
   lab_pos   = "label_position",
   direction = "horizontal"
-)
+))
 
 # Stacked bars: one row per segment, labels centered on each segment
 data4stacked <- WJPr::gpp \%>\%
@@ -332,7 +332,7 @@ data4stacked <- WJPr::gpp \%>\%
   ) \%>\%
   ungroup()
 
-wjp_bars(
+invisible(wjp_bars(
   data4stacked,
   target   = "percentage",
   grouping = "country",
@@ -342,7 +342,7 @@ wjp_bars(
   stacked  = TRUE,
   show_legend = TRUE,
   cvec     = c("Trust" = "#482d8b", "No trust" = "#f26b21")
-)
+))
 
 # Country and EU average side by side, with a 100\% track and values after
 # each bar (fictional data)
@@ -353,7 +353,7 @@ paired <- data.frame(
 )
 paired$text <- paste0(paired$value, "\%")
 
-wjp_bars(
+invisible(wjp_bars(
   paired,
   target         = "value",
   grouping       = "category",
@@ -373,6 +373,6 @@ wjp_bars(
                               track_width = 250, value_gap = 5,
                               value_width = 30, row_height = 21,
                               bar_height = 8)
-)
+))
 
 }
