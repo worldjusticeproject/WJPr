@@ -45,7 +45,7 @@ wjp_check_deps()
 #> 
 #> CORE DEPENDENCIES (Required)
 #> ---------------------------------------- 
-#>   ggplot2      [OK] v4.0.3
+#>   ggplot2      [OK] v4.0.4
 #>   dplyr        [OK] v1.2.1
 #>   tidyr        [OK] v1.3.2
 #>   magrittr     [OK] v2.0.5
@@ -60,7 +60,7 @@ wjp_check_deps()
 #>   ggtext       [OK] v0.2.0                Rich text labels (radar, rose, edgebars, groupbars)
 #>   ggrepel      [OK] v0.9.8                Non-overlapping labels (wjp_lines, wjp_slope)
 #>   ggh4x        [OK] v0.3.1                Minor axis ticks (wjp_lines custom.axis)
-#>   systemfonts  [OK] v1.3.2                Label width measurement (spread_labels_x)
+#>   systemfonts  [OK] v1.3.3                Label width measurement (spread_labels_x)
 #>   haven        [OK] v2.5.5                Reading Stata/SPSS files
 #> 
 #> All dependencies are installed!
