@@ -20,7 +20,8 @@ wjp_lollipops(
   points = TRUE,
   label_size = 10,
   label_fontface = "bold",
-  label_color = "#4a4a49"
+  label_color = "#4a4a49",
+  orientation = c("horizontal", "vertical")
 )
 }
 \arguments{
@@ -29,7 +30,7 @@ wjp_lollipops(
 \item{target}{String. Column name of the variable that supplies the values to plot.}
 
 \item{grouping}{String. Column name of the variable that supplies the categories
-(Y-axis labels).}
+(category-axis labels).}
 
 \item{labels}{String. Column name of the variable containing the value labels to
 display. Default is \code{NULL} (labels are generated automatically as rounded
@@ -63,6 +64,9 @@ when \code{label_gap} is \code{NULL}. Default is \code{0.5}.}
 \item{label_fontface}{String. Font face of the value labels. Default is \code{"bold"}.}
 
 \item{label_color}{String. Color of the value labels. Default is \code{"#4a4a49"}.}
+
+\item{orientation}{String. Chart orientation: \code{"horizontal"} (default) or
+\code{"vertical"}.}
 }
 \value{
 A ggplot object representing the lollipop chart.
@@ -80,7 +84,8 @@ The function expects one row per category: the category name in \code{grouping}
 and its value in \code{target}. Value labels are generated automatically as
 rounded percentages unless a \code{labels} column is supplied. Use \code{order} to
 control the top-to-bottom order of the rows, and \code{line_color}/\code{point_color}
-to adjust the accent colors.
+to adjust the accent colors. Set \code{orientation = "vertical"} to place
+categories on the horizontal axis and values on the vertical axis.
 }
 \examples{
 library(dplyr)
@@ -126,5 +131,17 @@ wjp_lollipops(
   order       = "rank",
   point_color = "#2894aa"
 )
+
+# Vertical version, with categories ordered from left to right
+invisible(wjp_lollipops(
+  data4lollipops_ordered,
+  target      = "percentage",
+  grouping    = "institution",
+  order       = "rank",
+  point_color = "#2894aa",
+  orientation = "vertical"
+))
+
+knitr::include_graphics("man/figures/wjp_lollipops_vertical.png")
 
 }

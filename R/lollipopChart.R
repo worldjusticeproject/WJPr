@@ -12,13 +12,14 @@
 #' The function expects one row per category: the category name in `grouping`
 #' and its value in `target`. Value labels are generated automatically as
 #' rounded percentages unless a `labels` column is supplied. Use `order` to
-#' control the top-to-bottom order of the rows, and `line_color`/`point_color`
-#' to adjust the accent colors.
+#' control the category order, and `line_color`/`point_color` to adjust the
+#' accent colors. Set `orientation = "vertical"` to place categories on the
+#' horizontal axis and values on the vertical axis.
 #'
 #' @param data Data frame containing the data to plot.
 #' @param target String. Column name of the variable that supplies the values to plot.
 #' @param grouping String. Column name of the variable that supplies the categories
-#'   (Y-axis labels).
+#'   (category-axis labels).
 #' @param labels String. Column name of the variable containing the value labels to
 #'   display. Default is `NULL` (labels are generated automatically as rounded
 #'   percentages).
@@ -39,6 +40,8 @@
 #' @param label_size Numeric. Size of the value labels, in points. Default is `10`.
 #' @param label_fontface String. Font face of the value labels. Default is `"bold"`.
 #' @param label_color String. Color of the value labels. Default is `"#4a4a49"`.
+#' @param orientation String. Chart orientation: `"horizontal"` (default) or
+#'   `"vertical"`.
 #'
 #' @return A ggplot object representing the lollipop chart.
 #' @export
@@ -88,6 +91,18 @@
 #'   point_color = "#2894aa"
 #' )
 #'
+#' # Vertical version, with categories ordered from left to right
+#' invisible(wjp_lollipops(
+#'   data4lollipops_ordered,
+#'   target      = "percentage",
+#'   grouping    = "institution",
+#'   order       = "rank",
+#'   point_color = "#2894aa",
+#'   orientation = "vertical"
+#' ))
+#'
+#' knitr::include_graphics("man/figures/wjp_lollipops_vertical.png")
+#'
 wjp_lollipops <- function(
     data,
     target,
@@ -104,8 +119,10 @@ wjp_lollipops <- function(
     points        = TRUE,
     label_size    = 10,
     label_fontface = "bold",
-    label_color   = "#4a4a49"
+    label_color   = "#4a4a49",
+    orientation   = c("horizontal", "vertical")
 ) {
+  orientation <- match.arg(orientation)
   if (length(points) != 1 || !is.logical(points) || is.na(points)) {
     stop("`points` must be TRUE or FALSE.", call. = FALSE)
   }
@@ -126,6 +143,10 @@ wjp_lollipops <- function(
       dplyr::rename(order_var = all_of(order))
   }
 
+  category_levels <- unique(as.character(data$grouping_var[base::order(data$order_var)]))
+  if (orientation == "horizontal") category_levels <- rev(category_levels)
+  data$axis_var <- factor(as.character(data$grouping_var), levels = category_levels)
+
   # Value labels: use the supplied column or fall back to rounded percentages
   if (is.null(labels)) {
     data <- data %>%
@@ -138,7 +159,7 @@ wjp_lollipops <- function(
   # Creating plot
   plt <- ggplot(data) +
     geom_linerange(
-      aes(x    = reorder(grouping_var, -order_var),
+      aes(x    = axis_var,
           ymin = 0,
           ymax = target_var),
       linewidth = line_size,
@@ -148,7 +169,7 @@ wjp_lollipops <- function(
     plt <- plt +
       geom_point(
         aes(y = target_var,
-            x = reorder(grouping_var, -order_var)),
+            x = axis_var),
         size  = point_size,
         shape = 16,
         color = point_color
@@ -159,7 +180,7 @@ wjp_lollipops <- function(
     plt <- plt +
       geom_text(
         aes(y     = target_var + 7,
-            x     = reorder(grouping_var, -order_var),
+            x     = axis_var,
             label = labels_var),
         size     = wjp_pt_text(label_size),
         color    = label_color,
@@ -173,28 +194,37 @@ wjp_lollipops <- function(
     plt <- plt +
       wjp_offset_text(
         data = data,
-        mapping = aes(y = target_var, x = reorder(grouping_var, -order_var),
+        mapping = aes(y = target_var, x = axis_var,
                       label = labels_var),
-        offset = edge + label_gap, side = "right",
+        offset = edge + label_gap,
+        side = if (orientation == "horizontal") "right" else "top",
         family = lface$family, fontface = lface$fontface,
         size = wjp_pt_text(label_size), colour = label_color
       )
   }
   plt <- plt +
     scale_y_continuous(breaks   = seq(0, 100, by = 20),
-                       limits   = c(0, 105),
+                       limits   = if (orientation == "vertical") c(0, 110) else c(0, 105),
                        labels   = paste0(seq(0, 100, by = 20), "%"),
-                       position = "right") +
-    coord_flip() +
+                       position = if (orientation == "horizontal") "right" else "left") +
     ptheme +
     theme(
       axis.title.x       = element_blank(),
-      axis.title.y       = element_blank(),
-      panel.grid.major.y = element_blank(),
-      panel.grid.major.x = element_line(color = "#d1cfd1"),
-      axis.text.y        = element_text(color = "#524F4C",
-                                        hjust = 0)
+      axis.title.y       = element_blank()
     )
+  if (orientation == "horizontal") {
+    plt <- plt + coord_flip() +
+      theme(panel.grid.major.y = element_blank(),
+            panel.grid.major.x = element_line(color = "#d1cfd1"),
+            axis.text.y = element_text(color = "#524F4C", hjust = 0))
+  } else {
+    plt <- plt +
+      theme(panel.grid.major.x = element_blank(),
+            panel.grid.major.y = element_line(color = "#d1cfd1"),
+            axis.text.x = element_text(color = "#524F4C", angle = 45,
+                                        hjust = 1, vjust = 1),
+            axis.text.y = element_text(color = "#524F4C", hjust = 1))
+  }
   plt <- wjp_apply_ptheme(plt, ptheme)
 
   return(plt)
