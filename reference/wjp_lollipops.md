@@ -174,27 +174,13 @@ wjp_lollipops(
 
 
 # Vertical version, with categories ordered from left to right
-invisible(wjp_lollipops(
+wjp_lollipops(
   data4lollipops_ordered,
   target      = "percentage",
   grouping    = "institution",
   order       = "rank",
   point_color = "#2894aa",
   orientation = "vertical"
-))
-
-lollipop_image <- system.file(
-  "help/figures/wjp_lollipops_vertical.png",
-  package = "WJPr"
 )
-if (!nzchar(lollipop_image)) {
-  lollipop_image <- file.path(
-    system.file(package = "WJPr"),
-    "man", "figures", "wjp_lollipops_vertical.png"
-  )
-}
-knitr::include_graphics(lollipop_image)
-#> [1] "/home/runner/.cache/R/renv/library/WJPr-c9012be6/linux-ubuntu-resolute/R-4.6/x86_64-pc-linux-gnu/WJPr/help/figures/wjp_lollipops_vertical.png"
-#> attr(,"class")
-#> [1] "knit_image_paths" "knit_asis"       
+
 ```
