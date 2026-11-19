@@ -30,12 +30,24 @@ jobs:
 
       - name: Test coverage
         run: |
-          covr::codecov(
+          coverage <- covr::package_coverage(
             quiet = FALSE,
-            clean = FALSE,
             install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package")
           )
+          print(coverage)
+          if (nzchar(Sys.getenv("CODECOV_TOKEN"))) {
+            covr::codecov(
+              coverage = coverage,
+              token = Sys.getenv("CODECOV_TOKEN"),
+              quiet = FALSE,
+              clean = FALSE
+            )
+          } else {
+            message("CODECOV_TOKEN is not configured; skipping Codecov upload.")
+          }
         shell: Rscript {0}
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Show testthat output
         if: always()

@@ -101,7 +101,17 @@
 #'   orientation = "vertical"
 #' ))
 #'
-#' knitr::include_graphics("man/figures/wjp_lollipops_vertical.png")
+#' lollipop_image <- system.file(
+#'   "help/figures/wjp_lollipops_vertical.png",
+#'   package = "WJPr"
+#' )
+#' if (!nzchar(lollipop_image)) {
+#'   lollipop_image <- file.path(
+#'     system.file(package = "WJPr"),
+#'     "man", "figures", "wjp_lollipops_vertical.png"
+#'   )
+#' }
+#' knitr::include_graphics(lollipop_image)
 #'
 wjp_lollipops <- function(
     data,
