@@ -183,6 +183,18 @@ invisible(wjp_lollipops(
   orientation = "vertical"
 ))
 
-knitr::include_graphics("man/figures/wjp_lollipops_vertical.png")
-#> Error in knitr::include_graphics("man/figures/wjp_lollipops_vertical.png"): Cannot find the file(s): "man/figures/wjp_lollipops_vertical.png"
+lollipop_image <- system.file(
+  "help/figures/wjp_lollipops_vertical.png",
+  package = "WJPr"
+)
+if (!nzchar(lollipop_image)) {
+  lollipop_image <- file.path(
+    system.file(package = "WJPr"),
+    "man", "figures", "wjp_lollipops_vertical.png"
+  )
+}
+knitr::include_graphics(lollipop_image)
+#> [1] "/home/runner/.cache/R/renv/library/WJPr-c9012be6/linux-ubuntu-resolute/R-4.6/x86_64-pc-linux-gnu/WJPr/help/figures/wjp_lollipops_vertical.png"
+#> attr(,"class")
+#> [1] "knit_image_paths" "knit_asis"       
 ```
