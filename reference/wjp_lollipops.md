@@ -26,7 +26,8 @@ wjp_lollipops(
   points = TRUE,
   label_size = 10,
   label_fontface = "bold",
-  label_color = "#4a4a49"
+  label_color = "#4a4a49",
+  orientation = c("horizontal", "vertical")
 )
 ```
 
@@ -43,7 +44,7 @@ wjp_lollipops(
 - grouping:
 
   String. Column name of the variable that supplies the categories
-  (Y-axis labels).
+  (category-axis labels).
 
 - labels:
 
@@ -105,6 +106,10 @@ wjp_lollipops(
 
   String. Color of the value labels. Default is `"#4a4a49"`.
 
+- orientation:
+
+  String. Chart orientation: `"horizontal"` (default) or `"vertical"`.
+
 ## Value
 
 A ggplot object representing the lollipop chart.
@@ -115,7 +120,9 @@ The function expects one row per category: the category name in
 `grouping` and its value in `target`. Value labels are generated
 automatically as rounded percentages unless a `labels` column is
 supplied. Use `order` to control the top-to-bottom order of the rows,
-and `line_color`/`point_color` to adjust the accent colors.
+and `line_color`/`point_color` to adjust the accent colors. Set
+`orientation = "vertical"` to place categories on the horizontal axis
+and values on the vertical axis.
 
 ## Examples
 
@@ -165,4 +172,17 @@ wjp_lollipops(
   point_color = "#2894aa"
 )
 
+
+# Vertical version, with categories ordered from left to right
+invisible(wjp_lollipops(
+  data4lollipops_ordered,
+  target      = "percentage",
+  grouping    = "institution",
+  order       = "rank",
+  point_color = "#2894aa",
+  orientation = "vertical"
+))
+
+knitr::include_graphics("man/figures/wjp_lollipops_vertical.png")
+#> Error in knitr::include_graphics("man/figures/wjp_lollipops_vertical.png"): Cannot find the file(s): "man/figures/wjp_lollipops_vertical.png"
 ```
