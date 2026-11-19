@@ -92,26 +92,14 @@
 #' )
 #'
 #' # Vertical version, with categories ordered from left to right
-#' invisible(wjp_lollipops(
+#' wjp_lollipops(
 #'   data4lollipops_ordered,
 #'   target      = "percentage",
 #'   grouping    = "institution",
 #'   order       = "rank",
 #'   point_color = "#2894aa",
 #'   orientation = "vertical"
-#' ))
-#'
-#' lollipop_image <- system.file(
-#'   "help/figures/wjp_lollipops_vertical.png",
-#'   package = "WJPr"
 #' )
-#' if (!nzchar(lollipop_image)) {
-#'   lollipop_image <- file.path(
-#'     system.file(package = "WJPr"),
-#'     "man", "figures", "wjp_lollipops_vertical.png"
-#'   )
-#' }
-#' knitr::include_graphics(lollipop_image)
 #'
 wjp_lollipops <- function(
     data,
