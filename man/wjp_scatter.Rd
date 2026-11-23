@@ -179,7 +179,11 @@ wjp_scatter(
   x_labels  = function(x) paste0(x, "\%"),
   x_title   = "Prevalence",
   y_title   = "Mean seriousness (0-10)"
-)
+) +
+  ggplot2::theme(
+    plot.background = ggplot2::element_rect(fill = "white", colour = NA),
+    panel.background = ggplot2::element_rect(fill = "white", colour = NA)
+  )
 
 # Basic scatter with a trend line
 scatter_basic <- data.frame(
@@ -204,7 +208,9 @@ wjp_scatter(
   ) +
   ggplot2::theme(
     plot.title = ggplot2::element_text(face = "bold", size = 18),
-    plot.subtitle = ggplot2::element_text(size = 10, colour = "#555659")
+    plot.subtitle = ggplot2::element_text(size = 10, colour = "#555659"),
+    plot.background = ggplot2::element_rect(fill = "white", colour = NA),
+    panel.background = ggplot2::element_rect(fill = "white", colour = NA)
   )
 
 # Highlight and label selected points
@@ -233,7 +239,9 @@ wjp_scatter(
   ) +
   ggplot2::theme(
     plot.title = ggplot2::element_text(face = "bold", size = 18),
-    plot.subtitle = ggplot2::element_text(size = 10, colour = "#555659")
+    plot.subtitle = ggplot2::element_text(size = 10, colour = "#555659"),
+    plot.background = ggplot2::element_rect(fill = "white", colour = NA),
+    panel.background = ggplot2::element_rect(fill = "white", colour = NA)
   )
 
 }
