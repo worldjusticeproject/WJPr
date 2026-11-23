@@ -60,7 +60,7 @@ wjp_check_deps()
 #>   ggtext       [OK] v0.2.0                Rich text labels (radar, rose, edgebars, groupbars)
 #>   ggrepel      [OK] v0.9.8                Non-overlapping labels (wjp_lines, wjp_slope)
 #>   ggh4x        [OK] v0.3.1                Minor axis ticks (wjp_lines custom.axis)
-#>   systemfonts  [OK] v1.3.3                Label width measurement (spread_labels_x)
+#>   systemfonts  [OK] v1.3.4                Label width measurement (spread_labels_x)
 #>   haven        [OK] v2.5.5                Reading Stata/SPSS files
 #> 
 #> All dependencies are installed!

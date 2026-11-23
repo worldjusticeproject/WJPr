@@ -209,36 +209,3 @@ Sizes are given in points: `point_size` is the diameter of a point and
 `point_stroke` the width of the outline of hollow points.
 
 ## Examples
-
-``` r
-# Always load the WJP fonts
-wjp_fonts()
-
-# Prevalence and seriousness of problems by area (fictional data)
-problems <- data.frame(
-  area     = rep(c("Rural", "Urban"), each = 6),
-  category = rep(c("Consumer", "Housing", "Family", "Employment",
-                   "Land", "Education"), 2),
-  prevalence  = c(41, 9, 21, 18, 20, 9, 39, 10, 17, 19, 18, 9),
-  seriousness = c(4.6, 4.3, 5.5, 6.0, 4.5, 5.6, 4.8, 4.9, 5.6, 6.4, 5.2, 5.9),
-  n           = c(215, 49, 99, 96, 105, 25, 480, 126, 210, 230, 211, 104)
-)
-problems$small <- problems$n < 30
-
-wjp_scatter(
-  problems,
-  x         = "prevalence",
-  y         = "seriousness",
-  labels    = "category",
-  facet     = "area",
-  highlight = c("Consumer", "Housing", "Family"),
-  hollow    = "small",
-  trend     = "lm",
-  xlim      = c(0, 50),
-  ylim      = c(4, 8),
-  x_labels  = function(x) paste0(x, "%"),
-  x_title   = "Prevalence",
-  y_title   = "Mean seriousness (0-10)"
-)
-
-```
