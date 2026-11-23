@@ -113,6 +113,61 @@
 #'   y_title   = "Mean seriousness (0-10)"
 #' )
 #'
+#' # Basic scatter with a trend line
+#' scatter_basic <- data.frame(
+#'   coverage = c(18, 24, 31, 37, 43, 48, 55, 62, 68, 73, 81, 89),
+#'   trust    = c(39, 43, 42, 51, 50, 59, 54, 68, 63, 71, 70, 83)
+#' )
+#' wjp_scatter(
+#'   scatter_basic,
+#'   x         = "coverage",
+#'   y         = "trust",
+#'   trend     = "lm",
+#'   xlim      = c(0, 100),
+#'   ylim      = c(0, 100),
+#'   x_labels  = function(x) paste0(x, "%"),
+#'   y_labels  = function(y) paste0(y, "%"),
+#'   x_title   = "Service coverage",
+#'   y_title   = "Public trust"
+#' ) +
+#'   ggplot2::labs(
+#'     title = "Service coverage and public trust",
+#'     subtitle = "All observations with a linear trend - Illustrative data"
+#'   ) +
+#'   ggplot2::theme(
+#'     plot.title = ggplot2::element_text(face = "bold", size = 18),
+#'     plot.subtitle = ggplot2::element_text(size = 10, colour = "#555659")
+#'   )
+#'
+#' # Highlight and label selected points
+#' scatter_highlighted <- data.frame(
+#'   country    = c("Aster", "Boreal", "Caspia", "Doria", "Estara", "Faron",
+#'                  "Galena", "Helios", "Ionia", "Juno", "Kalmia", "Lyris"),
+#'   access     = c(22, 31, 35, 42, 47, 53, 59, 63, 69, 74, 82, 91),
+#'   confidence = c(32, 43, 39, 52, 50, 58, 62, 55, 70, 65, 78, 73)
+#' )
+#' wjp_scatter(
+#'   scatter_highlighted,
+#'   x         = "access",
+#'   y         = "confidence",
+#'   labels    = "country",
+#'   highlight = c("Aster", "Doria", "Galena", "Kalmia"),
+#'   xlim      = c(0, 100),
+#'   ylim      = c(0, 100),
+#'   x_labels  = function(x) paste0(x, "%"),
+#'   y_labels  = function(y) paste0(y, "%"),
+#'   x_title   = "Access to services",
+#'   y_title   = "Confidence in institutions"
+#' ) +
+#'   ggplot2::labs(
+#'     title = "Highlight selected countries",
+#'     subtitle = "Direct labels emphasize a small subset - Illustrative data"
+#'   ) +
+#'   ggplot2::theme(
+#'     plot.title = ggplot2::element_text(face = "bold", size = 18),
+#'     plot.subtitle = ggplot2::element_text(size = 10, colour = "#555659")
+#'   )
+#'
 wjp_scatter <- function(
     data,
     x,
