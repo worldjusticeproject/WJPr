@@ -193,8 +193,8 @@ wjp_scatter(
   trend     = "lm",
   xlim      = c(0, 100),
   ylim      = c(0, 100),
-  x_labels  = function(x) paste0(x, "\\%"),
-  y_labels  = function(y) paste0(y, "\\%"),
+  x_labels  = function(x) paste0(x, "\%"),
+  y_labels  = function(y) paste0(y, "\%"),
   x_title   = "Service coverage",
   y_title   = "Public trust"
 ) +
@@ -222,8 +222,8 @@ wjp_scatter(
   highlight = c("Aster", "Doria", "Galena", "Kalmia"),
   xlim      = c(0, 100),
   ylim      = c(0, 100),
-  x_labels  = function(x) paste0(x, "\\%"),
-  y_labels  = function(y) paste0(y, "\\%"),
+  x_labels  = function(x) paste0(x, "\%"),
+  y_labels  = function(y) paste0(y, "\%"),
   x_title   = "Access to services",
   y_title   = "Confidence in institutions"
 ) +
